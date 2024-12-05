@@ -12,6 +12,11 @@ const loadingAni = [
     require("../assets/images/loading/6.png"),
 ];
 
+const assetsList = [
+    { name: "commonExitBtn", url: "images/game/common/exit_btn.png" },
+    { name: "audioClick", url: "audio/click.mp3" },
+];
+
 export const Loading = () => {
     return (
         <Container>

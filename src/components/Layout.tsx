@@ -3,7 +3,6 @@ import gsap from "gsap";
 import { Application } from "pixi.js";
 import React, { useRef } from "react";
 import { Helmet, HelmetProvider } from "react-helmet-async";
-import { useAssets } from "../hooks/useAssets";
 
 interface Props {
     children: React.ReactNode;
@@ -31,6 +30,8 @@ export const Layout = ({ children, title }: Props) => {
     const resizeApp = (app: Application) => {
         if (container.current && app?.renderer) {
             resizeWindow();
+
+            // app.renderer.view.width = window.innerWidth;
 
             // 렌더러 크기 조정
             app.renderer.resize(window.innerWidth, CONTENT_HEIGHT * window.scale);
