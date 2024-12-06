@@ -22,6 +22,7 @@ declare global {
 }
 
 function App() {
+    console.log(11);
     return <Starwords />;
 }
 

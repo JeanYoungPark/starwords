@@ -13,6 +13,9 @@ const assets = [
     { alias: "title", src: `${introImgPath}intro_title.png` },
     { alias: "rocket", src: `${introImgPath}rocket.png` },
     { alias: "spaceship", src: `${introImgPath}spaceship.png` },
+    { alias: "titleBg", src: `${introImgPath}titleBg.png` },
+    { alias: "startBtn", src: `${introImgPath}startBtn.png` },
+    { alias: "rankingBtn", src: `${introImgPath}rankingBtn.png` },
 ];
 
 export default assets;

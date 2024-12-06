@@ -9,8 +9,8 @@ interface Props {
     title: string;
 }
 
-const CONTENT_WIDTH = 2048;
-const CONTENT_HEIGHT = 1280;
+const CONTENT_WIDTH = 1920;
+const CONTENT_HEIGHT = 1080;
 
 export const Layout = ({ children, title }: Props) => {
     const container = useRef<PixiRef<typeof Container>>(null);
@@ -31,19 +31,20 @@ export const Layout = ({ children, title }: Props) => {
         if (container.current && app?.renderer) {
             resizeWindow();
 
-            // app.renderer.view.width = window.innerWidth;
+            app.renderer.view.width = window.innerWidth;
+            app.renderer.view.height = CONTENT_HEIGHT * window.scale;
 
             // 렌더러 크기 조정
             app.renderer.resize(window.innerWidth, CONTENT_HEIGHT * window.scale);
-
-            // 컨테이너 위치 및 크기 조정
-            container.current.position.x = (window.innerWidth - CONTENT_WIDTH * window.scale) / 2;
-            container.current.scale.set(window.scale);
 
             // 캔버스 스타일 설정 (CSS 속성)
             gsap.set(app.renderer.view, {
                 top: (window.innerHeight - CONTENT_HEIGHT * window.scale) / 2,
             });
+
+            // 컨테이너 위치 및 크기 조정
+            container.current.position.x = (window.innerWidth - CONTENT_WIDTH * window.scale) / 2;
+            container.current.scale.set(window.scale);
         }
     };
 
