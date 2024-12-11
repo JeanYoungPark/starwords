@@ -3,21 +3,25 @@ import gsap from "gsap";
 import { Application } from "pixi.js";
 import React, { useRef } from "react";
 import { Helmet, HelmetProvider } from "react-helmet-async";
+import { RecoilRoot } from "recoil";
+import { Intro } from "./Intro";
+import { Loading } from "./Loading";
+import { ResourceProvider } from "../context/ResourceProvider";
+import { CommonLayout } from "./CommonLayout";
 
 interface Props {
-    children: React.ReactNode;
     title: string;
 }
 
 const CONTENT_WIDTH = 1920;
 const CONTENT_HEIGHT = 1080;
 
-export const Layout = ({ children, title }: Props) => {
+export const Layout = ({ title }: Props) => {
     const container = useRef<PixiRef<typeof Container>>(null);
 
     const resizeWindow = () => {
-        const winWidth = window.innerWidth;
-        const winHeight = window.innerHeight;
+        const winWidth = Math.min(window.innerWidth, CONTENT_WIDTH);
+        const winHeight = Math.min(window.innerHeight, CONTENT_WIDTH);
         const scaleX = winWidth / CONTENT_WIDTH;
         const scaleY = winHeight / CONTENT_HEIGHT;
         const scale = Math.min(scaleX, scaleY);
@@ -31,19 +35,16 @@ export const Layout = ({ children, title }: Props) => {
         if (container.current && app?.renderer) {
             resizeWindow();
 
-            app.renderer.view.width = window.innerWidth;
+            const winWidth = Math.min(window.innerWidth, CONTENT_WIDTH);
+
+            app.renderer.view.width = winWidth;
             app.renderer.view.height = CONTENT_HEIGHT * window.scale;
 
             // 렌더러 크기 조정
-            app.renderer.resize(window.innerWidth, CONTENT_HEIGHT * window.scale);
-
-            // 캔버스 스타일 설정 (CSS 속성)
-            gsap.set(app.renderer.view, {
-                top: (window.innerHeight - CONTENT_HEIGHT * window.scale) / 2,
-            });
+            app.renderer.resize(winWidth, CONTENT_HEIGHT * window.scale);
 
             // 컨테이너 위치 및 크기 조정
-            container.current.position.x = (window.innerWidth - CONTENT_WIDTH * window.scale) / 2;
+            container.current.position.x = (winWidth - CONTENT_WIDTH * window.scale) / 2;
             container.current.scale.set(window.scale);
         }
     };
@@ -52,12 +53,13 @@ export const Layout = ({ children, title }: Props) => {
         const handleResize = () => resizeApp(app);
 
         // 초기 리사이즈
-        resizeApp(app);
+        requestAnimationFrame(() => {
+            resizeApp(app);
+        });
 
         // 리사이즈 이벤트 리스너 등록
         window.addEventListener("resize", () => setTimeout(handleResize, 0));
         window.addEventListener("orientationchange", () => setTimeout(() => handleResize, 100));
-        //   document.addEventListener('visibilitychange', onVisibleChange);
 
         return () => {
             // 리사이즈 이벤트 리스너 제거
@@ -72,7 +74,13 @@ export const Layout = ({ children, title }: Props) => {
                 <title>{title}</title>
             </Helmet>
             <Stage onMount={onMountApp} width={CONTENT_WIDTH} height={CONTENT_HEIGHT}>
-                <Container ref={container}>{children}</Container>
+                <RecoilRoot>
+                    <ResourceProvider>
+                        <Container ref={container}>
+                            <CommonLayout />
+                        </Container>
+                    </ResourceProvider>
+                </RecoilRoot>
             </Stage>
         </HelmetProvider>
     );
