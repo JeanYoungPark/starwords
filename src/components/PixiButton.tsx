@@ -1,8 +1,7 @@
-import { PixiRef, Sprite, useApp, _ReactPixi } from "@pixi/react";
+import { PixiRef, Sprite, _ReactPixi } from "@pixi/react";
 import { Sound } from "@pixi/sound";
-import gsap from "gsap";
 import { Sprite as PIXISprite, Texture } from "pixi.js";
-import React, { useLayoutEffect, useRef, useState } from "react";
+import { useLayoutEffect, useRef, useState } from "react";
 
 interface Props extends _ReactPixi.ISprite {
     defaultTexture: Texture;
@@ -19,7 +18,7 @@ interface Props extends _ReactPixi.ISprite {
     verticalAlign?: "TOP" | "BOTTOM";
 }
 
-export const PixiButton = ({ defaultTexture, align, verticalAlign, position, toggle, ...props }: Props) => {
+export const PixiButton = ({ defaultTexture, toggle, sound, align, verticalAlign, position, ...props }: Props) => {
     const buttonRef = useRef<PixiRef<typeof Sprite> | null>(null);
     const [texture, setTexture] = useState<Texture | undefined>(defaultTexture);
     const [isToggled, setIsToggled] = useState(toggle?.initToggle || false);
@@ -48,15 +47,16 @@ export const PixiButton = ({ defaultTexture, align, verticalAlign, position, tog
     const onPointUp = () => {
         if (buttonRef.current) {
             setScale(0.7);
-            // buttonRef.current.scale.set(0.7, 0.7);
-            console.log(buttonRef.current.scale);
         }
     };
 
     const onPointDown = () => {
         if (buttonRef.current) {
             setScale(0.8);
-            console.log(buttonRef.current.scale);
+        }
+
+        if (sound) {
+            sound.play();
         }
 
         if (toggle?.active && toggle?.texture) {

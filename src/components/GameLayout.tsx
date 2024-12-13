@@ -1,41 +1,22 @@
 import { Container, PixiRef, Sprite } from "@pixi/react";
-import { Sound } from "@pixi/sound";
-import React, { ReactNode, useContext, useEffect, useRef, useState } from "react";
+import { sound } from "@pixi/sound";
+import { ReactNode, useContext, useEffect, useRef, useState } from "react";
 import { ResourceContext } from "../context/ResourceContext";
 import { PixiButton } from "./PixiButton";
-// import { PixiButton } from "./PixiButton";
 
 export const GameLayout = ({ children }: { children: ReactNode }) => {
-    const resources = useContext(ResourceContext);
+    const { resources, sounds } = useContext(ResourceContext);
     const containerRef = useRef<PixiRef<typeof Container>>(null);
     const [active, setActive] = useState(true);
-    const bgmAudio = useRef<Sound>();
 
     const toggleSound = () => {
-        setActive((prev) => {
-            if (prev) {
-                // 음소거
-                bgmAudio.current?.pause();
-            } else {
-                // 다시 재생
-                bgmAudio.current?.play({
-                    loop: true,
-                });
-            }
-            return !prev;
-        });
+        sound.toggleMuteAll();
+        setActive((prev) => !prev);
     };
 
     useEffect(() => {
-        if (resources) {
-            bgmAudio.current = resources.audioBgm;
-            bgmAudio.current?.play({ loop: true });
-        }
-
-        return () => {
-            bgmAudio.current?.stop();
-        };
-    }, [resources]);
+        sounds["audioIntroBgm"].play({ loop: true });
+    }, [sounds]);
 
     if (!resources) return null;
 
@@ -46,7 +27,6 @@ export const GameLayout = ({ children }: { children: ReactNode }) => {
                 name='bgmBtn'
                 position={[41, 29]}
                 defaultTexture={resources.soundOn}
-                sound={resources.audioBgm.sound}
                 toggle={{
                     active: true,
                     initToggle: true,

@@ -1,6 +1,5 @@
-import React, { useContext, useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef } from "react";
 import { Container, PixiRef, Sprite } from "@pixi/react";
-import { Resource } from "../types/resourcesType";
 import gsap from "gsap";
 import { ResourceContext } from "../context/ResourceContext";
 import { actionState } from "../store/assetsStore";
@@ -11,7 +10,7 @@ import { PixiButton } from "./PixiButton";
 
 export const Intro = () => {
     const containerRef = useRef<PixiRef<typeof Container>>(null);
-    const resources = useContext(ResourceContext);
+    const { resources, sounds } = useContext(ResourceContext);
     const [action, setAction] = useRecoilState(actionState);
 
     useEffect(() => {
@@ -85,15 +84,15 @@ export const Intro = () => {
             <Sprite name='startBtn' texture={resources.startBtn} position={[0, 700]} />
             <Sprite name='rankingBtn' texture={resources.rankingBtn} position={[1300, 840]} />
 
-            <Sprite name='help' texture={resources.help} position={[1840, 1000]} scale={0.7} onclick={() => setAction(Actions.GUIDE)} />
-            {/* <PixiButton
+            <PixiButton
                 name='bgmBtn'
                 position={[41, 29]}
-                defaultTexture={resources.soundOn}
-                sound={resources.audioBgm.sound}
-                align='LEFT'
-                verticalAlign='TOP'
-            /> */}
+                defaultTexture={resources.help}
+                sound={sounds.audioIntoBtn}
+                align='RIGHT'
+                verticalAlign='BOTTOM'
+                onclick={() => setAction(Actions.GUIDE)}
+            />
         </Container>
     );
 };

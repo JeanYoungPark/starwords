@@ -23,9 +23,13 @@ const assets = [
     { alias: "startBtn", src: `${introImgPath}startBtn.png` },
     { alias: "rankingBtn", src: `${introImgPath}rankingBtn.png` },
     { alias: "help", src: `${iconImgPath}help.png` },
-
-    //audio
-    { alias: "audioBgm", src: `${audioPath}lobby_bgm.mp3` },
 ];
 
-export default assets;
+const audioAssets = [
+    //audio
+    { alias: "audioIntroBgm", src: `${audioPath}lobby_bgm.mp3` },
+    { alias: "audioIntoBtn", src: `${audioPath}lobby_btn.mp3` },
+];
+
+// export default assets;
+export default { assets, audioAssets };

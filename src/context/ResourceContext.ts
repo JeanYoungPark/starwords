@@ -1,4 +1,8 @@
 import { createContext } from "react";
-import { Resource } from "../types/resourcesType";
 
-export const ResourceContext = createContext<Resource | undefined>(undefined);
+interface ResourceContextType {
+    resources: any;
+    sounds: any;
+}
+
+export const ResourceContext = createContext<ResourceContextType>({ resources: undefined, sounds: undefined });

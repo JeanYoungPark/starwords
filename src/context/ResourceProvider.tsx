@@ -1,4 +1,4 @@
-import React, { ReactNode, useEffect, useState } from "react";
+import { ReactNode, useEffect, useState } from "react";
 import { ResourceContext } from "./ResourceContext";
 import { useRecoilState } from "recoil";
 import { actionState } from "../store/assetsStore";
@@ -10,37 +10,37 @@ interface ResourceProviderProps {
     children: ReactNode;
 }
 export const ResourceProvider = ({ children }: ResourceProviderProps) => {
-    const assetsList = require("../assets/GameAssets").default;
+    const { assets, audioAssets } = require("../assets/GameAssets").default;
 
     const [resources, setResources] = useState<any>();
+    const [sounds, setSounds] = useState<any>();
     const [action, setAction] = useRecoilState(actionState);
 
     const loadAssets = async () => {
-        const assets = assetsList.map((asset: { alias: string; src: string }) => {
-            if (asset.src.endsWith(".mp3")) {
-                return {
-                    alias: asset.alias,
-                    src: Sound.from(require(`../assets/${asset.src}`)), // @pixi/sound로 mp3 로드
-                };
-            } else {
-                return {
-                    alias: asset.alias,
-                    src: require(`../assets/${asset.src}`),
-                };
-            }
-        });
+        const assetsList = assets.map((asset: { alias: string; src: string }) => ({
+            alias: asset.alias,
+            src: require(`../assets/${asset.src}`),
+        }));
 
-        const imageAssets = assets.filter((asset: { alias: string; src: string }) => typeof asset.src !== "object");
-        const loadedTextures = await Assets.load(imageAssets);
+        const loadedTextures = await Assets.load(assetsList);
 
-        const soundAssets = assets.filter((asset: { alias: string; src: object }) => typeof asset.src === "object");
+        const soundAssetsList = audioAssets.map((asset: { alias: string; src: string }) => ({
+            alias: asset.alias,
+            src: require(`../assets/${asset.src}`), // @pixi/sound로 mp3 로드
+        }));
 
-        const res = {
-            ...loadedTextures,
-            ...Object.fromEntries(soundAssets.map((asset: { alias: string; src: object }) => [asset.alias, asset.src])),
-        };
+        try {
+            Assets.addBundle("sounds", soundAssetsList);
+            const loadedSound = await Assets.loadBundle("sounds");
+            Object.fromEntries(Object.entries(loadedSound).map(([alias, asset]) => [alias, Sound.from(asset as any)]));
 
-        setResources(res);
+            setSounds(loadedSound);
+        } catch (error) {
+            console.error("Sound loading error:", error);
+        }
+
+        setResources(loadedTextures);
+
         setAction(Actions.INTRO);
     };
 
@@ -50,5 +50,5 @@ export const ResourceProvider = ({ children }: ResourceProviderProps) => {
         }
     }, [action]);
 
-    return <ResourceContext.Provider value={resources}>{children}</ResourceContext.Provider>;
+    return <ResourceContext.Provider value={{ resources, sounds }}>{children}</ResourceContext.Provider>;
 };
