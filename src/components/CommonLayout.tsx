@@ -7,7 +7,7 @@ import { Guide } from "./Guide";
 
 export const CommonLayout = () => {
     const action = useRecoilValue(actionState);
-
+    console.log(action);
     switch (action) {
         case "INTRO":
             return (

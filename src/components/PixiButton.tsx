@@ -18,7 +18,7 @@ interface Props extends _ReactPixi.ISprite {
     verticalAlign?: "TOP" | "BOTTOM";
 }
 
-export const PixiButton = ({ defaultTexture, toggle, sound, align, verticalAlign, position, ...props }: Props) => {
+export const PixiButton = ({ defaultTexture, toggle, onTouchEnd, sound, align, verticalAlign, position, ...props }: Props) => {
     const buttonRef = useRef<PixiRef<typeof Sprite> | null>(null);
     const [texture, setTexture] = useState<Texture | undefined>(defaultTexture);
     const [isToggled, setIsToggled] = useState(toggle?.initToggle || false);
@@ -47,6 +47,10 @@ export const PixiButton = ({ defaultTexture, toggle, sound, align, verticalAlign
     const onPointUp = () => {
         if (buttonRef.current) {
             setScale(0.7);
+        }
+
+        if (onTouchEnd) {
+            onTouchEnd(buttonRef.current!);
         }
     };
 
