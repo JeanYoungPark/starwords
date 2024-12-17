@@ -15,7 +15,7 @@ const loadingAni = [
 export const Loading = () => {
     return (
         <Container>
-            <Sprite name='bg' image={bg} />
+            <Sprite name='bg' image={bg} position={[-350, 0]} />
             <Sprite name='logo' image={logo} position={[780, 400]} scale={1.5} />
             <AnimatedSprite anchor={0.5} position={[960, 740]} images={loadingAni} isPlaying={true} initialFrame={0} animationSpeed={0.2} />
         </Container>

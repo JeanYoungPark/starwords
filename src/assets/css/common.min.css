@@ -1,1 +1,1 @@
-*{padding:0;margin:0}body{background:#000;overflow:hidden}canvas{position:fixed;left:50%;top:50%;transform:translate(-50%, -50%);max-width:1920px;max-height:1080px;overflow:hidden}
+*{padding:0;margin:0}body{background:#000;overflow:hidden}canvas{position:fixed;left:0;top:0}#container{width:100%}#container #content-wrap{position:relative;transform-origin:top left}

@@ -10,10 +10,15 @@ body {
 
 canvas {
     position: fixed;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
-    max-width: 1920px;
-    max-height: 1080px;
-    overflow: hidden;
+    left: 0;
+    top: 0;
+}
+
+#container {
+    width: 100%;
+
+    #content-wrap {
+        position: relative;
+        transform-origin: top left;
+    }
 }

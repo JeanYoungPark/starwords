@@ -1,4 +1,4 @@
-import { PixiRef, Sprite, _ReactPixi } from "@pixi/react";
+import { PixiRef, Sprite, _ReactPixi, useApp } from "@pixi/react";
 import { Sound } from "@pixi/sound";
 import { Sprite as PIXISprite, Texture } from "pixi.js";
 import { useLayoutEffect, useRef, useState } from "react";
@@ -15,26 +15,24 @@ interface Props extends _ReactPixi.ISprite {
     onTouchEnd?: (target?: PIXISprite) => void;
     sound?: Sound;
     align?: "LEFT" | "RIGHT";
-    verticalAlign?: "TOP" | "BOTTOM";
 }
 
-export const PixiButton = ({ defaultTexture, toggle, onTouchEnd, sound, align, verticalAlign, position, ...props }: Props) => {
+export const PixiButton = ({ defaultTexture, toggle, onTouchEnd, sound, align, position, ...props }: Props) => {
     const buttonRef = useRef<PixiRef<typeof Sprite> | null>(null);
     const [texture, setTexture] = useState<Texture | undefined>(defaultTexture);
     const [isToggled, setIsToggled] = useState(toggle?.initToggle || false);
-    const [scale, setScale] = useState(0.7);
+    const [scale, setScale] = useState(1);
+    const app = useApp();
+    const initX = useRef<number>(0);
 
     const setBtnPos = () => {
-        if (align === "LEFT") {
-            buttonRef.current!.position.x = 20;
-        } else if (align === "RIGHT") {
-            buttonRef.current!.position.x = 1840;
-        }
+        let moveX = app.stage.children[0].position.x * (1 / window.scale);
+        if (moveX > 400) moveX = 400;
 
-        if (verticalAlign === "TOP") {
-            buttonRef.current!.position.y = 20;
-        } else if (verticalAlign === "BOTTOM") {
-            buttonRef.current!.position.y = 1000;
+        if (align === "LEFT") {
+            buttonRef.current!.position.x = initX.current - moveX;
+        } else if (align === "RIGHT") {
+            buttonRef.current!.position.x = initX.current + moveX;
         }
     };
 
@@ -46,7 +44,7 @@ export const PixiButton = ({ defaultTexture, toggle, onTouchEnd, sound, align, v
 
     const onPointUp = () => {
         if (buttonRef.current) {
-            setScale(0.7);
+            setScale(1);
         }
 
         if (onTouchEnd) {
@@ -56,7 +54,7 @@ export const PixiButton = ({ defaultTexture, toggle, onTouchEnd, sound, align, v
 
     const onPointDown = () => {
         if (buttonRef.current) {
-            setScale(0.8);
+            setScale(1.1);
         }
 
         if (sound) {
@@ -73,7 +71,9 @@ export const PixiButton = ({ defaultTexture, toggle, onTouchEnd, sound, align, v
     };
 
     useLayoutEffect(() => {
-        if (align || verticalAlign) {
+        initX.current = buttonRef.current!.position.x;
+
+        if (align) {
             window.addEventListener("resize", resizeApp);
             setBtnPos();
         }
@@ -81,17 +81,18 @@ export const PixiButton = ({ defaultTexture, toggle, onTouchEnd, sound, align, v
         return () => {
             window.removeEventListener("resize", resizeApp);
         };
-    }, []);
+    }, [align]);
 
     return (
         <Sprite
             ref={buttonRef}
-            position={buttonRef.current?.position ? buttonRef.current.position : position}
+            position={buttonRef.current ? buttonRef.current.position : position}
             interactive={true}
             texture={texture}
             pointerdown={onPointDown}
             pointerup={onPointUp}
             scale={scale}
+            anchor={[0.5, 0.5]}
             {...props}
         />
     );

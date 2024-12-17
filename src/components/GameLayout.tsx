@@ -1,16 +1,80 @@
-import { Container, PixiRef, Sprite } from "@pixi/react";
-import { ReactNode, useContext, useRef } from "react";
-import { ResourceContext } from "../context/ResourceContext";
-export const GameLayout = ({ children }: { children: ReactNode }) => {
-    const { resources } = useContext(ResourceContext);
-    const containerRef = useRef<PixiRef<typeof Container>>(null);
+import { Container, Stage, PixiRef } from "@pixi/react";
+import { Application } from "pixi.js";
+import React, { ReactNode, useEffect, useRef, useState } from "react";
+import { Helmet, HelmetProvider } from "react-helmet-async";
+import { CommonLayout } from "./CommonLayout";
+import { isMobile } from "../util";
+import gsap from "gsap";
 
-    if (!resources) return null;
+interface Props {
+    children: ReactNode;
+    title: string;
+    resultPopupData: any;
+}
+
+const CONTENT_WIDTH = 1920;
+const CONTENT_HEIGHT = 1080;
+
+export const GameLayout = ({ children, title, resultPopupData }: Props) => {
+    const container = useRef<PixiRef<typeof Container>>(null);
+
+    const resizeApp = (app: Application) => {
+        if (container.current && app?.renderer) {
+            app.renderer.view.width = window.innerWidth;
+            app.renderer.view.height = CONTENT_HEIGHT * window.scale;
+            gsap.set(app.renderer.view, { top: (window.innerHeight - CONTENT_HEIGHT * window.scale) / 2 });
+
+            // 렌더러 크기 조정
+            app.renderer.resize(window.innerWidth, CONTENT_HEIGHT * window.scale);
+
+            // 컨테이너 위치 및 크기 조정
+            container.current.position.x = (window.innerWidth - CONTENT_WIDTH * window.scale) / 2;
+            container.current.scale.set(window.scale);
+        }
+    };
+
+    const onMountApp = (app: Application) => {
+        const handleResize = () => resizeApp(app);
+
+        // 초기 리사이즈
+        requestAnimationFrame(() => {
+            resizeApp(app);
+        });
+
+        // 리사이즈 이벤트 리스너 등록
+        window.addEventListener("resize", () => setTimeout(handleResize, 0));
+        window.addEventListener("orientationchange", () => setTimeout(() => handleResize, 100));
+
+        return () => {
+            // 리사이즈 이벤트 리스너 제거
+            window.removeEventListener("resize", handleResize);
+            window.removeEventListener("orientationchange", handleResize);
+        };
+    };
 
     return (
-        <Container ref={containerRef}>
-            {children}
-            <Sprite name='close' texture={resources.close} position={[1840, 20]} scale={0.7} />
-        </Container>
+        <HelmetProvider>
+            <Helmet>
+                <title>{title}</title>
+            </Helmet>
+            <Stage
+                onMount={onMountApp}
+                width={CONTENT_WIDTH}
+                height={CONTENT_HEIGHT}
+                options={{
+                    backgroundColor: 0x000000,
+                    useContextAlpha: false,
+                    antialias: false,
+                    autoDensity: true,
+                    resolution: !isMobile() ? 2 : window.devicePixelRatio,
+                }}>
+                <Container ref={container}>{children}</Container>
+            </Stage>
+            <CommonLayout contentWidth={CONTENT_WIDTH} contentHeight={CONTENT_HEIGHT} disabled={!resultPopupData ? true : false}>
+                <div id='content'>
+                    {/* {resultPopupData && <ResultPopup data={resultPopupData} type={type} step={step ? step : 1} onClose={onCloseResultPopup} />} */}
+                </div>
+            </CommonLayout>
+        </HelmetProvider>
     );
 };

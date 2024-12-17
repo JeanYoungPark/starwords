@@ -2,6 +2,7 @@ const commonImgPath = "images/";
 const iconImgPath = "images/icons/";
 const introImgPath = "images/intro/";
 const guideImgPath = "images/guide/";
+const rankingImgPath = "images/ranking/";
 const audioPath = "audio/";
 
 const assets = [
@@ -32,6 +33,13 @@ const assets = [
     { alias: "planet04", src: `${guideImgPath}planet_02.png` },
     { alias: "planet05", src: `${guideImgPath}planet_03.png` },
     { alias: "rocket01", src: `${guideImgPath}rocket_01.png` },
+
+    // ranking
+    { alias: "rankingBg", src: `${rankingImgPath}ranking_bg.png` },
+    { alias: "rankingPrize", src: `${rankingImgPath}prize.png` },
+    { alias: "rankingTitle", src: `${rankingImgPath}title.png` },
+    { alias: "rankingProfile", src: `${rankingImgPath}profile.png` },
+    { alias: "rankingScoreBg", src: `${rankingImgPath}score_bg.png` },
 ];
 
 const audioAssets = [

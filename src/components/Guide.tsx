@@ -24,7 +24,14 @@ export const Guide = () => {
             <Sprite texture={resources.planet05} position={[-50, 800]} scale={0.9} />
             <Sprite texture={resources.rocket01} position={[0, 0]} scale={0.7} />
 
-            <PixiButton name='back' position={[41, 29]} defaultTexture={resources.back} align='LEFT' verticalAlign='TOP' onTouchEnd={onTouchEnd} />
+            <PixiButton
+                name='back'
+                position={[60, 70]}
+                defaultTexture={resources.back}
+                sound={sounds.audioIntoBtn}
+                align='LEFT'
+                onTouchEnd={onTouchEnd}
+            />
         </Container>
     );
 };
