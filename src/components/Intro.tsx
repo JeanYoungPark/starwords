@@ -8,7 +8,7 @@ import { UseIntroAnimations } from "../hooks/intro/UseIntroAnimations";
 export const Intro = () => {
     const containerRef = useRef<PixiRef<typeof Container>>(null);
     const { resources, sounds } = useContext(ResourceContext);
-    const { active, toggleSound, handleStartGuide, handleRanking } = UseIntroLogic();
+    const { active, toggleSound, handleStartGuide, handleStart, handleRanking } = UseIntroLogic();
     UseIntroAnimations(containerRef);
 
     if (!resources || !sounds) return null;
@@ -26,7 +26,15 @@ export const Intro = () => {
 
             <Sprite name='title' texture={resources.title} position={[980, 300]} anchor={[0.5, 0.5]} />
             <Sprite name='titleBg' texture={resources.titleBg} position={[280, 520]} width={1358} height={150} alpha={0.5} />
-            <Sprite name='startBtn' texture={resources.startBtn} position={[720, 750]} anchor={0.5} />
+
+            <PixiButton
+                name='startBtn'
+                position={[720, 750]}
+                defaultTexture={resources.startBtn}
+                sound={sounds.audioIntoBtn}
+                onTouchEnd={handleStart}
+            />
+
             <PixiButton
                 name='rankingBtn'
                 position={[720, 890]}

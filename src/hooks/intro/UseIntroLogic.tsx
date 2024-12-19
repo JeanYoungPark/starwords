@@ -19,6 +19,10 @@ export const UseIntroLogic = () => {
         setAction(Actions.GUIDE);
     };
 
+    const handleStart = () => {
+        setAction(Actions.GAME);
+    };
+
     const handleRanking = () => {
         setAction(Actions.RANKING);
     };
@@ -31,6 +35,7 @@ export const UseIntroLogic = () => {
         active,
         toggleSound,
         handleStartGuide,
+        handleStart,
         handleRanking,
     };
 };
