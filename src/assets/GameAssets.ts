@@ -40,6 +40,8 @@ const assets = [
     { alias: "rankingTitle", src: `${rankingImgPath}title.png` },
     { alias: "rankingProfile", src: `${rankingImgPath}profile.png` },
     { alias: "rankingScoreBg", src: `${rankingImgPath}score_bg.png` },
+    { alias: "gold", src: `${rankingImgPath}gold.png` },
+    { alias: "rankingUserScoreBg", src: `${rankingImgPath}user_score_bg.png` },
 ];
 
 const audioAssets = [

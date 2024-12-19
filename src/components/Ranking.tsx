@@ -1,5 +1,5 @@
 import { Container, Sprite, Text } from "@pixi/react";
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { ResourceContext } from "../context/ResourceContext";
 import { PixiButton } from "./PixiButton";
 import { TextStyle } from "pixi.js";
@@ -10,6 +10,11 @@ import { Actions } from "../types/actionsType";
 export const Ranking = () => {
     const { resources, sounds } = useContext(ResourceContext);
     const [action, setAction] = useRecoilState(actionState);
+    const [page, setPage] = useState<number>(1);
+
+    const handleStartGuide = () => {
+        setAction(Actions.GUIDE);
+    };
 
     const onTouchEnd = () => {
         setAction(Actions.INTRO);
@@ -44,14 +49,14 @@ export const Ranking = () => {
                 />
             </Container>
 
-            <Container position={[1130, 220]}>
-                <Sprite texture={resources.rankingScoreBg} position={[0, 0]} scale={0.8} width={506} height={130} />
-                <Sprite texture={resources.rankingProfile} position={[20, 20]} scale={0.35} />
+            <Container position={[1130, 200]}>
+                <Sprite texture={resources.rankingScoreBg} position={[0, 0]} width={506} height={130} />
+                <Sprite texture={resources.rankingProfile} position={[30, 25]} scale={0.4} />
 
                 <Text
                     text='0'
                     anchor={[0.5, 0.5]}
-                    position={[(resources.rankingScoreBg.width * 0.8) / 2, 50]}
+                    position={[506 / 2, 65]}
                     style={
                         new TextStyle({
                             fontSize: 40,
@@ -64,7 +69,7 @@ export const Ranking = () => {
                 <Text
                     text='점'
                     anchor={0.5}
-                    position={[480, 50]}
+                    position={[460, 65]}
                     style={
                         new TextStyle({
                             fontSize: 25,
@@ -74,7 +79,55 @@ export const Ranking = () => {
                 />
             </Container>
 
-            <Sprite texture={resources.rankingBg} position={[220, 350]} scale={0.75} />
+            <Container position={[220, 350]}>
+                <Sprite texture={resources.rankingBg} position={[0, 0]} scale={0.75} />
+                {Array.from({ length: 5 }, (_, idx: number) => {
+                    return (
+                        <Container key={idx} position={[0, idx * 115]}>
+                            {idx < 3 ? (
+                                <Sprite texture={resources.gold} position={[150, 40]} scale={0.75} />
+                            ) : (
+                                <Text
+                                    text={`${idx + 1}`}
+                                    position={[170, 50]}
+                                    style={
+                                        new TextStyle({
+                                            fontSize: 30,
+                                            fill: "rgba(256,256,256)",
+                                            fontWeight: "bold",
+                                        })
+                                    }
+                                />
+                            )}
+                            <Sprite texture={resources.rankingProfile} position={[220, 30]} scale={0.4} />
+                            <Text
+                                text='이름'
+                                position={[310, 50]}
+                                style={
+                                    new TextStyle({
+                                        fontSize: 30,
+                                        fill: "rgba(256,256,256)",
+                                    })
+                                }
+                            />
+                            <Container position={[(resources.rankingBg.width * 0.75) / 2 - resources.rankingUserScoreBg.width - 30, 40]}>
+                                <Sprite texture={resources.rankingUserScoreBg} position={[0, 0]} />
+                                <Text
+                                    text={`3,000 점`}
+                                    position={[50, 10]}
+                                    style={
+                                        new TextStyle({
+                                            fontSize: 30,
+                                            fill: "rgba(255, 234, 68)",
+                                            fontWeight: "bold",
+                                        })
+                                    }
+                                />
+                            </Container>
+                        </Container>
+                    );
+                })}
+            </Container>
 
             <Text
                 text='초기화까지 5일 9시간 13분 남음'
@@ -94,6 +147,14 @@ export const Ranking = () => {
                 sound={sounds.audioIntoBtn}
                 align='LEFT'
                 onTouchEnd={onTouchEnd}
+            />
+
+            <PixiButton
+                position={[1860, 1020]}
+                defaultTexture={resources.help}
+                sound={sounds.audioIntoBtn}
+                align='RIGHT'
+                onTouchEnd={handleStartGuide}
             />
         </Container>
     );
