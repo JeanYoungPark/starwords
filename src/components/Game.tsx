@@ -1,5 +1,5 @@
-import { Container, PixiRef, Sprite, Text, useApp } from "@pixi/react";
-import React, { RefObject, useContext, useEffect, useRef } from "react";
+import { Container, PixiRef, Sprite, Text, useTick } from "@pixi/react";
+import { useContext, useEffect, useRef } from "react";
 import { ResourceContext } from "../context/ResourceContext";
 import { PixiButton } from "./PixiButton";
 import { TextStyle } from "pixi.js";
@@ -9,6 +9,10 @@ import * as PIXI from "pixi.js";
 export const Game = () => {
     const containerRef = useRef<PixiRef<typeof Container>>(null);
     const { resources, sounds } = useContext(ResourceContext);
+    const timeoutLength = 6000;
+    const timer = useRef();
+
+    useTick((delta) => {});
 
     useEffect(() => {
         if (containerRef.current) {
@@ -44,12 +48,13 @@ export const Game = () => {
 
             <Text
                 text='(색깔이)밝은, 선명한'
-                position={[950, 200]}
+                position={[950, 180]}
                 style={
                     new TextStyle({
-                        fontSize: 40,
+                        fontFamily: "NotoSans",
+                        fontSize: 47,
                         fill: "rgba(255, 234, 68)",
-                        fontWeight: "bold",
+                        fontWeight: "700",
                     })
                 }
                 anchor={[0.5, 0.5]}
@@ -68,8 +73,10 @@ export const Game = () => {
                                 position={[resources.alien01.width / 2, 200]}
                                 style={
                                     new TextStyle({
+                                        fontFamily: "NotoSans",
                                         fontSize: 40,
                                         fill: "rgba(256, 256, 256)",
+                                        fontWeight: "700",
                                     })
                                 }
                                 anchor={0.5}
@@ -90,6 +97,7 @@ export const Game = () => {
                     new TextStyle({
                         fontSize: 50,
                         fill: "rgba(255, 234, 68)",
+                        fontFamily: "NotoSans",
                         fontWeight: "bold",
                     })
                 }
@@ -107,6 +115,8 @@ export const Game = () => {
                 position={[1230, 940]}
                 style={
                     new TextStyle({
+                        fontFamily: "NotoSans",
+                        fontWeight: "400",
                         fontSize: 20,
                         fill: "rgba(177, 184, 255)",
                     })

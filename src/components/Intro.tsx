@@ -1,15 +1,23 @@
-import { useContext, useRef } from "react";
-import { Container, PixiRef, Sprite } from "@pixi/react";
+import { useContext, useEffect, useRef } from "react";
+import { Container, PixiRef, Sprite, Text, useApp } from "@pixi/react";
 import { ResourceContext } from "../context/ResourceContext";
 import { PixiButton } from "./PixiButton";
 import { UseIntroLogic } from "../hooks/intro/UseIntroLogic";
 import { UseIntroAnimations } from "../hooks/intro/UseIntroAnimations";
+import { TextStyle } from "pixi.js";
+import { useRecoilValue } from "recoil";
+import { gameTypeState } from "../store/assetsStore";
 
 export const Intro = () => {
     const containerRef = useRef<PixiRef<typeof Container>>(null);
-    const { resources, sounds } = useContext(ResourceContext);
+    const { resources, sounds, contentsData } = useContext(ResourceContext);
+    const gameType = useRecoilValue(gameTypeState);
     const { active, toggleSound, handleStartGuide, handleStart, handleRanking } = UseIntroLogic();
     UseIntroAnimations(containerRef);
+
+    useEffect(() => {
+        console.log(contentsData);
+    }, [contentsData]);
 
     if (!resources || !sounds) return null;
 
@@ -19,13 +27,54 @@ export const Intro = () => {
 
             <Sprite name='bottomLight' texture={resources.bottomLight} position={[100, 550]} />
             <Sprite name='topLight' texture={resources.topLight} position={[200, 0]} />
-            <Sprite name='planet01' texture={resources.planet01} position={[-150, 0]} scale={0.8} />
-            <Sprite name='planet02' texture={resources.planet02} position={[1250, 420]} scale={0.8} />
-            <Sprite name='rocket' texture={resources.rocket} position={[1500, 250]} scale={0.7} />
-            <Sprite name='spaceship' texture={resources.spaceship} position={[0, 580]} scale={0.7} />
+            <Sprite name='planet01' texture={resources.planet01} position={[-150, 0]} scale={0.9} />
+            <Sprite name='planet02' texture={resources.planet02} position={[1130, 350]} scale={0.9} />
+            <Sprite name='rocket' texture={resources.rocket} position={[1400, 200]} />
+            <Sprite name='spaceship' texture={resources.spaceship} position={[-10, 550]} scale={0.9} />
 
             <Sprite name='title' texture={resources.title} position={[980, 300]} anchor={[0.5, 0.5]} />
-            <Sprite name='titleBg' texture={resources.titleBg} position={[280, 520]} width={1358} height={150} alpha={0.5} />
+            <Container position={[1920 / 2, 510]}>
+                <Sprite name='titleBg' texture={resources.titleBg} position={[-(1358 / 2), 0]} width={1358} height={150} alpha={0.5} />
+                <Text
+                    text={contentsData.cont_name}
+                    anchor={[0.5, 0.5]}
+                    position={[0, contentsData.mid_name ? 30 : 50]}
+                    style={
+                        new TextStyle({
+                            fontFamily: "NotoSans",
+                            fontSize: 34,
+                            fill: "rgba(170, 242, 246)",
+                            fontWeight: "700",
+                        })
+                    }
+                />
+                <Text
+                    text={contentsData.mid_name}
+                    anchor={[0.5, 0.5]}
+                    position={[0, 80]}
+                    style={
+                        new TextStyle({
+                            fontFamily: "NotoSans",
+                            fontSize: 34,
+                            fill: "rgba(170, 242, 246)",
+                            fontWeight: "700",
+                        })
+                    }
+                />
+                <Text
+                    text={contentsData.cont_sub_name}
+                    anchor={[0.5, 0.5]}
+                    position={[0, contentsData.mid_name ? 130 : 100]}
+                    style={
+                        new TextStyle({
+                            fontFamily: "NotoSans",
+                            fontSize: 34,
+                            fill: "rgba(170, 242, 246)",
+                            fontWeight: "700",
+                        })
+                    }
+                />
+            </Container>
 
             <PixiButton
                 name='startBtn'
@@ -35,13 +84,15 @@ export const Intro = () => {
                 onTouchEnd={handleStart}
             />
 
-            <PixiButton
-                name='rankingBtn'
-                position={[720, 890]}
-                defaultTexture={resources.rankingBtn}
-                sound={sounds.audioIntoBtn}
-                onTouchEnd={handleRanking}
-            />
+            {gameType !== "word_master" && (
+                <PixiButton
+                    name='rankingBtn'
+                    position={[720, 890]}
+                    defaultTexture={resources.rankingBtn}
+                    sound={sounds.audioIntoBtn}
+                    onTouchEnd={handleRanking}
+                />
+            )}
 
             <PixiButton
                 name='bgmBtn'

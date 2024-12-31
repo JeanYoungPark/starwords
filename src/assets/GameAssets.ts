@@ -5,6 +5,7 @@ const guideImgPath = "images/guide/";
 const rankingImgPath = "images/ranking/";
 const gameImgPath = "images/game/";
 const audioPath = "audio/";
+const fontPath = "fonts/";
 
 const assets = [
     //common
@@ -67,5 +68,17 @@ const audioAssets = [
     { alias: "audioIntoBtn", src: `${audioPath}lobby_btn.mp3` },
 ];
 
-// export default assets;
-export default { assets, audioAssets };
+const fonts = [
+    {
+        family: "NotoSans",
+        weight: 400,
+        url: `${fontPath}notosanskr-medium.woff2`, // 폰트 파일 경로
+    },
+    {
+        family: "NotoSans",
+        weight: 700,
+        url: `${fontPath}notosanskr-bold.woff2`, // 폰트 파일 경로
+    },
+];
+
+export default { assets, audioAssets, fonts };

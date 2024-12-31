@@ -1,6 +1,6 @@
 import { Container, Stage, PixiRef } from "@pixi/react";
 import { Application } from "pixi.js";
-import React, { ReactNode, useEffect, useRef, useState } from "react";
+import { ReactNode, useRef } from "react";
 import { Helmet, HelmetProvider } from "react-helmet-async";
 import { CommonLayout } from "./CommonLayout";
 import { isMobile } from "../util";
