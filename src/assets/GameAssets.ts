@@ -60,6 +60,20 @@ const assets = [
     { alias: "alien04", src: `${gameImgPath}alien_04.png` },
     { alias: "alien05", src: `${gameImgPath}alien_05.png` },
     { alias: "gauge", src: `${gameImgPath}gauge.png` },
+    { alias: "gauge2", src: `${gameImgPath}gauge2.png` },
+    { alias: "destroy01", src: `${gameImgPath}destroy_01.png` },
+    { alias: "destroy02", src: `${gameImgPath}destroy_02.png` },
+    { alias: "destroy03", src: `${gameImgPath}destroy_03.png` },
+    { alias: "destroy04", src: `${gameImgPath}destroy_04.png` },
+    { alias: "destroy05", src: `${gameImgPath}destroy_05.png` },
+    { alias: "destroy06", src: `${gameImgPath}destroy_06.png` },
+    { alias: "destroy07", src: `${gameImgPath}destroy_07.png` },
+    { alias: "destroy08", src: `${gameImgPath}destroy_08.png` },
+    { alias: "destroy09", src: `${gameImgPath}destroy_09.png` },
+    { alias: "destroy10", src: `${gameImgPath}destroy_10.png` },
+    { alias: "destroy11", src: `${gameImgPath}destroy_11.png` },
+    { alias: "destroy12", src: `${gameImgPath}destroy_12.png` },
+    { alias: "destroy13", src: `${gameImgPath}destroy_13.png` },
 ];
 
 const audioAssets = [

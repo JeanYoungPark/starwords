@@ -15,12 +15,8 @@ export const Intro = () => {
     const { active, toggleSound, handleStartGuide, handleStart, handleRanking } = UseIntroLogic();
     UseIntroAnimations(containerRef);
 
-    useEffect(() => {
-        console.log(contentsData);
-    }, [contentsData]);
-
     if (!resources || !sounds) return null;
-
+    console.log(gameType);
     return (
         <Container ref={containerRef}>
             <Sprite name='bg' texture={resources.bg} anchor={0.5} position={[1024, 640]} />
@@ -36,7 +32,7 @@ export const Intro = () => {
             <Container position={[1920 / 2, 510]}>
                 <Sprite name='titleBg' texture={resources.titleBg} position={[-(1358 / 2), 0]} width={1358} height={150} alpha={0.5} />
                 <Text
-                    text={contentsData.cont_name}
+                    text={gameType === "word_master" ? contentsData.cont_title : contentsData.cont_name}
                     anchor={[0.5, 0.5]}
                     position={[0, contentsData.mid_name ? 30 : 50]}
                     style={
@@ -48,21 +44,23 @@ export const Intro = () => {
                         })
                     }
                 />
+                {gameType !== "word_master" && (
+                    <Text
+                        text={contentsData.mid_name}
+                        anchor={[0.5, 0.5]}
+                        position={[0, 80]}
+                        style={
+                            new TextStyle({
+                                fontFamily: "NotoSans",
+                                fontSize: 34,
+                                fill: "rgba(170, 242, 246)",
+                                fontWeight: "700",
+                            })
+                        }
+                    />
+                )}
                 <Text
-                    text={contentsData.mid_name}
-                    anchor={[0.5, 0.5]}
-                    position={[0, 80]}
-                    style={
-                        new TextStyle({
-                            fontFamily: "NotoSans",
-                            fontSize: 34,
-                            fill: "rgba(170, 242, 246)",
-                            fontWeight: "700",
-                        })
-                    }
-                />
-                <Text
-                    text={contentsData.cont_sub_name}
+                    text={gameType === "word_master" ? `Stage ${contentsData.stage}` : contentsData.cont_sub_name}
                     anchor={[0.5, 0.5]}
                     position={[0, contentsData.mid_name ? 130 : 100]}
                     style={

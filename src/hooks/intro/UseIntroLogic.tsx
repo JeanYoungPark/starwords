@@ -20,7 +20,7 @@ export const UseIntroLogic = () => {
     };
 
     const handleStart = () => {
-        setAction(Actions.GAME);
+        setAction(Actions.GAME_START);
     };
 
     const handleRanking = () => {
@@ -30,6 +30,10 @@ export const UseIntroLogic = () => {
     useEffect(() => {
         sounds["audioIntroBgm"].play({ loop: true });
     }, [sounds]);
+
+    useEffect(() => {
+        // 여기서 데이터 셔플 (init)
+    }, []);
 
     return {
         active,

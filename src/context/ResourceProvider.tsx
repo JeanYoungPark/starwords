@@ -1,4 +1,4 @@
-import { ReactNode, useEffect, useState } from "react";
+import { ReactNode, useEffect, useRef, useState } from "react";
 import { ResourceContext } from "./ResourceContext";
 import { useRecoilState } from "recoil";
 import {
@@ -19,65 +19,83 @@ import { Sound } from "@pixi/sound";
 import FontFaceObserver from "fontfaceobserver";
 import { getGameData, getUserData, getContentsData } from "../apis/getData";
 import { getCookie } from "../util";
+import { AlienMovePositionType } from "../types/resourcesType";
+import { UseStarwords } from "../hooks/UseStarwords";
 
 interface ResourceProviderProps {
     children: ReactNode;
 }
 
 export const ResourceProvider = ({ children }: ResourceProviderProps) => {
+    const { contentDataParse, gameDataParse } = UseStarwords();
     const { assets, audioAssets, fonts } = require("../assets/GameAssets").default;
 
     const [resources, setResources] = useState<any>();
     const [sounds, setSounds] = useState<any>();
+    const [gameData, setGameData] = useState(undefined);
+    const [contentsData, setContentsData] = useState(undefined);
+    const [userData, setUserData] = useState(undefined);
+    const [aliensMovePosition, setAliensMovePosition] = useState<AlienMovePositionType[] | undefined>(undefined);
+
     const [action, setAction] = useRecoilState(actionState);
     const [, setDeviceOs] = useRecoilState(deviceOsState);
     const [, setFuId] = useRecoilState(fuIdState);
     const [, setHwCode] = useRecoilState(hwCodeState);
-    const [, setGameType] = useRecoilState(gameTypeState);
+    const [gameType, setGameType] = useRecoilState(gameTypeState);
     const [, setWordMasterSeq] = useRecoilState(wordMasterSeqState);
     const [, setStage] = useRecoilState(stageState);
     const [, setLangCode] = useRecoilState(langCodeState);
     const [, setFcId] = useRecoilState(fcIdState);
     const [, setClassId] = useRecoilState(classIdState);
-    const [gameData, setGameData] = useState(undefined);
-    const [contentsData, setContentsData] = useState(undefined);
-    const [userData, setUserData] = useState(undefined);
 
     const initData = async () => {
         setDeviceOs(getCookie("device_os"));
         setFuId(getCookie("fx7"));
         setHwCode(Number(getCookie("hw_no")));
 
-        const gameType = getCookie("game_type");
-        setGameType(gameType);
+        const cookieGameType = getCookie("game_type");
+        setGameType(cookieGameType);
 
-        if (gameType === "word_master") {
+        if (cookieGameType === "word_master") {
             setWordMasterSeq(getCookie("word_master_seq"));
             setStage(Number(getCookie("stage")));
             setLangCode(getCookie("lang_code"));
         } else {
             setFcId(getCookie("Starwords_fc_id"));
 
-            if (gameType === "class_id") {
+            if (cookieGameType === "class_id") {
                 setClassId(Number(getCookie("class_id")));
             }
         }
     };
 
     const loadData = async () => {
+        // game data
         const gameRes = await getGameData();
-        if (gameRes.status === 200) {
-            setGameData(gameRes.data);
+
+        if (gameRes.code === 200) {
+            gameRes.leftTime = gameRes.time_limit + 1;
+            gameRes.idx = -1;
+
+            const shuffleGameData = gameDataParse(gameRes);
+            gameRes.word_arr = shuffleGameData;
+            setGameData(gameRes);
         }
 
+        // content data
         const contentsRes = await getContentsData();
-        if (contentsRes.status === 200) {
-            setContentsData(contentsRes.data);
-        }
+        const aliensPosition = contentDataParse(contentsRes);
+        setAliensMovePosition(aliensPosition);
 
-        const userRes = await getUserData();
-        if (userRes.status === 200) {
-            setUserData(userRes.data);
+        // contentsRes.title_len = contentsRes.cont_title.length;
+        setContentsData(contentsRes);
+
+        // etc
+        if (gameType === "class" || gameType === "normal") {
+            const userRes = await getUserData();
+            if (userRes.status === 200) {
+                setUserData(userRes.data);
+            }
         }
     };
 
@@ -139,5 +157,9 @@ export const ResourceProvider = ({ children }: ResourceProviderProps) => {
         }
     }, [action]);
 
-    return <ResourceContext.Provider value={{ resources, sounds, gameData, contentsData, userData }}>{children}</ResourceContext.Provider>;
+    return (
+        <ResourceContext.Provider value={{ resources, sounds, gameData, contentsData, userData, aliensMovePosition }}>
+            {children}
+        </ResourceContext.Provider>
+    );
 };

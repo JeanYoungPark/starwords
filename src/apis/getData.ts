@@ -18,8 +18,11 @@ export const getGameData = async () => {
      * game type class 또는 normal 일 때
      * const res = await axios.get(`https://www.littlefox.com/starwords_api/game_info/${fuId}/${fcId}`);
      */
-    const res = await axios.get("https://www.littlefox.com/starwords_api/game_info/ko/1/1");
-    return res;
+    const res = await axios.get("https://www.littlefox.com/ko/starwords_api/game_info/U202205021507796459/C0011212");
+
+    if (res.status === 200) {
+        return res.data;
+    }
 };
 
 export const getUserData = async () => {
@@ -28,7 +31,10 @@ export const getUserData = async () => {
      * const res = await axios.get(`https://www.littlefox.com/starwords_api/user_info/${fuId}/${fcId}`);
      */
     const res = await axios.get("https://www.littlefox.com/starwords_api/user_info/U202205021507796459/C0011212");
-    return res;
+
+    if (res.status === 200) {
+        return res.data;
+    }
 };
 
 export const getContentsData = async () => {
@@ -44,5 +50,8 @@ export const getContentsData = async () => {
      * const res = await axios.get(`https://www.littlefox.com/starwords_api/contents_info/${fuId}/${fcId}`);
      */
     const res = await axios.get("https://www.littlefox.com/starwords_api/contents_info/U202205021507796459/C0011212");
-    return res;
+
+    if (res.status === 200) {
+        return res.data;
+    }
 };

@@ -20,7 +20,7 @@ export const Layout = () => {
                     {action === "INTRO" && <Intro />}
                     {action === "GUIDE" && <Guide />}
                     {action === "RANKING" && <Ranking />}
-                    {action === "GAME" && <Game />}
+                    {action === "GAME_START" && <Game />}
 
                     <PixiButton name='close' position={[1860, 70]} defaultTexture={resources.close} sound={sounds.audioIntoBtn} align='RIGHT' />
                 </>
