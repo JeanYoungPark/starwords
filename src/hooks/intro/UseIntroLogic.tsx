@@ -28,12 +28,9 @@ export const UseIntroLogic = () => {
     };
 
     useEffect(() => {
+        sounds["audioIntroBgm"].volume = 0.5;
         sounds["audioIntroBgm"].play({ loop: true });
     }, [sounds]);
-
-    useEffect(() => {
-        // 여기서 데이터 셔플 (init)
-    }, []);
 
     return {
         active,

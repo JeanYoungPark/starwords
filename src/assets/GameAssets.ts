@@ -53,7 +53,12 @@ const assets = [
     { alias: "gameBarBg", src: `${gameImgPath}bar_bg.png` },
     { alias: "gameScoreBg", src: `${gameImgPath}score_board.png` },
     { alias: "comboBall", src: `${gameImgPath}combo_ball.png` },
+    { alias: "comboBall01", src: `${gameImgPath}combo_ball_01.png` },
+    { alias: "comboBall02", src: `${gameImgPath}combo_ball_02.png` },
+    { alias: "comboBall03", src: `${gameImgPath}combo_ball_03.png` },
+    { alias: "comboBall04", src: `${gameImgPath}combo_ball_04.png` },
     { alias: "maxComboBall", src: `${gameImgPath}max_combo_ball.png` },
+    { alias: "maxComboBallOn", src: `${gameImgPath}max_combo_ball_on.png` },
     { alias: "alien01", src: `${gameImgPath}alien_01.png` },
     { alias: "alien02", src: `${gameImgPath}alien_02.png` },
     { alias: "alien03", src: `${gameImgPath}alien_03.png` },
@@ -74,12 +79,34 @@ const assets = [
     { alias: "destroy11", src: `${gameImgPath}destroy_11.png` },
     { alias: "destroy12", src: `${gameImgPath}destroy_12.png` },
     { alias: "destroy13", src: `${gameImgPath}destroy_13.png` },
+    { alias: "incorrect01", src: `${gameImgPath}incorrect_01.png` },
+    { alias: "incorrect02", src: `${gameImgPath}incorrect_02.png` },
+    { alias: "incorrect03", src: `${gameImgPath}incorrect_03.png` },
+    { alias: "incorrect04", src: `${gameImgPath}incorrect_04.png` },
+    { alias: "incorrect05", src: `${gameImgPath}incorrect_05.png` },
+    { alias: "incorrect06", src: `${gameImgPath}incorrect_06.png` },
+    { alias: "incorrect07", src: `${gameImgPath}incorrect_07.png` },
+    { alias: "incorrect08", src: `${gameImgPath}incorrect_08.png` },
+    { alias: "combo01", src: `${gameImgPath}combo_cnt_01.png` },
+    { alias: "combo02", src: `${gameImgPath}combo_cnt_02.png` },
+    { alias: "combo03", src: `${gameImgPath}combo_cnt_03.png` },
+    { alias: "combo04", src: `${gameImgPath}combo_cnt_04.png` },
+    { alias: "combo05", src: `${gameImgPath}combo_max.png` },
+    { alias: "comboBallText01", src: `${gameImgPath}combo_ball_text_01.png` },
+    { alias: "comboBallText02", src: `${gameImgPath}combo_ball_text_02.png` },
+    { alias: "comboBallText03", src: `${gameImgPath}combo_ball_text_03.png` },
+    { alias: "comboBallText04", src: `${gameImgPath}combo_ball_text_04.png` },
+    { alias: "comboBallText05", src: `${gameImgPath}combo_ball_text_05.png` },
 ];
 
 const audioAssets = [
     //audio
     { alias: "audioIntroBgm", src: `${audioPath}lobby_bgm.mp3` },
     { alias: "audioIntoBtn", src: `${audioPath}lobby_btn.mp3` },
+    { alias: "gameBgm", src: `${audioPath}game_bgm.mp3` },
+    { alias: "gameCombo", src: `${audioPath}game_combo.mp3` },
+    { alias: "gameCorrect", src: `${audioPath}game_correct.mp3` },
+    { alias: "gameIncorrect", src: `${audioPath}game_incorrect.mp3` },
 ];
 
 const fonts = [

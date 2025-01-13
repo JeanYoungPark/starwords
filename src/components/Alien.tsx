@@ -1,33 +1,62 @@
 import { AnimatedSprite, Container, PixiRef, Sprite, Text } from "@pixi/react";
-import React, { useContext, useEffect, useLayoutEffect, useRef, useState } from "react";
-import { ProblemType, WordType } from "../types/resourcesType";
+import React, { MutableRefObject, useContext, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
+import { AlienMovePositionType, ProblemType, WordType } from "../types/resourcesType";
 import { TextStyle, Container as PIXIContainer, Sprite as PIXISprite } from "pixi.js";
 import { ResourceContext } from "../context/ResourceContext";
 import gsap from "gsap";
+import { useRecoilState } from "recoil";
+import { comboState } from "../store/gameStore";
 
-export const Alien = ({
-    randomIdx,
+type AlienContextType = {
+    problem: { item: WordType; aliens: ProblemType[] } | undefined;
+    sec: MutableRefObject<number>;
+    handleCorrect: () => void;
+    handleIncorrect: () => void;
+};
+
+export const Aliens = ({ problem, sec, handleCorrect, handleIncorrect }: AlienContextType) => {
+    const { aliensMovePosition } = useContext(ResourceContext);
+
+    return (
+        <>
+            {aliensMovePosition?.map((data: AlienMovePositionType, idx: number) => {
+                return (
+                    <Alien
+                        key={`alien-${idx}-${problem?.item.word_en}`}
+                        idx={idx}
+                        sec={sec}
+                        position={{ x: data.x, y: data.y }}
+                        problem={problem}
+                        handleCorrect={handleCorrect}
+                        handleIncorrect={handleIncorrect}
+                    />
+                );
+            })}
+        </>
+    );
+};
+
+const Alien = ({
     idx,
     position,
+    sec,
     problem,
-    createProblem,
+    handleCorrect,
+    handleIncorrect,
 }: {
-    randomIdx: number;
     idx: number;
     position: { x: number; y: number };
-    problem:
-        | {
-              item: WordType;
-              aliens: ProblemType[];
-          }
-        | undefined;
-    createProblem: (gameData: any, contentsData: any) => void;
-}) => {
-    const { resources, gameData, contentsData } = useContext(ResourceContext);
+} & AlienContextType) => {
+    const { resources, sounds, gameData, contentsData } = useContext(ResourceContext);
+    const [combo, setCombo] = useRecoilState(comboState);
     const [isDestroying, setIsDestroying] = useState(false);
     const containerRef = useRef<PixiRef<typeof Container>>(null);
     const spriteRef = useRef<PixiRef<typeof Sprite>>(null);
     const timelineRef = useRef<gsap.core.Timeline | null>(null);
+
+    const randomIdx = useMemo(() => {
+        return Math.floor(Math.random() * 5) + 1;
+    }, [problem]);
 
     const destroy = [
         resources.destroy01,
@@ -50,14 +79,22 @@ export const Alien = ({
             const sprite = spriteRef.current as PIXISprite;
 
             if (sprite) {
+                sounds["gameCorrect"].play();
                 sprite.destroy();
                 setIsDestroying(true);
-
-                if (timelineRef.current) {
-                    timelineRef.current.kill();
-                    timelineRef.current = null;
+                if (combo < 5) {
+                    setCombo((prev) => (prev += 1));
                 }
             }
+        } else {
+            handleIncorrect();
+        }
+
+        sec.current = 0;
+
+        if (timelineRef.current) {
+            timelineRef.current.kill();
+            timelineRef.current = null;
         }
     };
 
@@ -126,18 +163,21 @@ export const Alien = ({
                 anchor={0.5}
             />
             {isDestroying && (
-                <AnimatedSprite
-                    textures={destroy}
-                    anchor={0.5}
-                    isPlaying={true}
-                    animationSpeed={0.2}
-                    loop={false}
-                    position={[0, 0]}
-                    onComplete={() => {
-                        setIsDestroying(false);
-                        createProblem(gameData, contentsData);
-                    }}
-                />
+                <>
+                    <AnimatedSprite
+                        textures={destroy}
+                        anchor={0.5}
+                        isPlaying={true}
+                        animationSpeed={0.2}
+                        loop={false}
+                        position={[0, 0]}
+                        onComplete={() => {
+                            setIsDestroying(false);
+                            handleCorrect();
+                        }}
+                    />
+                    <Sprite texture={resources[`combo0${combo}`]} anchor={0.5} position={[0, -80]} />
+                </>
             )}
         </Container>
     );

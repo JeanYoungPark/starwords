@@ -16,7 +16,7 @@ export const Intro = () => {
     UseIntroAnimations(containerRef);
 
     if (!resources || !sounds) return null;
-    console.log(gameType);
+
     return (
         <Container ref={containerRef}>
             <Sprite name='bg' texture={resources.bg} anchor={0.5} position={[1024, 640]} />

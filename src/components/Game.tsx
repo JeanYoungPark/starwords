@@ -1,11 +1,11 @@
-import { Container, PixiRef, Sprite, Text } from "@pixi/react";
+import { AnimatedSprite, Container, PixiRef, Sprite, Text } from "@pixi/react";
 import { useCallback, useContext, useEffect, useRef, useState } from "react";
 import { ResourceContext } from "../context/ResourceContext";
 import { PixiButton } from "./PixiButton";
 import { TextStyle } from "pixi.js";
 import { AlienMovePositionType } from "../types/resourcesType";
 import { UseStarwords } from "../hooks/UseStarwords";
-import { Alien } from "./Alien";
+import { Aliens } from "./Alien";
 import { ScoreBar } from "./ScoreBar";
 
 export const Game = () => {
@@ -13,33 +13,39 @@ export const Game = () => {
     const containerRef = useRef<PixiRef<typeof Container>>(null);
     const { resources, sounds, gameData, contentsData, aliensMovePosition } = useContext(ResourceContext);
     const [alienState, setAlienState] = useState<string>("STANDBY");
+    const [isIncorrect, setIsIncorrect] = useState<boolean>(false);
+    // const [combo, seCombo] = useState<number>(0);
+    // const combo = useRef<number>(0);
+    const sec = useRef<number>(0);
+
+    const incorrect = [
+        resources.incorrect01,
+        resources.incorrect02,
+        resources.incorrect03,
+        resources.incorrect04,
+        resources.incorrect05,
+        resources.incorrect06,
+        resources.incorrect07,
+        resources.incorrect08,
+    ];
+
+    useEffect(() => {
+        sounds["audioIntroBgm"].stop();
+        sounds["gameBgm"].play({ loop: true });
+    }, [sounds]);
 
     useEffect(() => {
         createProblem(gameData, contentsData);
-    }, [gameData, contentsData]);
+    }, []);
 
-    const renderAliens = useCallback(() => {
-        console.log(problem);
+    const handleCorrect = () => {
+        createProblem(gameData, contentsData);
+    };
 
-        return (
-            <>
-                {aliensMovePosition?.map((data: AlienMovePositionType, idx: number) => {
-                    const randomIdx = Math.floor(Math.random() * 5) + 1;
-
-                    return (
-                        <Alien
-                            key={`alien-${idx}-${problem?.item.word_en}`}
-                            randomIdx={randomIdx}
-                            idx={idx}
-                            position={{ x: data.x, y: data.y }}
-                            problem={problem}
-                            createProblem={createProblem}
-                        />
-                    );
-                })}
-            </>
-        );
-    }, [problem]);
+    const handleIncorrect = () => {
+        setIsIncorrect(true);
+        sounds["gameIncorrect"].play();
+    };
 
     return (
         <Container ref={containerRef}>
@@ -64,10 +70,27 @@ export const Game = () => {
             />
 
             <Container position={[1920 / 2, 400]} name='alien' scale={0.9}>
-                {renderAliens()}
+                {/* <Aliens problem={problem} sec={sec} combo={combo} handleCorrect={handleCorrect} handleIncorrect={handleIncorrect} /> */}
+                <Aliens problem={problem} sec={sec} handleCorrect={handleCorrect} handleIncorrect={handleIncorrect} />
+                {isIncorrect && (
+                    <AnimatedSprite
+                        textures={incorrect}
+                        anchor={0.5}
+                        isPlaying={true}
+                        animationSpeed={0.2}
+                        loop={false}
+                        scale={1.5}
+                        position={[0, 0]}
+                        onComplete={() => {
+                            setIsIncorrect(false);
+                            createProblem(gameData, contentsData);
+                        }}
+                    />
+                )}
             </Container>
 
-            <ScoreBar alienState={alienState} setAlienState={setAlienState} />
+            {/* <ScoreBar sec={sec} combo={combo} alienState={alienState} setAlienState={setAlienState} handleIncorrect={handleIncorrect} /> */}
+            <ScoreBar sec={sec} alienState={alienState} setAlienState={setAlienState} handleIncorrect={handleIncorrect} />
         </Container>
     );
 };
