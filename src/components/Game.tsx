@@ -12,10 +12,7 @@ export const Game = () => {
     const { createProblem, problem } = UseStarwords();
     const containerRef = useRef<PixiRef<typeof Container>>(null);
     const { resources, sounds, gameData, contentsData, aliensMovePosition } = useContext(ResourceContext);
-    const [alienState, setAlienState] = useState<string>("STANDBY");
     const [isIncorrect, setIsIncorrect] = useState<boolean>(false);
-    // const [combo, seCombo] = useState<number>(0);
-    // const combo = useRef<number>(0);
     const sec = useRef<number>(0);
 
     const incorrect = [
@@ -39,6 +36,7 @@ export const Game = () => {
     }, []);
 
     const handleCorrect = () => {
+        setIsIncorrect(false);
         createProblem(gameData, contentsData);
     };
 
@@ -70,7 +68,6 @@ export const Game = () => {
             />
 
             <Container position={[1920 / 2, 400]} name='alien' scale={0.9}>
-                {/* <Aliens problem={problem} sec={sec} combo={combo} handleCorrect={handleCorrect} handleIncorrect={handleIncorrect} /> */}
                 <Aliens problem={problem} sec={sec} handleCorrect={handleCorrect} handleIncorrect={handleIncorrect} />
                 {isIncorrect && (
                     <AnimatedSprite
@@ -89,8 +86,7 @@ export const Game = () => {
                 )}
             </Container>
 
-            {/* <ScoreBar sec={sec} combo={combo} alienState={alienState} setAlienState={setAlienState} handleIncorrect={handleIncorrect} /> */}
-            <ScoreBar sec={sec} alienState={alienState} setAlienState={setAlienState} handleIncorrect={handleIncorrect} />
+            <ScoreBar sec={sec} handleIncorrect={handleIncorrect} />
         </Container>
     );
 };

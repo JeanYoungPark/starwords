@@ -49,7 +49,7 @@ const Alien = ({
 } & AlienContextType) => {
     const { resources, sounds, gameData, contentsData } = useContext(ResourceContext);
     const [combo, setCombo] = useRecoilState(comboState);
-    const [isDestroying, setIsDestroying] = useState(false);
+    const [isCorrect, setIsCorrect] = useState(false);
     const containerRef = useRef<PixiRef<typeof Container>>(null);
     const spriteRef = useRef<PixiRef<typeof Sprite>>(null);
     const timelineRef = useRef<gsap.core.Timeline | null>(null);
@@ -81,8 +81,9 @@ const Alien = ({
             if (sprite) {
                 sounds["gameCorrect"].play();
                 sprite.destroy();
-                setIsDestroying(true);
+                setIsCorrect(true);
                 if (combo < 5) {
+                    // 정답일 경우 combo 증가 (5 이하인 경우에)
                     setCombo((prev) => (prev += 1));
                 }
             }
@@ -162,7 +163,7 @@ const Alien = ({
                 }
                 anchor={0.5}
             />
-            {isDestroying && (
+            {isCorrect && (
                 <>
                     <AnimatedSprite
                         textures={destroy}
@@ -172,7 +173,7 @@ const Alien = ({
                         loop={false}
                         position={[0, 0]}
                         onComplete={() => {
-                            setIsDestroying(false);
+                            setIsCorrect(false);
                             handleCorrect();
                         }}
                     />
