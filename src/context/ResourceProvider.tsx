@@ -21,6 +21,7 @@ import { getGameData, getUserData, getContentsData } from "../apis/getData";
 import { getCookie } from "../util";
 import { AlienMovePositionType } from "../types/resourcesType";
 import { UseStarwords } from "../hooks/UseStarwords";
+import { alienPositionState } from "../store/gameStore";
 
 interface ResourceProviderProps {
     children: ReactNode;
@@ -35,7 +36,8 @@ export const ResourceProvider = ({ children }: ResourceProviderProps) => {
     const [gameData, setGameData] = useState(undefined);
     const [contentsData, setContentsData] = useState(undefined);
     const [userData, setUserData] = useState(undefined);
-    const [aliensMovePosition, setAliensMovePosition] = useState<AlienMovePositionType[] | undefined>(undefined);
+    // const [aliensMovePosition, setAliensMovePosition] = useState<AlienMovePositionType[] | undefined>(undefined);
+    const [, setAliensMovePosition] = useRecoilState(alienPositionState);
 
     const [action, setAction] = useRecoilState(actionState);
     const [, setDeviceOs] = useRecoilState(deviceOsState);
@@ -157,9 +159,5 @@ export const ResourceProvider = ({ children }: ResourceProviderProps) => {
         }
     }, [action]);
 
-    return (
-        <ResourceContext.Provider value={{ resources, sounds, gameData, contentsData, userData, aliensMovePosition }}>
-            {children}
-        </ResourceContext.Provider>
-    );
+    return <ResourceContext.Provider value={{ resources, sounds, gameData, contentsData, userData }}>{children}</ResourceContext.Provider>;
 };

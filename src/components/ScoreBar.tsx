@@ -1,9 +1,9 @@
 import { AnimatedSprite, Container, PixiRef, Sprite, Text, useTick } from "@pixi/react";
-import { Dispatch, memo, MutableRefObject, SetStateAction, useContext, useEffect, useMemo, useRef, useState } from "react";
+import { memo, MutableRefObject, useContext, useEffect, useRef, useState } from "react";
 import { ResourceContext } from "../context/ResourceContext";
 import { TextStyle, Sprite as PIXISprite } from "pixi.js";
-import { useRecoilValue } from "recoil";
-import { comboState } from "../store/gameStore";
+import { useRecoilState, useRecoilValue } from "recoil";
+import { comboCntState, isComboState, scoreState } from "../store/gameStore";
 import gsap from "gsap";
 
 const COMBO_TEXT_POSITION = [
@@ -16,27 +16,55 @@ const COMBO_TEXT_POSITION = [
 
 export const ScoreBar = memo(({ sec, handleIncorrect }: { sec: MutableRefObject<number>; handleIncorrect: () => void }) => {
     const { resources, gameData } = useContext(ResourceContext);
-    const combo = useRecoilValue(comboState);
+    const [comboCnt, setComboCnt] = useRecoilState(comboCntState);
+    const [isCombo, setIsCombo] = useRecoilState(isComboState);
+    const score = useRecoilValue(scoreState);
 
     const timeLeft = useRef(60);
     const timeSpeed = useRef(0);
+    const comboSec = useRef<number>(0);
+
     const textRef = useRef<PixiRef<typeof Text>>(null);
     const gaugeRef = useRef<PixiRef<typeof Sprite>>(null);
-    // const comboContainerRef = useRef<PixiRef<typeof Container>>(null);
     const comboTextRefs = useRef<PixiRef<typeof Sprite>[] | null[]>([]);
     const comboMaxContainerRef = useRef<PixiRef<typeof Container>>(null);
     const [gameState, setGameState] = useState<string>("STANDBY");
 
     const maxComboOn = [resources.maxComboBallOn01, resources.maxComboBallOn02];
 
-    const handleMaxCombo = () => {};
+    const handleMaxCombo = () => {
+        // Todo
+        // 외계인 색깔 변경
+        // 정답 아닌 것 중 외계인 하나 destroy
+
+        const comboMaxContainer = comboMaxContainerRef.current;
+        const comboMaxBg = comboMaxContainer?.getChildByName("comboMaxOnBg") as PIXISprite;
+
+        // 콤보 초기화
+        setIsCombo(true);
+        setComboCnt(0);
+
+        // 콤보 animation gsap 제거
+        gsap.killTweensOf(comboMaxBg);
+
+        // 콤보 시간 시작
+        const eachSecCheck = setInterval(() => {
+            comboSec.current += 1;
+
+            if (comboSec.current === 10) {
+                comboSec.current = 0;
+                setIsCombo(false);
+                clearInterval(eachSecCheck);
+            }
+        }, 1000);
+    };
 
     useEffect(() => {
-        if (!combo) return;
+        if (!comboCnt) return;
 
-        const isLast = combo === COMBO_TEXT_POSITION.length;
+        const isLast = comboCnt === COMBO_TEXT_POSITION.length;
 
-        const comboText = comboTextRefs.current[combo - 1] as PIXISprite;
+        const comboText = comboTextRefs.current[comboCnt - 1] as PIXISprite;
         const comboMaxContainer = comboMaxContainerRef.current;
         const comboMaxBg = comboMaxContainer?.getChildByName("comboMaxOnBg") as PIXISprite;
 
@@ -50,9 +78,9 @@ export const ScoreBar = memo(({ sec, handleIncorrect }: { sec: MutableRefObject<
         } else {
             gsap.fromTo(
                 comboText,
-                { y: COMBO_TEXT_POSITION[combo - 1].y },
+                { y: COMBO_TEXT_POSITION[comboCnt - 1].y },
                 {
-                    y: COMBO_TEXT_POSITION[combo - 1].y - 30,
+                    y: COMBO_TEXT_POSITION[comboCnt - 1].y - 30,
                     duration: 0.5,
                     ease: "sign",
                     onComplete: () => {
@@ -63,7 +91,7 @@ export const ScoreBar = memo(({ sec, handleIncorrect }: { sec: MutableRefObject<
                 }
             );
         }
-    }, [combo]);
+    }, [comboCnt]);
 
     useEffect(() => {
         const gauge = gaugeRef.current as PIXISprite;
@@ -84,7 +112,7 @@ export const ScoreBar = memo(({ sec, handleIncorrect }: { sec: MutableRefObject<
         if (gameState === "START") {
             const eachSecCheck = setInterval(() => {
                 sec.current += 1;
-                console.log(sec.current);
+
                 if (sec.current === 5) {
                     handleIncorrect();
                     sec.current = 0;
@@ -136,10 +164,10 @@ export const ScoreBar = memo(({ sec, handleIncorrect }: { sec: MutableRefObject<
             <Sprite texture={resources.gameBarBg} position={[0, 920]} width={2000} height={250} />
             <Sprite ref={gaugeRef} name='gauge' texture={resources.gauge} />
             <Sprite texture={resources.gameBar} position={[-600, 820]} />
-            <Sprite texture={resources.gameScoreBg} position={[300, 920]} />
+            <Sprite texture={isCombo ? resources.gameComboScoreBg : resources.gameScoreBg} position={isCombo ? [264, 920] : [300, 920]} />
 
             <Text
-                text='0'
+                text={`${score}`}
                 position={[425, 1000]}
                 style={
                     new TextStyle({
@@ -154,13 +182,13 @@ export const ScoreBar = memo(({ sec, handleIncorrect }: { sec: MutableRefObject<
 
             {COMBO_TEXT_POSITION.map((data, i) => {
                 const isLast = i === COMBO_TEXT_POSITION.length - 1;
-                const texture = i < combo ? resources[`comboBallOn0${i + 1}`] : resources.comboBall;
+                const texture = i < comboCnt ? resources[`comboBallOn0${i + 1}`] : resources.comboBall;
 
                 return (
                     <Container key={i}>
                         {isLast ? (
                             <Container ref={comboMaxContainerRef} interactive={true} onclick={handleMaxCombo}>
-                                {combo === i + 1 ? (
+                                {comboCnt === i + 1 ? (
                                     <>
                                         <Sprite
                                             name='comboMaxOnBg'
@@ -176,6 +204,7 @@ export const ScoreBar = memo(({ sec, handleIncorrect }: { sec: MutableRefObject<
                                             animationSpeed={0.2}
                                             position={[data.x + 85, data.y + 91]}
                                         />
+                                        <Sprite anchor={0.5} texture={resources.maxComboBallOnText} position={[data.x + 90, data.y + 90]} />
                                     </>
                                 ) : (
                                     <Sprite key={i} texture={resources.maxComboBall} position={[data.x, data.y]} />
@@ -184,13 +213,13 @@ export const ScoreBar = memo(({ sec, handleIncorrect }: { sec: MutableRefObject<
                         ) : (
                             <>
                                 <Sprite texture={texture} position={[data.x, data.y]} />
-                                {combo === i + 1 && (
+                                {comboCnt === i + 1 && (
                                     <Sprite
                                         ref={(el) => {
                                             comboTextRefs.current[i] = el;
                                         }}
                                         name={`comboText0${i + 1}`}
-                                        texture={resources[`comboBallOnText0${combo}`]}
+                                        texture={resources[`comboBallOnText0${comboCnt}`]}
                                         anchor={0.5}
                                         position={[data.x + 34, data.y - 20]}
                                     />

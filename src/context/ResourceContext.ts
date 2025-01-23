@@ -1,5 +1,4 @@
 import { createContext } from "react";
-import { AlienMovePositionType } from "../types/resourcesType";
 
 interface ResourceContextType {
     resources: any;
@@ -7,7 +6,6 @@ interface ResourceContextType {
     gameData: any;
     contentsData: any;
     userData: any;
-    aliensMovePosition: AlienMovePositionType[] | undefined;
 }
 
 export const ResourceContext = createContext<ResourceContextType>({
@@ -16,5 +14,4 @@ export const ResourceContext = createContext<ResourceContextType>({
     gameData: undefined,
     contentsData: undefined,
     userData: undefined,
-    aliensMovePosition: undefined,
 });

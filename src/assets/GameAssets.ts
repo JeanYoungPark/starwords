@@ -52,6 +52,8 @@ const assets = [
     { alias: "gameBar", src: `${gameImgPath}bar.png` },
     { alias: "gameBarBg", src: `${gameImgPath}bar_bg.png` },
     { alias: "gameScoreBg", src: `${gameImgPath}score_board.png` },
+    { alias: "gameComboScoreBg", src: `${gameImgPath}combo_score_board.png` },
+    { alias: "gameComboBg", src: `${gameImgPath}combo_bg.png` },
 
     { alias: "comboBall", src: `${gameImgPath}combo_ball.png` },
     { alias: "maxComboBall", src: `${gameImgPath}max_combo_ball.png` },
@@ -63,6 +65,7 @@ const assets = [
     { alias: "maxComboBallOn01", src: `${gameImgPath}max_combo_ball_on_01.png` },
     { alias: "maxComboBallOn02", src: `${gameImgPath}max_combo_ball_on_02.png` },
     { alias: "maxComboBallOnBg", src: `${gameImgPath}max_combo_ball_bg_on.png` },
+    { alias: "maxComboBallOnText", src: `${gameImgPath}max_combo_ball_click_on.png` },
 
     { alias: "combo01", src: `${gameImgPath}combo_cnt_01.png` },
     { alias: "combo02", src: `${gameImgPath}combo_cnt_02.png` },
@@ -81,6 +84,7 @@ const assets = [
     { alias: "alien05", src: `${gameImgPath}alien_05.png` },
     { alias: "gauge", src: `${gameImgPath}gauge.png` },
     { alias: "gauge2", src: `${gameImgPath}gauge2.png` },
+
     { alias: "destroy01", src: `${gameImgPath}destroy_01.png` },
     { alias: "destroy02", src: `${gameImgPath}destroy_02.png` },
     { alias: "destroy03", src: `${gameImgPath}destroy_03.png` },
@@ -94,6 +98,18 @@ const assets = [
     { alias: "destroy11", src: `${gameImgPath}destroy_11.png` },
     { alias: "destroy12", src: `${gameImgPath}destroy_12.png` },
     { alias: "destroy13", src: `${gameImgPath}destroy_13.png` },
+
+    { alias: "comboDestroy01", src: `${gameImgPath}combo_destroy_01.png` },
+    { alias: "comboDestroy02", src: `${gameImgPath}combo_destroy_02.png` },
+    { alias: "comboDestroy03", src: `${gameImgPath}combo_destroy_03.png` },
+    { alias: "comboDestroy04", src: `${gameImgPath}combo_destroy_04.png` },
+    { alias: "comboDestroy05", src: `${gameImgPath}combo_destroy_05.png` },
+    { alias: "comboDestroy06", src: `${gameImgPath}combo_destroy_06.png` },
+    { alias: "comboDestroy07", src: `${gameImgPath}combo_destroy_07.png` },
+    { alias: "comboDestroy08", src: `${gameImgPath}combo_destroy_08.png` },
+    { alias: "comboDestroy09", src: `${gameImgPath}combo_destroy_09.png` },
+    { alias: "comboDestroy10", src: `${gameImgPath}combo_destroy_10.png` },
+
     { alias: "incorrect01", src: `${gameImgPath}incorrect_01.png` },
     { alias: "incorrect02", src: `${gameImgPath}incorrect_02.png` },
     { alias: "incorrect03", src: `${gameImgPath}incorrect_03.png` },

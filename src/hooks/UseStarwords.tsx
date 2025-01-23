@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import { AlienMovePositionType, ProblemType, WordType } from "../types/resourcesType";
+import { useRecoilValue } from "recoil";
+import { isComboState } from "../store/gameStore";
 
 export const UseStarwords = () => {
     const [leftTime, setLeftTime] = useState(0);
@@ -11,6 +13,7 @@ export const UseStarwords = () => {
           }
         | undefined
     >(undefined);
+    const isCombo = useRecoilValue(isComboState);
 
     const setContentInfo = () => {};
 
@@ -53,6 +56,7 @@ export const UseStarwords = () => {
     };
 
     const createProblem = (gameData: any, contentData: any) => {
+        //combo 상태일때는 문제 3개만 노출
         const nextIdx = idx + 1;
         setIdx(nextIdx);
 
@@ -60,7 +64,14 @@ export const UseStarwords = () => {
             setIdx(0);
         }
 
-        const alienCnt = contentData.level_code >= "LV06" ? 5 : 4;
+        let alienCnt = 4;
+
+        if (isCombo) {
+            alienCnt = contentData.level_code >= "LV06" ? 4 : 3;
+        } else {
+            alienCnt = contentData.level_code >= "LV06" ? 5 : 4;
+        }
+
         let aliens: ProblemType[] = [];
         let i = 0;
         let breakCnt = 0;

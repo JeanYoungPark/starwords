@@ -1,11 +1,11 @@
 import { AnimatedSprite, Container, PixiRef, Sprite, Text } from "@pixi/react";
-import React, { MutableRefObject, useContext, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
+import React, { MutableRefObject, useContext, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { AlienMovePositionType, ProblemType, WordType } from "../types/resourcesType";
 import { TextStyle, Container as PIXIContainer, Sprite as PIXISprite } from "pixi.js";
 import { ResourceContext } from "../context/ResourceContext";
 import gsap from "gsap";
-import { useRecoilState } from "recoil";
-import { comboState } from "../store/gameStore";
+import { useRecoilState, useRecoilValue } from "recoil";
+import { alienPositionState, comboCntState, isComboState, scoreState } from "../store/gameStore";
 
 type AlienContextType = {
     problem: { item: WordType; aliens: ProblemType[] } | undefined;
@@ -15,7 +15,8 @@ type AlienContextType = {
 };
 
 export const Aliens = ({ problem, sec, handleCorrect, handleIncorrect }: AlienContextType) => {
-    const { aliensMovePosition } = useContext(ResourceContext);
+    // const { aliensMovePosition } = useContext(ResourceContext);
+    const [aliensMovePosition, setAliensMovePosition] = useRecoilState(alienPositionState);
 
     return (
         <>
@@ -48,7 +49,9 @@ const Alien = ({
     position: { x: number; y: number };
 } & AlienContextType) => {
     const { resources, sounds, gameData, contentsData } = useContext(ResourceContext);
-    const [combo, setCombo] = useRecoilState(comboState);
+    const [comboCnt, setComboCnt] = useRecoilState(comboCntState);
+    const [, setScore] = useRecoilState(scoreState);
+    const isCombo = useRecoilValue(isComboState);
     const [isCorrect, setIsCorrect] = useState(false);
     const containerRef = useRef<PixiRef<typeof Container>>(null);
     const spriteRef = useRef<PixiRef<typeof Sprite>>(null);
@@ -82,9 +85,11 @@ const Alien = ({
                 sounds["gameCorrect"].play();
                 sprite.destroy();
                 setIsCorrect(true);
-                if (combo < 5) {
+                if (comboCnt < 5) {
                     // 정답일 경우 combo 증가 (5 이하인 경우에)
-                    setCombo((prev) => (prev += 1));
+                    const score = isCombo ? 200 : 100;
+                    setScore((prev) => (prev += score));
+                    setComboCnt((prev) => (prev += 1));
                 }
             }
         } else {
@@ -177,7 +182,7 @@ const Alien = ({
                             handleCorrect();
                         }}
                     />
-                    <Sprite texture={resources[`combo0${combo}`]} anchor={0.5} position={[0, -80]} />
+                    <Sprite texture={resources[`combo0${comboCnt}`]} anchor={0.5} position={[0, -80]} />
                 </>
             )}
         </Container>

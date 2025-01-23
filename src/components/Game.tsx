@@ -7,11 +7,14 @@ import { AlienMovePositionType } from "../types/resourcesType";
 import { UseStarwords } from "../hooks/UseStarwords";
 import { Aliens } from "./Alien";
 import { ScoreBar } from "./ScoreBar";
+import { useRecoilValue } from "recoil";
+import { comboCntState, isComboState } from "../store/gameStore";
 
 export const Game = () => {
     const { createProblem, problem } = UseStarwords();
+    const isCombo = useRecoilValue(isComboState);
     const containerRef = useRef<PixiRef<typeof Container>>(null);
-    const { resources, sounds, gameData, contentsData, aliensMovePosition } = useContext(ResourceContext);
+    const { resources, sounds, gameData, contentsData } = useContext(ResourceContext);
     const [isIncorrect, setIsIncorrect] = useState<boolean>(false);
     const sec = useRef<number>(0);
 
@@ -51,6 +54,7 @@ export const Game = () => {
             <Sprite texture={resources.gamePlanet01} position={[-50, 0]} />
             <Sprite texture={resources.gamePlanet02} position={[1500, 720]} />
 
+            {isCombo && <Sprite texture={resources.gameComboBg} />}
             <PixiButton name='reload' position={[60, 70]} defaultTexture={resources.reload} sound={sounds.audioIntoBtn} align='LEFT' />
 
             <Text
