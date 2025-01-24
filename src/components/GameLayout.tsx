@@ -5,15 +5,13 @@ import { Helmet, HelmetProvider } from "react-helmet-async";
 import { CommonLayout } from "./CommonLayout";
 import { isMobile } from "../util";
 import gsap from "gsap";
+import { CONTENT_HEIGHT, CONTENT_WIDTH } from "../constants/commonConstants";
 
 interface Props {
     children: ReactNode;
     title: string;
     resultPopupData: any;
 }
-
-const CONTENT_WIDTH = 1920;
-const CONTENT_HEIGHT = 1080;
 
 export const GameLayout = ({ children, title, resultPopupData }: Props) => {
     const container = useRef<PixiRef<typeof Container>>(null);

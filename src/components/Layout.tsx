@@ -9,6 +9,7 @@ import { Ranking } from "./Ranking";
 import { Loading } from "./Loading";
 import { PixiButton } from "./PixiButton";
 import { Game } from "./Game";
+
 export const Layout = () => {
     const { resources, sounds } = useContext(ResourceContext);
     const action = useRecoilValue(actionState);
