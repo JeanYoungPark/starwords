@@ -7,7 +7,7 @@ interface Props {
     disabled?: boolean;
 }
 
-export const CommonLayout = ({ children, contentWidth, contentHeight, disabled }: Props) => {
+export const ScreenLayout = ({ children, contentWidth, contentHeight, disabled }: Props) => {
     const [contentScale, setContentScale] = useState<number>(0);
     const [contentLeft, setContentLeft] = useState<number>(0);
     const [contentTop, setContentTop] = useState<number>(0);

@@ -1,5 +1,5 @@
-import { Container, Sprite } from "@pixi/react";
-import { useContext } from "react";
+import { Container } from "@pixi/react";
+import { useContext, useEffect } from "react";
 import { ResourceContext } from "../context/ResourceContext";
 import { useRecoilValue } from "recoil";
 import { actionState } from "../store/assetsStore";
@@ -14,20 +14,18 @@ export const Layout = () => {
     const { resources, sounds } = useContext(ResourceContext);
     const action = useRecoilValue(actionState);
 
+    if (!resources || !sounds) return <Loading />;
+
     return (
         <Container>
-            {resources ? (
-                <>
-                    {action === "INTRO" && <Intro />}
-                    {action === "GUIDE" && <Guide />}
-                    {action === "RANKING" && <Ranking />}
-                    {action === "GAME_START" && <Game />}
+            <>
+                {action === "INTRO" && <Intro />}
+                {action === "GUIDE" && <Guide />}
+                {action === "RANKING" && <Ranking />}
+                {action === "GAME_START" && <Game />}
 
-                    <PixiButton name='close' position={[1860, 70]} defaultTexture={resources.close} sound={sounds.audioIntoBtn} align='RIGHT' />
-                </>
-            ) : (
-                <Loading />
-            )}
+                <PixiButton name='close' position={[1860, 70]} defaultTexture={resources.close} sound={sounds.audioIntoBtn} align='RIGHT' />
+            </>
         </Container>
     );
 };

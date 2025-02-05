@@ -4,6 +4,7 @@ import { ResourceContext } from "../../context/ResourceContext";
 import { useRecoilValue } from "recoil";
 import { gameTypeState } from "../../store/assetsStore";
 import { TextStyle } from "pixi.js";
+import gsap from "gsap";
 
 export const Title = () => {
     const { resources, contentsData } = useContext(ResourceContext);

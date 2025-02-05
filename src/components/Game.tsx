@@ -3,18 +3,15 @@ import { useCallback, useContext, useEffect, useRef, useState } from "react";
 import { ResourceContext } from "../context/ResourceContext";
 import { PixiButton } from "./PixiButton";
 import { TextStyle } from "pixi.js";
-import { AlienMovePositionType } from "../types/resourcesType";
-import { UseStarwords } from "../hooks/UseStarwords";
-import { Aliens } from "./Alien";
-import { ScoreBar } from "./ScoreBar";
+import { Aliens } from "./game/Alien";
+import { ScoreBar } from "./game/ScoreBar";
 import { useRecoilValue } from "recoil";
-import { comboCntState, isComboState } from "../store/gameStore";
+import { isComboState } from "../store/gameStore";
 
 export const Game = () => {
-    const { createProblem, problem } = UseStarwords();
     const isCombo = useRecoilValue(isComboState);
     const containerRef = useRef<PixiRef<typeof Container>>(null);
-    const { resources, sounds, gameData, contentsData } = useContext(ResourceContext);
+    const { resources, sounds, gameData, contentsData, createProblem, problems } = useContext(ResourceContext);
     const [isIncorrect, setIsIncorrect] = useState<boolean>(false);
     const sec = useRef<number>(0);
 
@@ -34,19 +31,19 @@ export const Game = () => {
         sounds["gameBgm"].play({ loop: true });
     }, [sounds]);
 
-    useEffect(() => {
-        createProblem(gameData, contentsData);
-    }, []);
+    // useEffect(() => {
+    //     createProblem(gameData, contentsData);
+    // }, []);
 
     const handleCorrect = () => {
         setIsIncorrect(false);
         createProblem(gameData, contentsData);
     };
 
-    const handleIncorrect = () => {
+    const handleIncorrect = useCallback(() => {
         setIsIncorrect(true);
         sounds["gameIncorrect"].play();
-    };
+    }, [sounds]);
 
     return (
         <Container ref={containerRef}>
@@ -58,7 +55,7 @@ export const Game = () => {
             <PixiButton name='reload' position={[60, 70]} defaultTexture={resources.reload} sound={sounds.audioIntoBtn} align='LEFT' />
 
             <Text
-                text={problem?.item.word_ko}
+                text={problems?.item.word_ko}
                 position={[950, 180]}
                 style={
                     new TextStyle({
@@ -72,7 +69,7 @@ export const Game = () => {
             />
 
             <Container position={[1920 / 2, 400]} name='alien' scale={0.9}>
-                <Aliens problem={problem} sec={sec} handleCorrect={handleCorrect} handleIncorrect={handleIncorrect} />
+                <Aliens problems={problems} sec={sec} handleCorrect={handleCorrect} handleIncorrect={handleIncorrect} />
                 {isIncorrect && (
                     <AnimatedSprite
                         textures={incorrect}

@@ -2,7 +2,7 @@ import { Container, Stage, PixiRef } from "@pixi/react";
 import { Application } from "pixi.js";
 import { ReactNode, useRef } from "react";
 import { Helmet, HelmetProvider } from "react-helmet-async";
-import { CommonLayout } from "./CommonLayout";
+import { ScreenLayout } from "./ScreenLayout";
 import { isMobile } from "../util";
 import gsap from "gsap";
 import { CONTENT_HEIGHT, CONTENT_WIDTH } from "../constants/commonConstants";
@@ -68,11 +68,11 @@ export const GameLayout = ({ children, title, resultPopupData }: Props) => {
                 }}>
                 <Container ref={container}>{children}</Container>
             </Stage>
-            <CommonLayout contentWidth={CONTENT_WIDTH} contentHeight={CONTENT_HEIGHT} disabled={!resultPopupData ? true : false}>
+            <ScreenLayout contentWidth={CONTENT_WIDTH} contentHeight={CONTENT_HEIGHT} disabled={!resultPopupData ? true : false}>
                 <div id='content'>
                     {/* {resultPopupData && <ResultPopup data={resultPopupData} type={type} step={step ? step : 1} onClose={onCloseResultPopup} />} */}
                 </div>
-            </CommonLayout>
+            </ScreenLayout>
         </HelmetProvider>
     );
 };

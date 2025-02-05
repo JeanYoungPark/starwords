@@ -1,33 +1,54 @@
 import { AnimatedSprite, Container, PixiRef, Sprite, Text } from "@pixi/react";
-import React, { MutableRefObject, useContext, useLayoutEffect, useMemo, useRef, useState } from "react";
-import { AlienMovePositionType, ProblemType, WordType } from "../types/resourcesType";
+import { MutableRefObject, useContext, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
+import { AlienMovePositionType, ProblemType, WordType } from "../../types/resourcesType";
 import { TextStyle, Container as PIXIContainer, Sprite as PIXISprite } from "pixi.js";
-import { ResourceContext } from "../context/ResourceContext";
+import { ResourceContext } from "../../context/ResourceContext";
 import gsap from "gsap";
 import { useRecoilState, useRecoilValue } from "recoil";
-import { alienPositionState, comboCntState, isComboState, scoreState } from "../store/gameStore";
+import { alienPositionState, comboCntState, comboDestroyNumberState, isComboState, scoreState } from "../../store/gameStore";
+import { MAX_COMBO_NUMBER } from "../../constants/commonConstants";
 
 type AlienContextType = {
-    problem: { item: WordType; aliens: ProblemType[] } | undefined;
     sec: MutableRefObject<number>;
     handleCorrect: () => void;
     handleIncorrect: () => void;
 };
 
-export const Aliens = ({ problem, sec, handleCorrect, handleIncorrect }: AlienContextType) => {
-    // const { aliensMovePosition } = useContext(ResourceContext);
+export const Aliens = ({
+    problems,
+    sec,
+    handleCorrect,
+    handleIncorrect,
+}: {
+    problems: {
+        item: WordType;
+        aliens: ProblemType[];
+    };
+} & AlienContextType) => {
     const [aliensMovePosition, setAliensMovePosition] = useRecoilState(alienPositionState);
+    const isCombo = useRecoilValue(isComboState);
+    const [comboRemoveIdx, setComboRemoveIdx] = useState<number | null>(null);
+
+    // useEffect(() => {
+    //     if (isCombo && problem) {
+    //         console.log("!!");
+    //         const originalIndex = destroyProblemIdx(problem.aliens);
+    //         setComboRemoveIdx(originalIndex);
+    //     }
+    // }, [isCombo, problem]);
 
     return (
         <>
             {aliensMovePosition?.map((data: AlienMovePositionType, idx: number) => {
+                if (comboRemoveIdx === idx) return null;
+
                 return (
                     <Alien
-                        key={`alien-${idx}-${problem?.item.word_en}`}
+                        key={`alien-${idx}-${problems.item.word_en}`}
                         idx={idx}
                         sec={sec}
                         position={{ x: data.x, y: data.y }}
-                        problem={problem}
+                        problem={problems.aliens[idx]}
                         handleCorrect={handleCorrect}
                         handleIncorrect={handleIncorrect}
                     />
@@ -45,21 +66,20 @@ const Alien = ({
     handleCorrect,
     handleIncorrect,
 }: {
+    problem: ProblemType;
     idx: number;
     position: { x: number; y: number };
 } & AlienContextType) => {
-    const { resources, sounds, gameData, contentsData } = useContext(ResourceContext);
+    const { resources, sounds } = useContext(ResourceContext);
     const [comboCnt, setComboCnt] = useRecoilState(comboCntState);
     const [, setScore] = useRecoilState(scoreState);
     const isCombo = useRecoilValue(isComboState);
+    const [comboDestroyNum, setComboDestroyNum] = useRecoilState(comboDestroyNumberState);
     const [isCorrect, setIsCorrect] = useState(false);
+    const [isDestroy, setIsDestroy] = useState<boolean>(false);
     const containerRef = useRef<PixiRef<typeof Container>>(null);
-    const spriteRef = useRef<PixiRef<typeof Sprite>>(null);
+    const spriteRef = useRef<PixiRef<typeof Sprite> | null>(null);
     const timelineRef = useRef<gsap.core.Timeline | null>(null);
-
-    const randomIdx = useMemo(() => {
-        return Math.floor(Math.random() * 5) + 1;
-    }, [problem]);
 
     const destroy = [
         resources.destroy01,
@@ -77,15 +97,33 @@ const Alien = ({
         resources.destroy13,
     ];
 
+    const comboDestroy = [
+        resources.comboDestroy01,
+        resources.comboDestroy02,
+        resources.comboDestroy03,
+        resources.comboDestroy04,
+        resources.comboDestroy05,
+        resources.comboDestroy06,
+        resources.comboDestroy07,
+        resources.comboDestroy08,
+        resources.comboDestroy09,
+        resources.comboDestroy10,
+    ];
+
+    const randomIdx = useMemo(() => {
+        return Math.floor(Math.random() * 5) + 1;
+    }, [problem]);
+
     const checkAnswer = () => {
-        if (problem?.aliens[idx].correct === "Y") {
+        if (problem.correct === "Y") {
             const sprite = spriteRef.current as PIXISprite;
 
             if (sprite) {
                 sounds["gameCorrect"].play();
                 sprite.destroy();
+                spriteRef.current = null;
                 setIsCorrect(true);
-                if (comboCnt < 5) {
+                if (comboCnt < MAX_COMBO_NUMBER) {
                     // 정답일 경우 combo 증가 (5 이하인 경우에)
                     const score = isCombo ? 200 : 100;
                     setScore((prev) => (prev += score));
@@ -152,11 +190,34 @@ const Alien = ({
         };
     }, []);
 
+    useEffect(() => {
+        if (comboDestroyNum && comboDestroyNum === idx) {
+            const sprite = spriteRef.current as PIXISprite;
+
+            if (sprite) {
+                // sounds["gameCorrect"].play();
+                setIsDestroy(true);
+                setComboDestroyNum(null);
+
+                gsap.killTweensOf(sprite);
+                sprite.destroy();
+                spriteRef.current = null;
+                // setIsCorrect(true);
+                // if (comboCnt < MAX_COMBO_NUMBER) {
+                //     // 정답일 경우 combo 증가 (5 이하인 경우에)
+                //     const score = isCombo ? 200 : 100;
+                //     setScore((prev) => (prev += score));
+                //     setComboCnt((prev) => (prev += 1));
+                // }
+            }
+        }
+    }, [comboDestroyNum, idx]);
+
     return (
         <Container ref={containerRef} position={[position.x, position.y]} anchor={0.5} interactive={true} pointerdown={checkAnswer}>
             <Sprite ref={spriteRef} texture={resources[`alien0${randomIdx}`]} anchor={0.5} name={`alien0${idx + 1}`} />
             <Text
-                text={problem?.aliens[idx].word}
+                text={problem.word}
                 position={[0, 100]}
                 style={
                     new TextStyle({
@@ -184,6 +245,9 @@ const Alien = ({
                     />
                     <Sprite texture={resources[`combo0${comboCnt}`]} anchor={0.5} position={[0, -80]} />
                 </>
+            )}
+            {isDestroy && (
+                <AnimatedSprite textures={comboDestroy} anchor={0.5} isPlaying={true} animationSpeed={0.2} loop={false} position={[0, 0]} />
             )}
         </Container>
     );

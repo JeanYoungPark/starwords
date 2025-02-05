@@ -5,6 +5,7 @@ import { useRecoilState } from "recoil";
 import { actionState } from "../../store/assetsStore";
 import { Actions } from "../../types/actionsType";
 import { Container, PixiRef } from "@pixi/react";
+import gsap from "gsap";
 
 export const StartBtn = () => {
     const { resources, sounds } = useContext(ResourceContext);
