@@ -239,12 +239,11 @@ export const UseStarwords = () => {
             word: gameData.word_arr[nextIdx].word_en,
             correct: "Y",
         };
-
+        console.log(9876976);
         setProblems({
             item: gameData.word_arr[nextIdx],
             aliens: aliens,
         });
-        console.log(9876976);
     };
 
     const loadGameData = async () => {

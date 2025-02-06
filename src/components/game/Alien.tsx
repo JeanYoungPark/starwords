@@ -79,6 +79,7 @@ const Alien = ({
     const [isDestroy, setIsDestroy] = useState<boolean>(false);
     const containerRef = useRef<PixiRef<typeof Container>>(null);
     const spriteRef = useRef<PixiRef<typeof Sprite> | null>(null);
+    const alienRef = useRef<PixiRef<typeof Container> | null>(null);
     const timelineRef = useRef<gsap.core.Timeline | null>(null);
 
     const destroy = [
@@ -192,43 +193,40 @@ const Alien = ({
 
     useEffect(() => {
         if (comboDestroyNum && comboDestroyNum === idx) {
+            const alien = alienRef.current;
             const sprite = spriteRef.current as PIXISprite;
 
-            if (sprite) {
+            if (alien && sprite) {
                 // sounds["gameCorrect"].play();
                 setIsDestroy(true);
                 setComboDestroyNum(null);
 
                 gsap.killTweensOf(sprite);
-                sprite.destroy();
+                alien.destroy();
                 spriteRef.current = null;
-                // setIsCorrect(true);
-                // if (comboCnt < MAX_COMBO_NUMBER) {
-                //     // 정답일 경우 combo 증가 (5 이하인 경우에)
-                //     const score = isCombo ? 200 : 100;
-                //     setScore((prev) => (prev += score));
-                //     setComboCnt((prev) => (prev += 1));
-                // }
             }
         }
     }, [comboDestroyNum, idx]);
 
     return (
         <Container ref={containerRef} position={[position.x, position.y]} anchor={0.5} interactive={true} pointerdown={checkAnswer}>
-            <Sprite ref={spriteRef} texture={resources[`alien0${randomIdx}`]} anchor={0.5} name={`alien0${idx + 1}`} />
-            <Text
-                text={problem.word}
-                position={[0, 100]}
-                style={
-                    new TextStyle({
-                        fontFamily: "NotoSans",
-                        fontSize: 40,
-                        fill: "rgba(256, 256, 256)",
-                        fontWeight: "700",
-                    })
-                }
-                anchor={0.5}
-            />
+            <Container ref={alienRef}>
+                <Sprite ref={spriteRef} texture={resources[`alien0${randomIdx}`]} anchor={0.5} name={`alien0${idx + 1}`} />
+                <Text
+                    name={`alienText0${idx + 1}`}
+                    text={problem.word}
+                    position={[0, 100]}
+                    style={
+                        new TextStyle({
+                            fontFamily: "NotoSans",
+                            fontSize: 40,
+                            fill: "rgba(256, 256, 256)",
+                            fontWeight: "700",
+                        })
+                    }
+                    anchor={0.5}
+                />
+            </Container>
             {isCorrect && (
                 <>
                     <AnimatedSprite
@@ -247,7 +245,15 @@ const Alien = ({
                 </>
             )}
             {isDestroy && (
-                <AnimatedSprite textures={comboDestroy} anchor={0.5} isPlaying={true} animationSpeed={0.2} loop={false} position={[0, 0]} />
+                <AnimatedSprite
+                    textures={comboDestroy}
+                    anchor={0.5}
+                    isPlaying={true}
+                    animationSpeed={0.2}
+                    loop={false}
+                    position={[0, 0]}
+                    onComplete={() => setIsDestroy(false)}
+                />
             )}
         </Container>
     );

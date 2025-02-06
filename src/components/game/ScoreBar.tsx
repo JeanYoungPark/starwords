@@ -26,6 +26,13 @@ export const ScoreBar = memo(({ sec, handleIncorrect }: ScoreBarProps) => {
     const [gameState, setGameState] = useState<string>("STANDBY");
 
     useEffect(() => {
+        console.log("MaxComboIcon rendered");
+        return () => {
+            console.log("MaxComboIcon unmounted");
+        };
+    }, []);
+
+    useEffect(() => {
         const gauge = gaugeRef.current as PIXISprite;
 
         if (gauge) {
