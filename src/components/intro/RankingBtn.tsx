@@ -1,38 +1,50 @@
-import { RefObject, useContext, useEffect, useRef } from "react";
-import { PixiButton } from "../PixiButton";
-import { ResourceContext } from "../../context/ResourceContext";
-import { useRecoilState } from "recoil";
-import { actionState } from "../../store/assetsStore";
-import { Actions } from "../../types/actionsType";
+import { useContext, useEffect, useRef } from "react";
+import { useSetRecoilState } from "recoil";
 import { Container, PixiRef } from "@pixi/react";
 import gsap from "gsap";
 
+import { PixiButton } from "../common/PixiButton";
+import { ResourceContext } from "../../context/ResourceContext";
+import { actionState } from "../../store/assetsStore";
+import { Actions } from "../../types/actionsType";
+import { CONTENT_WIDTH } from "../../constants/commonConstants";
+import { RANKING_BUTTON } from "../../constants/introConstants";
+
 export const RankingBtn = () => {
     const { resources, sounds } = useContext(ResourceContext);
-    const [, setAction] = useRecoilState(actionState);
-
-    const rankingBtnRef = useRef<PixiRef<typeof Container>>(null);
-
-    const animateRankingButton = ({ rankingBtnRef }: { rankingBtnRef: RefObject<PixiRef<typeof Container>> }) => {
-        if (!rankingBtnRef.current) return;
-
-        const rankingBtn = rankingBtnRef.current.getChildByName("rankingBtn");
-        gsap.fromTo(rankingBtn, { x: 1860 }, { x: 980, duration: 0.7, ease: "sign" });
-    };
+    const setAction = useSetRecoilState(actionState);
+    const containerRef = useRef<PixiRef<typeof Container>>(null);
 
     const handleRanking = () => {
         setAction(Actions.RANKING);
     };
 
     useEffect(() => {
-        animateRankingButton({ rankingBtnRef });
-    }, [rankingBtnRef]);
+        const button = containerRef.current?.getChildByName("rankingBtn");
+        if (!button) return;
+
+        const animation = gsap.fromTo(
+            button,
+            { x: RANKING_BUTTON.POSITION.start },
+            {
+                x: RANKING_BUTTON.POSITION.end,
+                duration: RANKING_BUTTON.ANIMATION.duration,
+                ease: RANKING_BUTTON.ANIMATION.ease,
+            }
+        );
+
+        return () => {
+            if (animation) {
+                animation.kill();
+            }
+        };
+    }, []);
 
     return (
-        <Container ref={rankingBtnRef}>
+        <Container ref={containerRef}>
             <PixiButton
                 name='rankingBtn'
-                position={[720, 890]}
+                position={[CONTENT_WIDTH / 2, RANKING_BUTTON.POSITION.y]}
                 defaultTexture={resources.rankingBtn}
                 sound={sounds.audioIntoBtn}
                 onTouchEnd={handleRanking}

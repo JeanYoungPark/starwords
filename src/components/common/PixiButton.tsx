@@ -1,7 +1,7 @@
 import { PixiRef, Sprite, _ReactPixi, useApp } from "@pixi/react";
 import { Sound } from "@pixi/sound";
 import { Sprite as PIXISprite, Texture } from "pixi.js";
-import { useLayoutEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 
 interface Props extends _ReactPixi.ISprite {
     defaultTexture: Texture;
@@ -14,31 +14,17 @@ interface Props extends _ReactPixi.ISprite {
     onTouchStart?: (target?: PIXISprite) => void;
     onTouchEnd?: (target?: PIXISprite) => void;
     sound?: Sound;
-    align?: "LEFT" | "RIGHT";
 }
 
-export const PixiButton = ({ defaultTexture, toggle, onTouchEnd, sound, align, position, ...props }: Props) => {
+export const PixiButton = ({ defaultTexture, toggle, onTouchEnd, sound, position, ...props }: Props) => {
     const buttonRef = useRef<PixiRef<typeof Sprite> | null>(null);
     const [texture, setTexture] = useState<Texture | undefined>(defaultTexture);
     const [isToggled, setIsToggled] = useState(toggle?.initToggle || false);
     const [scale, setScale] = useState(1);
-    const app = useApp();
-    const initX = useRef<number>(0);
 
-    const setBtnPos = () => {
-        let moveX = app.stage.children[0].position.x * (1 / window.scale);
-        if (moveX > 400) moveX = 400;
-
-        if (align === "LEFT") {
-            buttonRef.current!.position.x = initX.current - moveX;
-        } else if (align === "RIGHT") {
-            buttonRef.current!.position.x = initX.current + moveX;
-        }
-    };
-
-    const resizeApp = () => {
+    const resetScale = () => {
         if (buttonRef.current) {
-            setTimeout(() => setBtnPos(), 1);
+            setScale(1);
         }
     };
 
@@ -70,19 +56,6 @@ export const PixiButton = ({ defaultTexture, toggle, onTouchEnd, sound, align, p
         }
     };
 
-    useLayoutEffect(() => {
-        initX.current = buttonRef.current!.position.x;
-
-        if (align) {
-            window.addEventListener("resize", resizeApp);
-            setBtnPos();
-        }
-
-        return () => {
-            window.removeEventListener("resize", resizeApp);
-        };
-    }, [align]);
-
     return (
         <Sprite
             ref={buttonRef}
@@ -91,6 +64,7 @@ export const PixiButton = ({ defaultTexture, toggle, onTouchEnd, sound, align, p
             texture={texture}
             pointerdown={onPointDown}
             pointerup={onPointUp}
+            onpointerout={resetScale}
             scale={scale}
             anchor={[0.5, 0.5]}
             {...props}

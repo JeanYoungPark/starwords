@@ -1,9 +1,11 @@
 import { useContext } from "react";
-import { PixiButton } from "../PixiButton";
-import { ResourceContext } from "../../context/ResourceContext";
 import { useRecoilState } from "recoil";
+
+import { PixiButton } from "../common/PixiButton";
+import { ResourceContext } from "../../context/ResourceContext";
 import { actionState } from "../../store/assetsStore";
 import { Actions } from "../../types/actionsType";
+import { CONTENT_WIDTH } from "../../constants/commonConstants";
 
 export const HelpBtn = () => {
     const { resources, sounds } = useContext(ResourceContext);
@@ -14,6 +16,6 @@ export const HelpBtn = () => {
     };
 
     return (
-        <PixiButton position={[1860, 1020]} defaultTexture={resources.help} sound={sounds.audioIntoBtn} align='RIGHT' onTouchEnd={handleStartGuide} />
+        <PixiButton position={[CONTENT_WIDTH - 60, 1020]} defaultTexture={resources.help} sound={sounds.audioIntoBtn} onTouchEnd={handleStartGuide} />
     );
 };

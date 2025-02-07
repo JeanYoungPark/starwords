@@ -3,28 +3,22 @@ import { Container, Sprite } from "@pixi/react";
 import { ResourceContext } from "../context/ResourceContext";
 import { Title } from "./intro/Title";
 import { BgmBtn } from "./intro/BgmBtn";
-import { HelpBtn } from "./common/HelpBtn";
+import { HelpBtn } from "./intro/HelpBtn";
 import { StartBtn } from "./intro/StartBtn";
 import { RankingBtn } from "./intro/RankingBtn";
-import { useRecoilState, useRecoilValue } from "recoil";
-import { actionState, gameTypeState } from "../store/assetsStore";
-import { Actions } from "../types/actionsType";
-
+import { useRecoilValue } from "recoil";
+import { gameTypeState } from "../store/assetsStore";
+import { CONTENT_HEIGHT, CONTENT_WIDTH } from "../constants/commonConstants";
+import { SubTitle } from "./intro/SubTitle";
 export const Intro = () => {
     const { resources, sounds } = useContext(ResourceContext);
     const gameType = useRecoilValue(gameTypeState);
-    const [action, setAction] = useRecoilState(actionState);
-
-    useEffect(() => {
-        console.log(resources.resultBg);
-        // setAction(Actions.GAME_FINISH);
-    }, []);
 
     if (!resources || !sounds) return null;
 
     return (
         <Container>
-            <Sprite name='bg' texture={resources.bg} anchor={0.5} position={[1024, 640]} />
+            <Sprite name='bg' texture={resources.bg} anchor={0.5} position={[CONTENT_WIDTH / 2, CONTENT_HEIGHT / 2]} />
 
             <Sprite name='bottomLight' texture={resources.bottomLight} position={[100, 550]} />
             <Sprite name='topLight' texture={resources.topLight} position={[200, 0]} />
@@ -36,7 +30,11 @@ export const Intro = () => {
             <BgmBtn />
             <HelpBtn />
 
-            <Title />
+            <Container>
+                <Title />
+                <SubTitle />
+            </Container>
+
             <StartBtn />
             {gameType !== "word_master" && <RankingBtn />}
         </Container>

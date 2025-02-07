@@ -1,7 +1,7 @@
 import { Container, Sprite, Text } from "@pixi/react";
 import React, { useContext, useState } from "react";
 import { ResourceContext } from "../context/ResourceContext";
-import { PixiButton } from "./PixiButton";
+import { PixiButton } from "./common/PixiButton";
 import { TextStyle } from "pixi.js";
 import { useRecoilState } from "recoil";
 import { actionState } from "../store/assetsStore";
@@ -140,22 +140,9 @@ export const Ranking = () => {
                 }
             />
 
-            <PixiButton
-                name='back'
-                position={[60, 70]}
-                defaultTexture={resources.back}
-                sound={sounds.audioIntoBtn}
-                align='LEFT'
-                onTouchEnd={onTouchEnd}
-            />
+            <PixiButton name='back' position={[60, 70]} defaultTexture={resources.back} sound={sounds.audioIntoBtn} onTouchEnd={onTouchEnd} />
 
-            <PixiButton
-                position={[1860, 1020]}
-                defaultTexture={resources.help}
-                sound={sounds.audioIntoBtn}
-                align='RIGHT'
-                onTouchEnd={handleStartGuide}
-            />
+            <PixiButton position={[1860, 1020]} defaultTexture={resources.help} sound={sounds.audioIntoBtn} onTouchEnd={handleStartGuide} />
         </Container>
     );
 };

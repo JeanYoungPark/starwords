@@ -1,7 +1,7 @@
 import { Container, Sprite } from "@pixi/react";
 import { useContext } from "react";
 import { ResourceContext } from "../context/ResourceContext";
-import { PixiButton } from "./PixiButton";
+import { PixiButton } from "./common/PixiButton";
 import { actionState } from "../store/assetsStore";
 import { useRecoilState } from "recoil";
 import { Actions } from "../types/actionsType";
@@ -24,14 +24,7 @@ export const Guide = () => {
             <Sprite texture={resources.planet05} position={[-50, 800]} scale={0.9} />
             <Sprite texture={resources.rocket01} position={[0, 0]} scale={0.7} />
 
-            <PixiButton
-                name='back'
-                position={[60, 70]}
-                defaultTexture={resources.back}
-                sound={sounds.audioIntoBtn}
-                align='LEFT'
-                onTouchEnd={onTouchEnd}
-            />
+            <PixiButton name='back' position={[60, 70]} defaultTexture={resources.back} sound={sounds.audioIntoBtn} onTouchEnd={onTouchEnd} />
         </Container>
     );
 };

@@ -7,9 +7,10 @@ import { Intro } from "./Intro";
 import { Guide } from "./Guide";
 import { Ranking } from "./Ranking";
 import { Loading } from "./Loading";
-import { PixiButton } from "./PixiButton";
+import { PixiButton } from "./common/PixiButton";
 import { Game } from "./Game";
 import { GameFinish } from "./GameFinish";
+import { CONTENT_WIDTH } from "../constants/commonConstants";
 
 export const Layout = () => {
     const { resources, sounds } = useContext(ResourceContext);
@@ -26,7 +27,7 @@ export const Layout = () => {
                 {action === "GUIDE" && <Guide />}
                 {action === "RANKING" && <Ranking />}
 
-                <PixiButton name='close' position={[1860, 70]} defaultTexture={resources.close} sound={sounds.audioIntoBtn} align='RIGHT' />
+                <PixiButton name='close' position={[CONTENT_WIDTH - 60, 70]} defaultTexture={resources.close} sound={sounds.audioIntoBtn} />
             </>
         </Container>
     );

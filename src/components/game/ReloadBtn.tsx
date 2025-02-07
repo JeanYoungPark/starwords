@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { PixiButton } from "../PixiButton";
+import { PixiButton } from "../common/PixiButton";
 import { ResourceContext } from "../../context/ResourceContext";
 import { useRecoilState } from "recoil";
 import { gameActionState } from "../../store/assetsStore";
@@ -23,7 +23,6 @@ export const ReloadBtn = () => {
             position={[60, 70]}
             defaultTexture={resources.reload}
             sound={sounds.audioIntoBtn}
-            align='LEFT'
             interactive={true}
             onclick={onReload}
         />
