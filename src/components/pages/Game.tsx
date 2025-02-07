@@ -1,31 +1,24 @@
 import { AnimatedSprite, Container, PixiRef, Sprite, Text } from "@pixi/react";
-import { useCallback, useContext, useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { ResourceContext } from "../../context/ResourceContext";
-import { TextStyle } from "pixi.js";
-import { Aliens } from "../game/Alien";
+import { Aliens } from "../game/Aliens";
 import { ScoreBar } from "../game/ScoreBar";
-import { useRecoilState, useRecoilValue } from "recoil";
+import { useRecoilValue, useSetRecoilState } from "recoil";
 import { comboDestroyNumberState, isComboState } from "../../store/gameStore";
 import { ReloadBtn } from "../game/ReloadBtn";
+import { PROBLEM_TEXT_STYLE } from "../../constants/gameConstants";
+import { CONTENT_WIDTH } from "../../constants/commonConstants";
 
 export const Game = () => {
-    const isCombo = useRecoilValue(isComboState);
-    const [comboDestroyNum, setComboDestroyNum] = useRecoilState(comboDestroyNumberState);
-    const containerRef = useRef<PixiRef<typeof Container>>(null);
     const { resources, sounds, gameData, contentsData, createProblem, problems } = useContext(ResourceContext);
+    const isCombo = useRecoilValue(isComboState);
+    const setComboDestroyNum = useSetRecoilState(comboDestroyNumberState);
+
+    const containerRef = useRef<PixiRef<typeof Container>>(null);
     const [isIncorrect, setIsIncorrect] = useState<boolean>(false);
     const sec = useRef<number>(0);
 
-    const incorrect = [
-        resources.incorrect01,
-        resources.incorrect02,
-        resources.incorrect03,
-        resources.incorrect04,
-        resources.incorrect05,
-        resources.incorrect06,
-        resources.incorrect07,
-        resources.incorrect08,
-    ];
+    const INCORRECT_FRAMES = Array.from({ length: 8 }, (_, i) => resources[`incorrect0${i + 1}`]);
 
     useEffect(() => {
         sounds["audioIntroBgm"].stop();
@@ -41,43 +34,33 @@ export const Game = () => {
         }
     };
 
-    const handleIncorrect = useCallback(() => {
+    const handleIncorrect = () => {
         setIsIncorrect(true);
         sounds["gameIncorrect"].play();
 
         if (!isCombo) {
             setComboDestroyNum(null);
         }
-    }, [sounds]);
+    };
 
     return (
         <Container ref={containerRef}>
-            <Sprite texture={resources.bg} anchor={0.5} position={[1024, 640]} />
+            <Sprite texture={resources.bg} anchor={0.5} position={[CONTENT_WIDTH / 2, 640]} />
             <Sprite texture={resources.gamePlanet01} position={[-50, 0]} />
             <Sprite texture={resources.gamePlanet02} position={[1500, 720]} />
 
-            {isCombo && <Sprite texture={resources.gameComboBg} />}
+            {isCombo && <Sprite texture={resources.gameComboBg} anchor={0.5} />}
+
             <ReloadBtn />
 
-            <Text
-                text={problems?.item.word_ko}
-                position={[950, 180]}
-                style={
-                    new TextStyle({
-                        fontFamily: "NotoSans",
-                        fontSize: 47,
-                        fill: "rgba(255, 234, 68)",
-                        fontWeight: "700",
-                    })
-                }
-                anchor={[0.5, 0.5]}
-            />
+            <Text text={problems.item.word_ko} position={[CONTENT_WIDTH / 2, 180]} style={PROBLEM_TEXT_STYLE} anchor={0.5} />
 
-            <Container position={[1920 / 2, 400]} name='alien' scale={0.9}>
+            <Container position={[CONTENT_WIDTH / 2, 400]} scale={0.9} anchor={0.5}>
                 <Aliens problems={problems} sec={sec} handleCorrect={handleCorrect} handleIncorrect={handleIncorrect} />
+
                 {isIncorrect && (
                     <AnimatedSprite
-                        textures={incorrect}
+                        textures={INCORRECT_FRAMES}
                         anchor={0.5}
                         isPlaying={true}
                         animationSpeed={0.2}

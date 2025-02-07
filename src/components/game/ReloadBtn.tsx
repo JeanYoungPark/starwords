@@ -1,14 +1,15 @@
 import { useContext } from "react";
+import { useSetRecoilState } from "recoil";
+
 import { PixiButton } from "../common/PixiButton";
 import { ResourceContext } from "../../context/ResourceContext";
-import { useRecoilState } from "recoil";
 import { gameActionState } from "../../store/assetsStore";
 import { GameActions } from "../../types/actionsType";
 import { UseInit } from "../../hooks/UseInit";
 
 export const ReloadBtn = () => {
     const { resources, sounds, createProblem, gameData, contentsData } = useContext(ResourceContext);
-    const [, setGameAction] = useRecoilState(gameActionState);
+    const setGameAction = useSetRecoilState(gameActionState);
     const { init } = UseInit();
 
     const onReload = () => {
