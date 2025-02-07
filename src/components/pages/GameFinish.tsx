@@ -1,9 +1,9 @@
 import { Container, PixiRef, Sprite } from "@pixi/react";
 import React, { useContext, useEffect, useRef } from "react";
-import { ResourceContext } from "../context/ResourceContext";
 import { useRecoilState } from "recoil";
-import { actionState } from "../store/assetsStore";
-import { Actions } from "../types/actionsType";
+
+import { ResourceContext } from "../../context/ResourceContext";
+import { actionState } from "../../store/assetsStore";
 
 export const GameFinish = () => {
     const containerRef = useRef<PixiRef<typeof Container>>(null);

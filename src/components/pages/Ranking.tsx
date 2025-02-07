@@ -1,11 +1,12 @@
 import { Container, Sprite, Text } from "@pixi/react";
 import React, { useContext, useState } from "react";
-import { ResourceContext } from "../context/ResourceContext";
-import { PixiButton } from "./common/PixiButton";
 import { TextStyle } from "pixi.js";
 import { useRecoilState } from "recoil";
-import { actionState } from "../store/assetsStore";
-import { Actions } from "../types/actionsType";
+
+import { ResourceContext } from "../../context/ResourceContext";
+import { actionState } from "../../store/assetsStore";
+import { Actions } from "../../types/actionsType";
+import { PixiButton } from "../common/PixiButton";
 
 export const Ranking = () => {
     const { resources, sounds } = useContext(ResourceContext);

@@ -1,16 +1,17 @@
 import { Container } from "@pixi/react";
-import { useContext, useEffect } from "react";
-import { ResourceContext } from "../context/ResourceContext";
+import { useContext } from "react";
 import { useRecoilValue } from "recoil";
+
+import { ResourceContext } from "../context/ResourceContext";
 import { actionState } from "../store/assetsStore";
-import { Intro } from "./Intro";
-import { Guide } from "./Guide";
-import { Ranking } from "./Ranking";
+import { Intro } from "./pages/Intro";
+import { Guide } from "./pages/Guide";
 import { Loading } from "./Loading";
 import { PixiButton } from "./common/PixiButton";
-import { Game } from "./Game";
-import { GameFinish } from "./GameFinish";
+import { Game } from "./pages/Game";
 import { CONTENT_WIDTH } from "../constants/commonConstants";
+import { GameFinish } from "./pages/GameFinish";
+import { Ranking } from "./pages/Ranking";
 
 export const Layout = () => {
     const { resources, sounds } = useContext(ResourceContext);
@@ -22,9 +23,9 @@ export const Layout = () => {
         <Container>
             <>
                 {action === "INTRO" && <Intro />}
+                {action === "GUIDE" && <Guide />}
                 {action === "GAME_PLAY" && <Game />}
                 {action === "GAME_FINISH" && <GameFinish />}
-                {action === "GUIDE" && <Guide />}
                 {action === "RANKING" && <Ranking />}
 
                 <PixiButton name='close' position={[CONTENT_WIDTH - 60, 70]} defaultTexture={resources.close} sound={sounds.audioIntoBtn} />

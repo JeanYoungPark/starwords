@@ -2,10 +2,10 @@ import { Container, Stage, PixiRef } from "@pixi/react";
 import { Application } from "pixi.js";
 import { ReactNode, useRef } from "react";
 import { Helmet, HelmetProvider } from "react-helmet-async";
-import { ScreenLayout } from "./ScreenLayout";
-import { isMobile } from "../util";
 import gsap from "gsap";
+
 import { CONTENT_HEIGHT, CONTENT_WIDTH } from "../constants/commonConstants";
+import { isMobile } from "../util";
 
 interface Props {
     children: ReactNode;
@@ -40,15 +40,12 @@ export const GameLayout = ({ children, title }: Props) => {
             resizeTimeout = window.setTimeout(() => resizeApp(app), 100);
         };
 
-        // 초기 리사이즈
         requestAnimationFrame(() => resizeApp(app));
 
-        // 리사이즈 이벤트 리스너 등록
         window.addEventListener("resize", handleResize);
         window.addEventListener("orientationchange", handleResize);
 
         return () => {
-            // 리사이즈 이벤트 리스너 제거
             window.clearTimeout(resizeTimeout);
             window.removeEventListener("resize", handleResize);
             window.removeEventListener("orientationchange", handleResize);

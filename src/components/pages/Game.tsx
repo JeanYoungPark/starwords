@@ -1,12 +1,12 @@
 import { AnimatedSprite, Container, PixiRef, Sprite, Text } from "@pixi/react";
 import { useCallback, useContext, useEffect, useRef, useState } from "react";
-import { ResourceContext } from "../context/ResourceContext";
+import { ResourceContext } from "../../context/ResourceContext";
 import { TextStyle } from "pixi.js";
-import { Aliens } from "./game/Alien";
-import { ScoreBar } from "./game/ScoreBar";
+import { Aliens } from "../game/Alien";
+import { ScoreBar } from "../game/ScoreBar";
 import { useRecoilState, useRecoilValue } from "recoil";
-import { comboDestroyNumberState, isComboState } from "../store/gameStore";
-import { ReloadBtn } from "./game/ReloadBtn";
+import { comboDestroyNumberState, isComboState } from "../../store/gameStore";
+import { ReloadBtn } from "../game/ReloadBtn";
 
 export const Game = () => {
     const isCombo = useRecoilValue(isComboState);

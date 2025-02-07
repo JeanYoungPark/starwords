@@ -1,14 +1,15 @@
 import { Container, Sprite } from "@pixi/react";
 import { useContext } from "react";
-import { ResourceContext } from "../context/ResourceContext";
-import { PixiButton } from "./common/PixiButton";
-import { actionState } from "../store/assetsStore";
-import { useRecoilState } from "recoil";
-import { Actions } from "../types/actionsType";
+import { useSetRecoilState } from "recoil";
+
+import { ResourceContext } from "../../context/ResourceContext";
+import { PixiButton } from "../common/PixiButton";
+import { actionState } from "../../store/assetsStore";
+import { Actions } from "../../types/actionsType";
 
 export const Guide = () => {
     const { resources, sounds } = useContext(ResourceContext);
-    const [action, setAction] = useRecoilState(actionState);
+    const setAction = useSetRecoilState(actionState);
 
     const onTouchEnd = () => {
         setAction(Actions.INTRO);
