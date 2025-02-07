@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { Container, Sprite } from "@pixi/react";
 import { ResourceContext } from "../context/ResourceContext";
 import { Title } from "./intro/Title";
@@ -6,12 +6,19 @@ import { BgmBtn } from "./intro/BgmBtn";
 import { HelpBtn } from "./common/HelpBtn";
 import { StartBtn } from "./intro/StartBtn";
 import { RankingBtn } from "./intro/RankingBtn";
-import { useRecoilValue } from "recoil";
-import { gameTypeState } from "../store/assetsStore";
+import { useRecoilState, useRecoilValue } from "recoil";
+import { actionState, gameTypeState } from "../store/assetsStore";
+import { Actions } from "../types/actionsType";
 
 export const Intro = () => {
     const { resources, sounds } = useContext(ResourceContext);
     const gameType = useRecoilValue(gameTypeState);
+    const [action, setAction] = useRecoilState(actionState);
+
+    useEffect(() => {
+        console.log(resources.resultBg);
+        // setAction(Actions.GAME_FINISH);
+    }, []);
 
     if (!resources || !sounds) return null;
 

@@ -1,9 +1,16 @@
 import { atom } from "recoil";
-import { Actions } from "../types/actionsType";
+import { Actions, GameActions } from "../types/actionsType";
 
+// 컴포넌트 상태 관리
 export const actionState = atom<Actions>({
     key: "actionState",
     default: Actions.INIT,
+});
+
+// 게임 컴포넌트내에서 상태 관리
+export const gameActionState = atom<GameActions>({
+    key: "gameActionState",
+    default: GameActions.STAND_BY,
 });
 
 /**

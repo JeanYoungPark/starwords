@@ -5,6 +5,7 @@ const guideImgPath = "images/guide/";
 const rankingImgPath = "images/ranking/";
 const gameImgPath = "images/game/";
 const aliensImgPath = "images/game/aliens/";
+const resultPath = "images/result/";
 const comboDestroyAniImgPath = "images/game/combo_destroy_ani/";
 const correctDestroyAniImgPath = "images/game/correct_destroy_ani/";
 const incorrectAniImgPath = "images/game/incorrect_ani/";
@@ -126,6 +127,19 @@ const assets = [
     { alias: "incorrect06", src: `${incorrectAniImgPath}incorrect_06.png` },
     { alias: "incorrect07", src: `${incorrectAniImgPath}incorrect_07.png` },
     { alias: "incorrect08", src: `${incorrectAniImgPath}incorrect_08.png` },
+
+    // result
+    { alias: "resultBg", src: `${resultPath}bg.png` },
+    { alias: "tryAgain", src: `${resultPath}tryAgain.png` },
+    { alias: "good", src: `${resultPath}good.png` },
+    { alias: "excellent", src: `${resultPath}excellent.png` },
+    { alias: "didIt", src: `${resultPath}didIt.png` },
+    { alias: "dontGiveUp", src: `${resultPath}dontGiveUp.png` },
+    { alias: "incorrectBtn", src: `${resultPath}incorrect_btn.png` },
+    { alias: "resultRankingBtn01", src: `${resultPath}ranking_btn_01.png` },
+    { alias: "resultRankingBtn02", src: `${resultPath}ranking_btn_02.png` },
+    { alias: "resultTryAgainBtn01", src: `${resultPath}tryAgain_btn_01.png` },
+    { alias: "resultTryAgainBtn02", src: `${resultPath}tryAgain_btn_02.png` },
 ];
 
 const audioAssets = [
@@ -136,6 +150,8 @@ const audioAssets = [
     { alias: "gameCombo", src: `${audioPath}game_combo.mp3` },
     { alias: "gameCorrect", src: `${audioPath}game_correct.mp3` },
     { alias: "gameIncorrect", src: `${audioPath}game_incorrect.mp3` },
+    { alias: "alienDestroy", src: `${audioPath}alien_destroy.mp3` },
+    { alias: "result", src: `${audioPath}result.mp3` },
 ];
 
 const fonts = [

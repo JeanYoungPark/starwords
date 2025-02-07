@@ -1,15 +1,16 @@
 import { AnimatedSprite, Container, PixiRef, Sprite, Text } from "@pixi/react";
 import { useCallback, useContext, useEffect, useRef, useState } from "react";
 import { ResourceContext } from "../context/ResourceContext";
-import { PixiButton } from "./PixiButton";
 import { TextStyle } from "pixi.js";
 import { Aliens } from "./game/Alien";
 import { ScoreBar } from "./game/ScoreBar";
-import { useRecoilValue } from "recoil";
-import { isComboState } from "../store/gameStore";
+import { useRecoilState, useRecoilValue } from "recoil";
+import { comboDestroyNumberState, isComboState } from "../store/gameStore";
+import { ReloadBtn } from "./game/ReloadBtn";
 
 export const Game = () => {
     const isCombo = useRecoilValue(isComboState);
+    const [comboDestroyNum, setComboDestroyNum] = useRecoilState(comboDestroyNumberState);
     const containerRef = useRef<PixiRef<typeof Container>>(null);
     const { resources, sounds, gameData, contentsData, createProblem, problems } = useContext(ResourceContext);
     const [isIncorrect, setIsIncorrect] = useState<boolean>(false);
@@ -31,18 +32,22 @@ export const Game = () => {
         sounds["gameBgm"].play({ loop: true });
     }, [sounds]);
 
-    // useEffect(() => {
-    //     createProblem(gameData, contentsData);
-    // }, []);
-
     const handleCorrect = () => {
         setIsIncorrect(false);
         createProblem(gameData, contentsData);
+
+        if (!isCombo) {
+            setComboDestroyNum(null);
+        }
     };
 
     const handleIncorrect = useCallback(() => {
         setIsIncorrect(true);
         sounds["gameIncorrect"].play();
+
+        if (!isCombo) {
+            setComboDestroyNum(null);
+        }
     }, [sounds]);
 
     return (
@@ -52,7 +57,7 @@ export const Game = () => {
             <Sprite texture={resources.gamePlanet02} position={[1500, 720]} />
 
             {isCombo && <Sprite texture={resources.gameComboBg} />}
-            <PixiButton name='reload' position={[60, 70]} defaultTexture={resources.reload} sound={sounds.audioIntoBtn} align='LEFT' />
+            <ReloadBtn />
 
             <Text
                 text={problems?.item.word_ko}

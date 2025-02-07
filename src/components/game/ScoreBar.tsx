@@ -1,12 +1,14 @@
 import { Container, PixiRef, Sprite, Text, useTick } from "@pixi/react";
-import { memo, MutableRefObject, useContext, useEffect, useRef, useState } from "react";
+import { memo, MutableRefObject, useContext, useEffect, useRef } from "react";
 import { ResourceContext } from "../../context/ResourceContext";
 import { TextStyle, Sprite as PIXISprite } from "pixi.js";
 import { useRecoilState, useRecoilValue } from "recoil";
-import { isComboState, scoreState } from "../../store/gameStore";
+import { comboScoreState, isComboState, scoreState } from "../../store/gameStore";
 import { COMBO_TEXT_POSITION, MAX_COMBO_NUMBER } from "../../constants/commonConstants";
 import { ComboMaxIcon } from "./ComboMaxIcon";
 import { ComboIcon } from "./ComboIcon";
+import { actionState, gameActionState } from "../../store/assetsStore";
+import { Actions, GameActions } from "../../types/actionsType";
 
 interface ScoreBarProps {
     sec: MutableRefObject<number>;
@@ -15,40 +17,35 @@ interface ScoreBarProps {
 
 export const ScoreBar = memo(({ sec, handleIncorrect }: ScoreBarProps) => {
     const { resources, gameData } = useContext(ResourceContext);
-    const [isCombo, setIsCombo] = useRecoilState(isComboState);
+    const [action, setAction] = useRecoilState(actionState);
+    const [gameAction, setGameAction] = useRecoilState(gameActionState);
+    const isCombo = useRecoilValue(isComboState);
     const score = useRecoilValue(scoreState);
+    const comboScore = useRecoilValue(comboScoreState);
 
     const timeLeft = useRef(60);
     const timeSpeed = useRef(0);
 
     const textRef = useRef<PixiRef<typeof Text>>(null);
     const gaugeRef = useRef<PixiRef<typeof Sprite>>(null);
-    const [gameState, setGameState] = useState<string>("STANDBY");
 
-    useEffect(() => {
-        console.log("MaxComboIcon rendered");
-        return () => {
-            console.log("MaxComboIcon unmounted");
-        };
-    }, []);
+    const timeSetting = () => {
+        timeLeft.current = gameData.leftTime;
+        timeSpeed.current = resources.gauge.width / gameData.leftTime / 60;
+        setGameAction(GameActions.START);
+    };
 
-    useEffect(() => {
+    const gaugeSetting = () => {
         const gauge = gaugeRef.current as PIXISprite;
 
         if (gauge) {
             gauge.x = 720;
             gauge.y = 980;
         }
-    }, []);
+    };
 
     useEffect(() => {
-        timeLeft.current = gameData.leftTime;
-        timeSpeed.current = resources.gauge.width / gameData.leftTime / 60;
-        setGameState("START");
-    }, []);
-
-    useEffect(() => {
-        if (gameState === "START") {
+        if (gameAction === GameActions.START) {
             const eachSecCheck = setInterval(() => {
                 sec.current += 1;
 
@@ -62,7 +59,7 @@ export const ScoreBar = memo(({ sec, handleIncorrect }: ScoreBarProps) => {
                 if (timeLeft.current === 0) {
                     clearInterval(eachSecCheck);
                     clearInterval(totalTime);
-                    // setAction(Actions.GAME_FINISH);
+                    setAction(Actions.GAME_FINISH);
                 } else {
                     timeLeft.current = Math.max(timeLeft.current - 1, 0);
 
@@ -79,11 +76,15 @@ export const ScoreBar = memo(({ sec, handleIncorrect }: ScoreBarProps) => {
                 clearInterval(eachSecCheck);
                 clearInterval(totalTime);
             };
+        } else if (gameAction === GameActions.STAND_BY) {
+            // 새로고침
+            timeSetting();
+            gaugeSetting();
         }
-    }, [gameState, sec]);
+    }, [gameAction, sec]);
 
     useTick((delta) => {
-        if (gameState === "START") {
+        if (gameAction === GameActions.START) {
             if (timeLeft.current > 0) {
                 const gauge = gaugeRef.current as PIXISprite;
 
@@ -106,7 +107,7 @@ export const ScoreBar = memo(({ sec, handleIncorrect }: ScoreBarProps) => {
             <Sprite texture={isCombo ? resources.gameComboScoreBg : resources.gameScoreBg} position={isCombo ? [264, 920] : [300, 920]} />
 
             <Text
-                text={`${score}`}
+                text={`${score + comboScore}`}
                 position={[425, 1000]}
                 style={
                     new TextStyle({

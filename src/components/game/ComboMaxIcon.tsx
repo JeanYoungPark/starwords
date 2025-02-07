@@ -1,8 +1,8 @@
-import { AnimatedSprite, Container, PixiRef, Sprite } from "@pixi/react";
+import { Container, PixiRef, Sprite } from "@pixi/react";
 import React, { memo, useContext, useEffect, useRef, useState } from "react";
 import { ResourceContext } from "../../context/ResourceContext";
 import { useRecoilState } from "recoil";
-import { comboCntState, comboDestroyNumberState, isComboState } from "../../store/gameStore";
+import { comboCntState, comboDestroyNumberState, forceAlienRemoveState, isComboState } from "../../store/gameStore";
 import { MAX_COMBO_NUMBER } from "../../constants/commonConstants";
 import { Sprite as PIXISprite } from "pixi.js";
 import gsap from "gsap";
@@ -13,7 +13,7 @@ const NormalIcon = memo(({ data }: { data: { x: number; y: number } }) => {
     return <Sprite texture={resources.maxComboBall} position={[data.x, data.y]} rotation={0} />;
 });
 
-const MaxComboIcon = memo(({ data, onComboDestroy }: { data: { x: number; y: number }; onComboDestroy: () => void }) => {
+const MaxComboIcon = memo(({ data, onClick }: { data: { x: number; y: number }; onClick: () => void }) => {
     const { resources } = useContext(ResourceContext);
     const comboMaxContainerRef = useRef<PixiRef<typeof Container>>(null);
     const [currentTexture, setCurrentTexture] = useState(resources.maxComboBallOn01);
@@ -21,25 +21,12 @@ const MaxComboIcon = memo(({ data, onComboDestroy }: { data: { x: number; y: num
     const handleMaxCombo = () => {
         // Todo
         // 외계인 색깔 변경
-        // 정답 아닌 것 중 외계인 하나 destroy
-
         const comboMaxContainer = comboMaxContainerRef.current;
         const comboMaxBg = comboMaxContainer?.getChildByName("comboMaxOnBg") as PIXISprite;
 
         // 콤보 animation gsap 제거
         gsap.killTweensOf(comboMaxBg);
-        onComboDestroy();
-
-        // // 콤보 시간 시작
-        // const eachSecCheck = setInterval(() => {
-        //     comboSec.current += 1;
-
-        //     if (comboSec.current === 10) {
-        //         comboSec.current = 0;
-        //         setIsCombo(false);
-        //         clearInterval(eachSecCheck);
-        //     }
-        // }, 1000);
+        onClick();
     };
 
     useEffect(() => {
@@ -86,22 +73,35 @@ const MaxComboIcon = memo(({ data, onComboDestroy }: { data: { x: number; y: num
 export const ComboMaxIcon = memo(({ data }: { data: { x: number; y: number } }) => {
     const { problems } = useContext(ResourceContext);
     const [comboCnt, setComboCnt] = useRecoilState(comboCntState);
-    const [isCombo, setIsCombo] = useRecoilState(isComboState);
+    const [, setIsCombo] = useRecoilState(isComboState);
+    const [, setIsForceAlienRemove] = useRecoilState(forceAlienRemoveState);
     const [, setComboDestroyNum] = useRecoilState(comboDestroyNumberState);
-
     const comboSec = useRef<number>(0);
 
-    const handleComboDestroy = () => {
+    const handleMaxCombo = () => {
         setIsCombo(true);
+        setIsForceAlienRemove(true);
         setComboCnt(0);
+
         const originalIndex = destroyProblemIdx(problems.aliens);
         setComboDestroyNum(originalIndex);
+
+        // 콤보 시간 시작
+        const eachSecCheck = setInterval(() => {
+            comboSec.current += 1;
+
+            if (comboSec.current === 10) {
+                comboSec.current = 0;
+                setIsCombo(false);
+                clearInterval(eachSecCheck);
+            }
+        }, 1000);
     };
 
     return (
         <Container>
             {comboCnt === MAX_COMBO_NUMBER ? (
-                <MaxComboIcon data={{ x: data.x, y: data.y }} onComboDestroy={handleComboDestroy} />
+                <MaxComboIcon data={{ x: data.x, y: data.y }} onClick={handleMaxCombo} />
             ) : (
                 <NormalIcon data={{ x: data.x, y: data.y }} />
             )}

@@ -32,7 +32,7 @@ export const ScreenLayout = ({ children, contentWidth, contentHeight, disabled }
 
     return (
         <div
-            id='container'
+            id=' '
             style={{
                 height: `${contentHeight * contentScale + contentTop}px`,
                 pointerEvents: `${disabled ? "none" : "all"}`,

@@ -21,6 +21,7 @@ export const getGameData = async () => {
     const res = await axios.get("https://www.littlefox.com/ko/starwords_api/game_info/U202205021507796459/C0011212");
 
     if (res.status === 200) {
+        console.log(res.data);
         return res.data;
     }
 };

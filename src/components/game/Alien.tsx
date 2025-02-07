@@ -5,8 +5,18 @@ import { TextStyle, Container as PIXIContainer, Sprite as PIXISprite } from "pix
 import { ResourceContext } from "../../context/ResourceContext";
 import gsap from "gsap";
 import { useRecoilState, useRecoilValue } from "recoil";
-import { alienPositionState, comboCntState, comboDestroyNumberState, isComboState, scoreState } from "../../store/gameStore";
+import {
+    alienPositionState,
+    answerCntState,
+    comboCntState,
+    comboDestroyNumberState,
+    comboScoreState,
+    isComboState,
+    forceAlienRemoveState,
+    scoreState,
+} from "../../store/gameStore";
 import { MAX_COMBO_NUMBER } from "../../constants/commonConstants";
+import { destroyProblemIdx } from "../../util";
 
 type AlienContextType = {
     sec: MutableRefObject<number>;
@@ -25,22 +35,26 @@ export const Aliens = ({
         aliens: ProblemType[];
     };
 } & AlienContextType) => {
-    const [aliensMovePosition, setAliensMovePosition] = useRecoilState(alienPositionState);
+    const aliensMovePosition = useRecoilValue(alienPositionState);
     const isCombo = useRecoilValue(isComboState);
-    const [comboRemoveIdx, setComboRemoveIdx] = useState<number | null>(null);
+    const isForceAlienRemove = useRecoilValue(forceAlienRemoveState);
+    const [comboDestroyNum, setComboDestroyNum] = useRecoilState(comboDestroyNumberState);
 
-    // useEffect(() => {
-    //     if (isCombo && problem) {
-    //         console.log("!!");
-    //         const originalIndex = destroyProblemIdx(problem.aliens);
-    //         setComboRemoveIdx(originalIndex);
-    //     }
-    // }, [isCombo, problem]);
+    const chooseDestroyIdx = () => {
+        if (isCombo && !isForceAlienRemove) {
+            const originalIndex = destroyProblemIdx(problems.aliens);
+            setComboDestroyNum(originalIndex);
+        }
+    };
+
+    useEffect(() => {
+        chooseDestroyIdx();
+    }, [problems]);
 
     return (
         <>
             {aliensMovePosition?.map((data: AlienMovePositionType, idx: number) => {
-                if (comboRemoveIdx === idx) return null;
+                if (!isForceAlienRemove && comboDestroyNum === idx) return null;
 
                 return (
                     <Alien
@@ -73,8 +87,11 @@ const Alien = ({
     const { resources, sounds } = useContext(ResourceContext);
     const [comboCnt, setComboCnt] = useRecoilState(comboCntState);
     const [, setScore] = useRecoilState(scoreState);
+    const [, setComboScore] = useRecoilState(comboScoreState);
+    const [, setAnswer] = useRecoilState(answerCntState);
     const isCombo = useRecoilValue(isComboState);
     const [comboDestroyNum, setComboDestroyNum] = useRecoilState(comboDestroyNumberState);
+    const [, setForceAlienRemove] = useRecoilState(forceAlienRemoveState);
     const [isCorrect, setIsCorrect] = useState(false);
     const [isDestroy, setIsDestroy] = useState<boolean>(false);
     const containerRef = useRef<PixiRef<typeof Container>>(null);
@@ -117,22 +134,30 @@ const Alien = ({
 
     const checkAnswer = () => {
         if (problem.correct === "Y") {
+            const alien = alienRef.current;
             const sprite = spriteRef.current as PIXISprite;
 
-            if (sprite) {
+            if (alien && sprite) {
                 sounds["gameCorrect"].play();
-                sprite.destroy();
+                alien.destroy();
+                gsap.killTweensOf(sprite);
                 spriteRef.current = null;
                 setIsCorrect(true);
+                setAnswer((prev) => ({ correct: prev.correct + 1, incorrect: prev.incorrect }));
+
                 if (comboCnt < MAX_COMBO_NUMBER) {
                     // 정답일 경우 combo 증가 (5 이하인 경우에)
-                    const score = isCombo ? 200 : 100;
-                    setScore((prev) => (prev += score));
+                    if (isCombo) {
+                        setComboScore((prev) => (prev += 100));
+                    }
+
+                    setScore((prev) => (prev += 100));
                     setComboCnt((prev) => (prev += 1));
                 }
             }
         } else {
             handleIncorrect();
+            setAnswer((prev) => ({ correct: prev.correct, incorrect: prev.incorrect + 1 }));
         }
 
         sec.current = 0;
@@ -197,7 +222,7 @@ const Alien = ({
             const sprite = spriteRef.current as PIXISprite;
 
             if (alien && sprite) {
-                // sounds["gameCorrect"].play();
+                sounds["alienDestroy"].play();
                 setIsDestroy(true);
                 setComboDestroyNum(null);
 
@@ -252,7 +277,10 @@ const Alien = ({
                     animationSpeed={0.2}
                     loop={false}
                     position={[0, 0]}
-                    onComplete={() => setIsDestroy(false)}
+                    onComplete={() => {
+                        setIsDestroy(false);
+                        setForceAlienRemove(false);
+                    }}
                 />
             )}
         </Container>

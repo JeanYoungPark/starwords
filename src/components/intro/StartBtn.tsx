@@ -22,7 +22,7 @@ export const StartBtn = () => {
     };
 
     const handleStart = () => {
-        setAction(Actions.GAME_START);
+        setAction(Actions.GAME_PLAY);
     };
 
     useEffect(() => {
