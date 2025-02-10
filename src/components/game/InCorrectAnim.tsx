@@ -1,7 +1,7 @@
 import { AnimatedSprite } from "@pixi/react";
 import React, { useContext } from "react";
 import { ResourceContext } from "../../context/ResourceContext";
-import { GameContext } from "../../context/GameContex";
+import { GameContext } from "../../context/GameContext";
 
 export const InCorrectAnim = () => {
     const { resources, gameData, contentsData, createProblem } = useContext(ResourceContext);
@@ -11,6 +11,7 @@ export const InCorrectAnim = () => {
 
     const handleCompleteIncorrectAnim = () => {
         setInCorrectAnimActive(false);
+        console.log(11);
         createProblem(gameData, contentsData);
     };
 

@@ -212,10 +212,8 @@ export const UseStarwords = () => {
 
             // 오답 리스트중 한개 랜덤으로 선택
             let rand_word = gameData.wrong_word_arr[Math.floor(Math.random() * gameData.wrong_word_arr.length)].word_en;
-            console.log("rand_word: ", rand_word);
+
             // 랜덤 오답 단어가 기존 오답과 동일하지 않고 정답 단어와도 동일하지 않은 경우
-            console.log("aliens: ", aliens);
-            console.log("nextIdx: ", nextIdx);
             if (
                 !aliens.find((ele) => {
                     return ele.word === rand_word;

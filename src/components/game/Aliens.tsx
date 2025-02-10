@@ -1,10 +1,10 @@
 import { useContext, useEffect } from "react";
+import { useRecoilValue } from "recoil";
 import { AlienMovePositionType, ProblemType, WordType } from "../../types/resourcesType";
-import { useRecoilState, useRecoilValue } from "recoil";
-import { alienPositionState, comboDestroyNumberState, forceAlienRemoveState } from "../../store/gameStore";
+import { alienPositionState } from "../../store/gameStore";
 import { destroyProblemIdx } from "../../util";
 import { Alien } from "./Alien";
-import { GameContext } from "../../context/GameContex";
+import { GameContext } from "../../context/GameContext";
 
 interface AliensProps {
     problems: {
@@ -14,13 +14,11 @@ interface AliensProps {
 }
 
 export const Aliens = ({ problems }: AliensProps) => {
-    const { comboActive } = useContext(GameContext);
+    const { comboActive, comboDestroyNum, setComboDestroyNum } = useContext(GameContext);
     const aliensMovePosition = useRecoilValue(alienPositionState);
-    const isForceAlienRemove = useRecoilValue(forceAlienRemoveState);
-    const [comboDestroyNum, setComboDestroyNum] = useRecoilState(comboDestroyNumberState);
 
     const chooseDestroyIdx = () => {
-        if (comboActive && !isForceAlienRemove) {
+        if (comboActive && !comboDestroyNum) {
             const originalIndex = destroyProblemIdx(problems.aliens);
             setComboDestroyNum(originalIndex);
         }
@@ -33,7 +31,7 @@ export const Aliens = ({ problems }: AliensProps) => {
     return (
         <>
             {aliensMovePosition?.map((data: AlienMovePositionType, idx: number) => {
-                if (!isForceAlienRemove && comboDestroyNum === idx) return null;
+                if (!comboDestroyNum && comboDestroyNum === idx) return null;
 
                 return (
                     <Alien

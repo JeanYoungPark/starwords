@@ -8,7 +8,7 @@ import { ReloadBtn } from "../game/ReloadBtn";
 import { PROBLEM_TEXT_STYLE } from "../../constants/gameConstants";
 import { CONTENT_WIDTH } from "../../constants/commonConstants";
 import { Aliens } from "../game/Aliens";
-import { GameContext } from "../../context/GameContex";
+import { GameContext } from "../../context/GameContext";
 import { InCorrectAnim } from "../game/InCorrectAnim";
 
 export const Game = () => {

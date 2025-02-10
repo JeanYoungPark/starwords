@@ -9,7 +9,7 @@ import { ComboMaxIcon } from "./ComboMaxIcon";
 import { ComboIcon } from "./ComboIcon";
 import { actionState, gameActionState } from "../../store/assetsStore";
 import { Actions, GameActions } from "../../types/actionsType";
-import { GameContext } from "../../context/GameContex";
+import { GameContext } from "../../context/GameContext";
 
 export const ScoreBar = memo(() => {
     const { resources, sounds, gameData } = useContext(ResourceContext);

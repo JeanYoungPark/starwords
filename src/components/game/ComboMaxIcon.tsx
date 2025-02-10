@@ -7,7 +7,7 @@ import { MAX_COMBO_NUMBER } from "../../constants/commonConstants";
 import { Sprite as PIXISprite } from "pixi.js";
 import gsap from "gsap";
 import { destroyProblemIdx } from "../../util";
-import { GameContext } from "../../context/GameContex";
+import { GameContext } from "../../context/GameContext";
 
 const NormalIcon = memo(({ data }: { data: { x: number; y: number } }) => {
     const { resources } = useContext(ResourceContext);
@@ -73,14 +73,12 @@ const MaxComboIcon = memo(({ data, onClick }: { data: { x: number; y: number }; 
 
 export const ComboMaxIcon = memo(({ data }: { data: { x: number; y: number } }) => {
     const { problems } = useContext(ResourceContext);
-    const { setComboActive, setComboTrigger } = useContext(GameContext);
+    const { setComboActive, setComboDestroyNum } = useContext(GameContext);
     const [comboCnt, setComboCnt] = useRecoilState(comboCntState);
-    const [, setComboDestroyNum] = useRecoilState(comboDestroyNumberState);
     const comboSec = useRef<number>(0);
 
     const handleOnClickMaxCombo = () => {
         setComboActive(true);
-        setComboTrigger(true);
         setComboCnt(0);
 
         const originalIndex = destroyProblemIdx(problems.aliens);
