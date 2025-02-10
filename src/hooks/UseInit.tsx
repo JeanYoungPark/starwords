@@ -1,10 +1,9 @@
-import React from "react";
 import { useRecoilState } from "recoil";
-import { answerCntState, comboCntState, comboDestroyNumberState, comboScoreState, isComboState, scoreState } from "../store/gameStore";
+import { answerCntState, comboCntState, comboDestroyNumberState, comboScoreState, scoreState } from "../store/gameStore";
 
 export const UseInit = () => {
     const [, setComboCnt] = useRecoilState(comboCntState);
-    const [, setIsCombo] = useRecoilState(isComboState);
+    // const [, setIsCombo] = useRecoilState(isComboState);
     const [, setScore] = useRecoilState(scoreState);
     const [, setComboScore] = useRecoilState(comboScoreState);
     const [, setDestroyNum] = useRecoilState(comboDestroyNumberState);
@@ -12,7 +11,7 @@ export const UseInit = () => {
 
     const init = () => {
         setComboCnt(0);
-        setIsCombo(false);
+        // setIsCombo(false);
         setScore(0);
         setComboScore(0);
         setDestroyNum(null);

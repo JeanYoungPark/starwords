@@ -1,25 +1,21 @@
 import { Container, PixiRef, Sprite, Text, useTick } from "@pixi/react";
-import { memo, MutableRefObject, useContext, useEffect, useRef } from "react";
+import { memo, useContext, useEffect, useRef } from "react";
 import { ResourceContext } from "../../context/ResourceContext";
 import { TextStyle, Sprite as PIXISprite } from "pixi.js";
 import { useRecoilState, useRecoilValue } from "recoil";
-import { comboScoreState, isComboState, scoreState } from "../../store/gameStore";
+import { comboScoreState, scoreState } from "../../store/gameStore";
 import { COMBO_TEXT_POSITION, MAX_COMBO_NUMBER } from "../../constants/commonConstants";
 import { ComboMaxIcon } from "./ComboMaxIcon";
 import { ComboIcon } from "./ComboIcon";
 import { actionState, gameActionState } from "../../store/assetsStore";
 import { Actions, GameActions } from "../../types/actionsType";
+import { GameContext } from "../../context/GameContex";
 
-interface ScoreBarProps {
-    sec: MutableRefObject<number>;
-    handleIncorrect: () => void;
-}
-
-export const ScoreBar = memo(({ sec, handleIncorrect }: ScoreBarProps) => {
-    const { resources, gameData } = useContext(ResourceContext);
+export const ScoreBar = memo(() => {
+    const { resources, sounds, gameData } = useContext(ResourceContext);
+    const { sec, setInCorrectAnimActive, comboActive } = useContext(GameContext);
     const [action, setAction] = useRecoilState(actionState);
     const [gameAction, setGameAction] = useRecoilState(gameActionState);
-    const isCombo = useRecoilValue(isComboState);
     const score = useRecoilValue(scoreState);
     const comboScore = useRecoilValue(comboScoreState);
 
@@ -42,6 +38,15 @@ export const ScoreBar = memo(({ sec, handleIncorrect }: ScoreBarProps) => {
             gauge.x = 720;
             gauge.y = 980;
         }
+    };
+
+    const handleIncorrect = () => {
+        setInCorrectAnimActive(true);
+        sounds["gameIncorrect"].play();
+
+        // if (!comboActive) {
+        //     setComboDestroyNum(null);
+        // }
     };
 
     useEffect(() => {
@@ -104,7 +109,7 @@ export const ScoreBar = memo(({ sec, handleIncorrect }: ScoreBarProps) => {
             <Sprite texture={resources.gameBarBg} position={[0, 920]} width={2000} height={250} />
             <Sprite ref={gaugeRef} name='gauge' texture={resources.gauge} />
             <Sprite texture={resources.gameBar} position={[-600, 820]} />
-            <Sprite texture={isCombo ? resources.gameComboScoreBg : resources.gameScoreBg} position={isCombo ? [264, 920] : [300, 920]} />
+            <Sprite texture={comboActive ? resources.gameComboScoreBg : resources.gameScoreBg} position={comboActive ? [264, 920] : [300, 920]} />
 
             <Text
                 text={`${score + comboScore}`}

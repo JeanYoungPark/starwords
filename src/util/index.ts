@@ -26,3 +26,5 @@ export const destroyProblemIdx = (aliens: ProblemType[]) => {
     const originalIndex = aliens.indexOf(selectedIncorrectAlien);
     return originalIndex;
 };
+
+export const getFrameNumber = (num: number) => (num < 10 ? `0${num}` : num);

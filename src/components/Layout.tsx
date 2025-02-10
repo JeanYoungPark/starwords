@@ -12,6 +12,7 @@ import { Game } from "./pages/Game";
 import { CONTENT_WIDTH } from "../constants/commonConstants";
 import { GameFinish } from "./pages/GameFinish";
 import { Ranking } from "./pages/Ranking";
+import { GameProvider } from "../context/GameProvider";
 
 export const Layout = () => {
     const { resources, sounds } = useContext(ResourceContext);
@@ -24,7 +25,11 @@ export const Layout = () => {
             <>
                 {action === "INTRO" && <Intro />}
                 {action === "GUIDE" && <Guide />}
-                {action === "GAME_PLAY" && <Game />}
+                {action === "GAME_PLAY" && (
+                    <GameProvider>
+                        <Game />
+                    </GameProvider>
+                )}
                 {action === "GAME_FINISH" && <GameFinish />}
                 {action === "RANKING" && <Ranking />}
 

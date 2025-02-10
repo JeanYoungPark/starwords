@@ -13,10 +13,10 @@ export const comboCntState = atom<number>({
 });
 
 // 콤보 활성화 상태
-export const isComboState = atom<boolean>({
-    key: "isComboActiveState",
-    default: false,
-});
+// export const isComboState = atom<boolean>({
+//     key: "isComboActiveState",
+//     default: false,
+// });
 
 // 콤보 활성화 이후, 강제 외계인 제거 여부
 export const forceAlienRemoveState = atom<boolean>({
