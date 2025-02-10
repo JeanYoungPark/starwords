@@ -3,8 +3,6 @@ import { useContext, useMemo } from "react";
 import { ResourceContext } from "../../context/ResourceContext";
 import { getFrameNumber } from "../../util";
 import { GameContext } from "../../context/GameContext";
-import { useRecoilState } from "recoil";
-import { comboCntState } from "../../store/gameStore";
 
 interface AlienDestroyAnimProps {
     correctAnimActive: boolean;

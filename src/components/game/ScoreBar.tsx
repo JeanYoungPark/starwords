@@ -43,10 +43,6 @@ export const ScoreBar = memo(() => {
     const handleIncorrect = () => {
         setInCorrectAnimActive(true);
         sounds["gameIncorrect"].play();
-
-        // if (!comboActive) {
-        //     setComboDestroyNum(null);
-        // }
     };
 
     useEffect(() => {

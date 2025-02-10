@@ -1,14 +1,6 @@
-import { AnimatedSprite, Container, PixiRef, Sprite, Text } from "@pixi/react";
-import { useContext, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
+import { Container, PixiRef, Sprite } from "@pixi/react";
+import { useRef, useState } from "react";
 import { ProblemType } from "../../types/resourcesType";
-import { TextStyle, Container as PIXIContainer, Sprite as PIXISprite } from "pixi.js";
-import { ResourceContext } from "../../context/ResourceContext";
-import gsap from "gsap";
-import { useRecoilState } from "recoil";
-import { answerCntState, comboCntState, comboDestroyNumberState, comboScoreState, forceAlienRemoveState, scoreState } from "../../store/gameStore";
-import { MAX_COMBO_NUMBER } from "../../constants/commonConstants";
-import { getFrameNumber } from "../../util";
-import { GameContext } from "../../context/GameContext";
 import { AlienDestroyAnim } from "./AlienDestroyAnim";
 import { AlienContainer } from "./AlienContainer";
 import { useAlienAnimation } from "../../hooks/game/useAlienAnimation";

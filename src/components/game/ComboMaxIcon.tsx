@@ -1,8 +1,6 @@
 import { Container, PixiRef, Sprite } from "@pixi/react";
-import React, { memo, useContext, useEffect, useRef, useState } from "react";
+import { memo, useContext, useEffect, useRef, useState } from "react";
 import { ResourceContext } from "../../context/ResourceContext";
-import { useRecoilState } from "recoil";
-import { comboCntState, comboDestroyNumberState, forceAlienRemoveState } from "../../store/gameStore";
 import { MAX_COMBO_NUMBER } from "../../constants/commonConstants";
 import { Sprite as PIXISprite } from "pixi.js";
 import gsap from "gsap";
@@ -73,8 +71,8 @@ const MaxComboIcon = memo(({ data, onClick }: { data: { x: number; y: number }; 
 
 export const ComboMaxIcon = memo(({ data }: { data: { x: number; y: number } }) => {
     const { problems } = useContext(ResourceContext);
+    const { comboCnt, setComboCnt } = useContext(GameContext);
     const { setComboActive, setComboDestroyNum } = useContext(GameContext);
-    const [comboCnt, setComboCnt] = useRecoilState(comboCntState);
     const comboSec = useRef<number>(0);
 
     const handleOnClickMaxCombo = () => {

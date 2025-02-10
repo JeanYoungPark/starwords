@@ -10,6 +10,8 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
 
     const init = () => {
         setComboActive(false);
+        setComboCnt(0);
+        setComboDestroyNum(NaN);
     };
 
     return (

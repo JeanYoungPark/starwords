@@ -1,9 +1,7 @@
-import { AnimatedSprite, Container, PixiRef, Sprite, Text } from "@pixi/react";
+import { Container, PixiRef, Sprite, Text } from "@pixi/react";
 import { useContext, useEffect, useRef } from "react";
 import { ResourceContext } from "../../context/ResourceContext";
 import { ScoreBar } from "../game/ScoreBar";
-import { useSetRecoilState } from "recoil";
-import { comboDestroyNumberState } from "../../store/gameStore";
 import { ReloadBtn } from "../game/ReloadBtn";
 import { PROBLEM_TEXT_STYLE } from "../../constants/gameConstants";
 import { CONTENT_WIDTH } from "../../constants/commonConstants";

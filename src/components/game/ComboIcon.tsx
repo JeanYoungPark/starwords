@@ -1,15 +1,14 @@
 import { PixiRef, Sprite } from "@pixi/react";
 import { useContext, useEffect, useRef } from "react";
 import { ResourceContext } from "../../context/ResourceContext";
-import { useRecoilState } from "recoil";
-import { comboCntState } from "../../store/gameStore";
 import { COMBO_TEXT_POSITION } from "../../constants/commonConstants";
 import { Sprite as PIXISprite } from "pixi.js";
 import gsap from "gsap";
+import { GameContext } from "../../context/GameContext";
 
 export const ComboIcon = ({ i, data }: { i: number; data: { x: number; y: number } }) => {
     const { resources } = useContext(ResourceContext);
-    const [comboCnt, setComboCnt] = useRecoilState(comboCntState);
+    const { comboCnt } = useContext(GameContext);
 
     const comboTextRefs = useRef<PixiRef<typeof Sprite> | null>(null);
     const texture = i < comboCnt ? resources[`comboBallOn0${i + 1}`] : resources.comboBall;
