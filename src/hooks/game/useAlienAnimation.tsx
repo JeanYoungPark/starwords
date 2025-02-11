@@ -34,7 +34,6 @@ export const useAlienAnimation = ({ containerRef, alienRef, spriteRef, position 
     };
 
     const setupAnimation = () => {
-        console.log(32423);
         cleanupAnimations();
 
         const container = containerRef.current;

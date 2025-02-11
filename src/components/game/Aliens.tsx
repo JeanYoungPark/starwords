@@ -31,7 +31,6 @@ export const Aliens = memo(({ problems }: AliensProps) => {
     };
 
     useEffect(() => {
-        console.log(`-------1. ${problems.item.word_en}--------`);
         chooseDestroyIdx();
     }, [problems.item.word_en]);
 
