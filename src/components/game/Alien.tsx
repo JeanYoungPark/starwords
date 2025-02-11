@@ -1,5 +1,5 @@
 import { Container, PixiRef, Sprite } from "@pixi/react";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { ProblemType } from "../../types/resourcesType";
 import { AlienDestroyAnim } from "./AlienDestroyAnim";
 import { AlienContainer } from "./AlienContainer";
@@ -13,30 +13,20 @@ interface AlienProps {
 
 export const Alien = ({ idx, position, problem }: AlienProps) => {
     const [correctAnimActive, setCorrectAnimActive] = useState<boolean>(false);
-    const [destroyAnimActive, setDestroyAnimActive] = useState<boolean>(false);
 
     const containerRef = useRef<PixiRef<typeof Container>>(null);
     const alienRef = useRef<PixiRef<typeof Container> | null>(null);
     const spriteRef = useRef<PixiRef<typeof Sprite> | null>(null);
+    const { setupAnimation } = useAlienAnimation({ containerRef, alienRef, spriteRef, position });
 
-    useAlienAnimation({ containerRef, alienRef, spriteRef, position });
+    useEffect(() => {
+        setupAnimation();
+    }, []);
 
     return (
         <Container ref={containerRef} position={[position.x, position.y]} anchor={0.5}>
-            <AlienContainer
-                alienRef={alienRef}
-                spriteRef={spriteRef}
-                idx={idx}
-                problem={problem}
-                setCorrectAnimActive={setCorrectAnimActive}
-                setDestroyAnimActive={setDestroyAnimActive}
-            />
-            <AlienDestroyAnim
-                correctAnimActive={correctAnimActive}
-                destroyAnimActive={destroyAnimActive}
-                setCorrectAnimActive={setCorrectAnimActive}
-                setDestroyAnimActive={setDestroyAnimActive}
-            />
+            <AlienContainer alienRef={alienRef} spriteRef={spriteRef} idx={idx} problem={problem} setCorrectAnimActive={setCorrectAnimActive} />
+            <AlienDestroyAnim idx={idx} correctAnimActive={correctAnimActive} setCorrectAnimActive={setCorrectAnimActive} />
         </Container>
     );
 };

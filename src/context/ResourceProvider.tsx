@@ -1,9 +1,9 @@
 import { ReactNode, useEffect } from "react";
 import { ResourceContext } from "./ResourceContext";
-import { UseStarwords } from "../hooks/UseStarwords";
+import { useStarwords } from "../hooks/useStarwords";
 
 export const ResourceProvider = ({ children }: { children: ReactNode }) => {
-    const { createProblem, problems, resources, sounds, gameData, contentsData, userData } = UseStarwords();
+    const { createProblem, problems, resources, sounds, gameData, contentsData, userData } = useStarwords();
 
     useEffect(() => {
         if (!gameData || !contentsData) return;

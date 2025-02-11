@@ -1,4 +1,4 @@
-import { useContext, useEffect } from "react";
+import { Fragment, memo, useContext, useEffect, useRef, useState } from "react";
 import { useRecoilValue } from "recoil";
 import { AlienMovePositionType, ProblemType, WordType } from "../../types/resourcesType";
 import { alienPositionState } from "../../store/gameStore";
@@ -13,25 +13,32 @@ interface AliensProps {
     };
 }
 
-export const Aliens = ({ problems }: AliensProps) => {
-    const { comboActive, comboDestroyNum, setComboDestroyNum } = useContext(GameContext);
+export const Aliens = memo(({ problems }: AliensProps) => {
+    const { comboActive, comboDestroyNum, alienRemoveNum, setAlienRemoveNum } = useContext(GameContext);
     const aliensMovePosition = useRecoilValue(alienPositionState);
+    // const [removeIdx, setRemoveIdx] = useState<number>(NaN);
 
     const chooseDestroyIdx = () => {
+        if (!comboActive && alienRemoveNum) {
+            setAlienRemoveNum(NaN);
+            return;
+        }
+
         if (comboActive && !comboDestroyNum) {
             const originalIndex = destroyProblemIdx(problems.aliens);
-            setComboDestroyNum(originalIndex);
+            setAlienRemoveNum(originalIndex);
         }
     };
 
     useEffect(() => {
+        console.log(`-------1. ${problems.item.word_en}--------`);
         chooseDestroyIdx();
-    }, [problems]);
+    }, [problems.item.word_en]);
 
     return (
         <>
             {aliensMovePosition?.map((data: AlienMovePositionType, idx: number) => {
-                if (!comboDestroyNum && comboDestroyNum === idx) return null;
+                if (alienRemoveNum === idx) return null;
 
                 return (
                     <Alien
@@ -44,4 +51,4 @@ export const Aliens = ({ problems }: AliensProps) => {
             })}
         </>
     );
-};
+});

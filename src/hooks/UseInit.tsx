@@ -1,7 +1,7 @@
 import { useRecoilState } from "recoil";
 import { answerCntState, comboScoreState, scoreState } from "../store/gameStore";
 
-export const UseInit = () => {
+export const useInit = () => {
     // const [, setComboCnt] = useRecoilState(comboCntState);
     // const [, setIsCombo] = useRecoilState(isComboState);
     const [, setScore] = useRecoilState(scoreState);

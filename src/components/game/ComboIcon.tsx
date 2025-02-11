@@ -1,9 +1,10 @@
 import { PixiRef, Sprite } from "@pixi/react";
 import { useContext, useEffect, useRef } from "react";
-import { ResourceContext } from "../../context/ResourceContext";
-import { COMBO_TEXT_POSITION } from "../../constants/commonConstants";
 import { Sprite as PIXISprite } from "pixi.js";
 import gsap from "gsap";
+
+import { ResourceContext } from "../../context/ResourceContext";
+import { COMBO_TEXT_POSITION } from "../../constants/commonConstants";
 import { GameContext } from "../../context/GameContext";
 
 export const ComboIcon = ({ i, data }: { i: number; data: { x: number; y: number } }) => {
@@ -23,7 +24,7 @@ export const ComboIcon = ({ i, data }: { i: number; data: { x: number; y: number
                 comboText,
                 { y: COMBO_TEXT_POSITION[i].y },
                 {
-                    y: COMBO_TEXT_POSITION[i].y - 30,
+                    y: COMBO_TEXT_POSITION[i].y - 25,
                     duration: 0.5,
                     ease: "sign",
                     onComplete: () => {
@@ -45,7 +46,7 @@ export const ComboIcon = ({ i, data }: { i: number; data: { x: number; y: number
                     name={`comboText0${i + 1}`}
                     texture={resources[`comboBallOnText0${comboCnt}`]}
                     anchor={0.5}
-                    position={[data.x + 34, data.y - 20]}
+                    position={[data.x + 34, data.y - 25]}
                 />
             )}
         </>

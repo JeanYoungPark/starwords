@@ -5,12 +5,12 @@ import { PixiButton } from "../common/PixiButton";
 import { ResourceContext } from "../../context/ResourceContext";
 import { gameActionState } from "../../store/assetsStore";
 import { GameActions } from "../../types/actionsType";
-import { UseInit } from "../../hooks/UseInit";
+import { useInit } from "../../hooks/useInit";
 
 export const ReloadBtn = () => {
     const { resources, sounds, createProblem, gameData, contentsData } = useContext(ResourceContext);
     const setGameAction = useSetRecoilState(gameActionState);
-    const { init } = UseInit();
+    const { init } = useInit();
 
     const onReload = () => {
         init();

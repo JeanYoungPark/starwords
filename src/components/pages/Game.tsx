@@ -26,7 +26,7 @@ export const Game = () => {
             <Sprite texture={resources.gamePlanet01} position={[-50, 0]} />
             <Sprite texture={resources.gamePlanet02} position={[1500, 720]} />
 
-            {comboActive && <Sprite texture={resources.gameComboBg} anchor={0.5} />}
+            {comboActive && <Sprite texture={resources.gameComboBg} anchor={0.5} position={[CONTENT_WIDTH / 2, 640]} />}
 
             <ReloadBtn />
 

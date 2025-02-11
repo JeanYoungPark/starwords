@@ -1,37 +1,45 @@
 import { AnimatedSprite, Sprite } from "@pixi/react";
-import { useContext, useMemo } from "react";
+import { useContext, useEffect, useMemo, useState } from "react";
 import { ResourceContext } from "../../context/ResourceContext";
 import { getFrameNumber } from "../../util";
 import { GameContext } from "../../context/GameContext";
 
 interface AlienDestroyAnimProps {
+    idx: number;
     correctAnimActive: boolean;
-    destroyAnimActive: boolean;
     setCorrectAnimActive: (val: boolean) => void;
-    setDestroyAnimActive: (val: boolean) => void;
 }
 
-export const AlienDestroyAnim = ({ correctAnimActive, destroyAnimActive, setCorrectAnimActive, setDestroyAnimActive }: AlienDestroyAnimProps) => {
+export const AlienDestroyAnim = ({ idx, correctAnimActive, setCorrectAnimActive }: AlienDestroyAnimProps) => {
     const { resources, createProblem, gameData, contentsData } = useContext(ResourceContext);
-    const { comboActive, comboCnt, setComboDestroyNum } = useContext(GameContext);
+    const { comboCnt, comboDestroyNum, setComboDestroyNum, setAnimActive } = useContext(GameContext);
+    const [destroyAnimActive, setDestroyAnimActive] = useState<boolean>(false);
 
     const destroyFrames = useMemo(
         () => ({
-            firstCombo: Array.from({ length: 13 }, (_, i) => resources[`comboDestroy${getFrameNumber(i + 1)}`]),
-            correct: Array.from({ length: 10 }, (_, i) => resources[`destroy${getFrameNumber(i + 1)}`]),
+            firstCombo: Array.from({ length: 10 }, (_, i) => resources[`comboDestroy${getFrameNumber(i + 1)}`]),
+            correct: Array.from({ length: 13 }, (_, i) => resources[`destroy${getFrameNumber(i + 1)}`]),
         }),
         [resources]
     );
 
     const handleCompleteCorrectAnim = () => {
         setCorrectAnimActive(false);
+        setAnimActive(false);
         createProblem(gameData, contentsData);
     };
 
     const handleCompleteDestroyAnim = () => {
         setDestroyAnimActive(false);
+        setAnimActive(false);
         setComboDestroyNum(NaN);
     };
+
+    useEffect(() => {
+        if (comboDestroyNum === idx) {
+            setDestroyAnimActive(true);
+        }
+    }, [comboDestroyNum, idx]);
 
     return (
         <>

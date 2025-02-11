@@ -1,9 +1,10 @@
 import { Container, PixiRef, Sprite } from "@pixi/react";
 import { memo, useContext, useEffect, useRef, useState } from "react";
-import { ResourceContext } from "../../context/ResourceContext";
-import { MAX_COMBO_NUMBER } from "../../constants/commonConstants";
 import { Sprite as PIXISprite } from "pixi.js";
 import gsap from "gsap";
+
+import { ResourceContext } from "../../context/ResourceContext";
+import { MAX_COMBO_NUMBER } from "../../constants/commonConstants";
 import { destroyProblemIdx } from "../../util";
 import { GameContext } from "../../context/GameContext";
 
@@ -12,8 +13,9 @@ const NormalIcon = memo(({ data }: { data: { x: number; y: number } }) => {
     return <Sprite texture={resources.maxComboBall} position={[data.x, data.y]} rotation={0} />;
 });
 
-const MaxComboIcon = memo(({ data, onClick }: { data: { x: number; y: number }; onClick: () => void }) => {
+const MaxIcon = memo(({ data, onClick }: { data: { x: number; y: number }; onClick: () => void }) => {
     const { resources } = useContext(ResourceContext);
+    const { animActive } = useContext(GameContext);
     const comboMaxContainerRef = useRef<PixiRef<typeof Container>>(null);
     const [currentTexture, setCurrentTexture] = useState(resources.maxComboBallOn01);
 
@@ -22,9 +24,10 @@ const MaxComboIcon = memo(({ data, onClick }: { data: { x: number; y: number }; 
         // 외계인 색깔 변경
         const comboMaxContainer = comboMaxContainerRef.current;
         const comboMaxBg = comboMaxContainer?.getChildByName("comboMaxOnBg") as PIXISprite;
+        const comboMaxText = comboMaxContainer?.getChildByName("comboMaxText") as PIXISprite;
 
-        // 콤보 animation gsap 제거
         gsap.killTweensOf(comboMaxBg);
+        gsap.killTweensOf(comboMaxText);
         onClick();
     };
 
@@ -61,7 +64,7 @@ const MaxComboIcon = memo(({ data, onClick }: { data: { x: number; y: number }; 
     }, []);
 
     return (
-        <Container ref={comboMaxContainerRef} interactive={true} onclick={handleMaxCombo}>
+        <Container ref={comboMaxContainerRef} interactive={!animActive ? true : false} onclick={handleMaxCombo}>
             <Sprite name='comboMaxOnBg' texture={resources.maxComboBallOnBg} anchor={0.5} position={[data.x + 85, data.y + 91]} />
             <Sprite name='comboMaxText' texture={currentTexture} anchor={0.5} position={[data.x + 85, data.y + 91]} />
             <Sprite anchor={0.5} texture={resources.maxComboBallOnText} position={[data.x + 90, data.y + 90]} />
@@ -71,8 +74,7 @@ const MaxComboIcon = memo(({ data, onClick }: { data: { x: number; y: number }; 
 
 export const ComboMaxIcon = memo(({ data }: { data: { x: number; y: number } }) => {
     const { problems } = useContext(ResourceContext);
-    const { comboCnt, setComboCnt } = useContext(GameContext);
-    const { setComboActive, setComboDestroyNum } = useContext(GameContext);
+    const { comboCnt, setComboCnt, setComboActive, setComboDestroyNum, setAlienRemoveNum } = useContext(GameContext);
     const comboSec = useRef<number>(0);
 
     const handleOnClickMaxCombo = () => {
@@ -97,7 +99,7 @@ export const ComboMaxIcon = memo(({ data }: { data: { x: number; y: number } }) 
     return (
         <Container>
             {comboCnt === MAX_COMBO_NUMBER ? (
-                <MaxComboIcon data={{ x: data.x, y: data.y }} onClick={handleOnClickMaxCombo} />
+                <MaxIcon data={{ x: data.x, y: data.y }} onClick={handleOnClickMaxCombo} />
             ) : (
                 <NormalIcon data={{ x: data.x, y: data.y }} />
             )}

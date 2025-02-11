@@ -5,13 +5,13 @@ import { GameContext } from "../../context/GameContext";
 
 export const InCorrectAnim = () => {
     const { resources, gameData, contentsData, createProblem } = useContext(ResourceContext);
-    const { setInCorrectAnimActive } = useContext(GameContext);
+    const { setInCorrectAnimActive, setAnimActive } = useContext(GameContext);
 
     const INCORRECT_FRAMES = Array.from({ length: 8 }, (_, i) => resources[`incorrect0${i + 1}`]);
 
     const handleCompleteIncorrectAnim = () => {
         setInCorrectAnimActive(false);
-        console.log(11);
+        setAnimActive(false);
         createProblem(gameData, contentsData);
     };
 

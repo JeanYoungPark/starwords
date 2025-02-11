@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { ProblemType, WordType } from "../types/resourcesType";
-import { useRecoilState, useRecoilValue } from "recoil";
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import { alienPositionState } from "../store/gameStore";
 import { getCookie } from "../util";
 import {
@@ -20,19 +20,19 @@ import { Assets } from "pixi.js";
 import FontFaceObserver from "fontfaceobserver";
 import { Actions } from "../types/actionsType";
 
-export const UseStarwords = () => {
+export const useStarwords = () => {
     const { assets, audioAssets, fonts } = require("../assets/GameAssets").default;
 
     // get from cookies
-    const [, setDeviceOs] = useRecoilState(deviceOsState);
-    const [, setFuId] = useRecoilState(fuIdState);
-    const [, setHwCode] = useRecoilState(hwCodeState);
-    const [, setGameType] = useRecoilState(gameTypeState);
-    const [, setWordMasterSeq] = useRecoilState(wordMasterSeqState);
-    const [, setStage] = useRecoilState(stageState);
-    const [, setLangCode] = useRecoilState(langCodeState);
-    const [, setFcId] = useRecoilState(fcIdState);
-    const [, setClassId] = useRecoilState(classIdState);
+    const setDeviceOs = useSetRecoilState(deviceOsState);
+    const setFuId = useSetRecoilState(fuIdState);
+    const setHwCode = useSetRecoilState(hwCodeState);
+    const setGameType = useSetRecoilState(gameTypeState);
+    const setWordMasterSeq = useSetRecoilState(wordMasterSeqState);
+    const setStage = useSetRecoilState(stageState);
+    const setLangCode = useSetRecoilState(langCodeState);
+    const setFcId = useSetRecoilState(fcIdState);
+    const setClassId = useSetRecoilState(classIdState);
     const [action, setAction] = useRecoilState(actionState);
 
     const gameType = useRecoilValue(gameTypeState);
@@ -118,19 +118,32 @@ export const UseStarwords = () => {
     const contentDataParse = (data: any) => {
         if (data.level_code >= "LV06") {
             return [
-                { x: -453, y: -75, direction_x: "left", direction_y: "top" },
-                { x: 0, y: -75, direction_x: "center", direction_y: "top" },
-                { x: 453, y: -75, direction_x: "right", direction_y: "top" },
-                { x: -268, y: 214, direction_x: "left", direction_y: "bottom" },
-                { x: 268, y: 214, direction_x: "right", direction_y: "bottom" },
+                { x: -453, y: -75 },
+                { x: 0, y: -75 },
+                { x: 453, y: -75 },
+                { x: -268, y: 214 },
+                { x: 268, y: 214 },
             ];
+            // return [
+            //     { x: -453, y: -75, direction_x: "left", direction_y: "top" },
+            //     { x: 0, y: -75, direction_x: "center", direction_y: "top" },
+            //     { x: 453, y: -75, direction_x: "right", direction_y: "top" },
+            //     { x: -268, y: 214, direction_x: "left", direction_y: "bottom" },
+            //     { x: 268, y: 214, direction_x: "right", direction_y: "bottom" },
+            // ];
         } else {
             return [
-                { x: -268, y: -75, direction_x: "left", direction_y: "top" },
-                { x: 268, y: -75, direction_x: "right", direction_y: "top" },
-                { x: -268, y: 214, direction_x: "left", direction_y: "bottom" },
-                { x: 268, y: 214, direction_x: "right", direction_y: "bottom" },
+                { x: -268, y: -75 },
+                { x: 268, y: -75 },
+                { x: -268, y: 214 },
+                { x: 268, y: 214 },
             ];
+            // return [
+            //     { x: -268, y: -75, direction_x: "left", direction_y: "top" },
+            //     { x: 268, y: -75, direction_x: "right", direction_y: "top" },
+            //     { x: -268, y: 214, direction_x: "left", direction_y: "bottom" },
+            //     { x: 268, y: 214, direction_x: "right", direction_y: "bottom" },
+            // ];
         }
     };
 
