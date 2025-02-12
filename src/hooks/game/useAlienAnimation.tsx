@@ -1,15 +1,15 @@
-import { RefObject, useEffect, useRef } from "react";
+import { RefObject, useRef } from "react";
 import { Container as PIXIContainer, Sprite as PIXISprite } from "pixi.js";
 import gsap from "gsap";
+import { CONTENT_HEIGHT, CONTENT_WIDTH } from "../../constants/commonConstants";
 
 interface props {
     containerRef: RefObject<PIXIContainer>;
-    alienRef: RefObject<PIXIContainer>;
     spriteRef: RefObject<PIXISprite>;
-    position: { x: number; y: number };
+    position: { x: number; y: number; direction_x: string; direction_y: string };
 }
 
-export const useAlienAnimation = ({ containerRef, alienRef, spriteRef, position }: props) => {
+export const useAlienAnimation = ({ containerRef, spriteRef, position }: props) => {
     const timelineRef = useRef<gsap.core.Timeline | null>(null);
     const animationsRef = useRef<gsap.core.Tween[]>([]);
 
@@ -76,11 +76,22 @@ export const useAlienAnimation = ({ containerRef, alienRef, spriteRef, position 
         animationsRef.current.push(scaleAnim);
     };
 
-    useEffect(() => {
-        return () => {
-            cleanupAnimations();
-        };
-    }, []);
+    const endAnimation = async () => {
+        const container = containerRef.current;
+        if (!container) return;
 
-    return { setupAnimation };
+        await gsap.fromTo(
+            container,
+            { x: position.x, y: position.y },
+            {
+                x: position.direction_x === "left" ? -CONTENT_WIDTH - 200 : CONTENT_WIDTH + 200,
+                y: position.direction_y === "top" ? -CONTENT_HEIGHT - 200 : CONTENT_HEIGHT + 200,
+
+                duration: 0.3,
+                ease: "sine",
+            }
+        );
+    };
+
+    return { setupAnimation, endAnimation, cleanupAnimations };
 };

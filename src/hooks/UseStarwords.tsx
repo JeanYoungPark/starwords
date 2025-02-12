@@ -43,7 +43,7 @@ export const useStarwords = () => {
     const [gameData, setGameData] = useState(undefined);
     const [contentsData, setContentsData] = useState(undefined);
     const [userData, setUserData] = useState(undefined);
-    const [, setAliensMovePosition] = useRecoilState(alienPositionState);
+    const setAliensMovePosition = useSetRecoilState(alienPositionState);
 
     const [problems, setProblems] = useState<
         | {
@@ -115,21 +115,21 @@ export const useStarwords = () => {
         }
     };
 
-    const contentDataParse = (data: any) => {
-        if (data.level_code >= "LV06") {
+    const contentDataParse = ({ level }: { level: string }) => {
+        if (level >= "LV06") {
             return [
-                { x: -453, y: -75 },
-                { x: 0, y: -75 },
-                { x: 453, y: -75 },
-                { x: -268, y: 214 },
-                { x: 268, y: 214 },
+                { x: -453, y: -75, direction_x: "left", direction_y: "top" },
+                { x: 0, y: -75, direction_x: "center", direction_y: "top" },
+                { x: 453, y: -75, direction_x: "right", direction_y: "top" },
+                { x: -268, y: 214, direction_x: "left", direction_y: "bottom" },
+                { x: 268, y: 214, direction_x: "right", direction_y: "bottom" },
             ];
         } else {
             return [
-                { x: -268, y: -75 },
-                { x: 268, y: -75 },
-                { x: -268, y: 214 },
-                { x: 268, y: 214 },
+                { x: -268, y: -75, direction_x: "left", direction_y: "top" },
+                { x: 268, y: -75, direction_x: "right", direction_y: "top" },
+                { x: -268, y: 214, direction_x: "left", direction_y: "bottom" },
+                { x: 268, y: 214, direction_x: "right", direction_y: "bottom" },
             ];
         }
     };
@@ -149,7 +149,9 @@ export const useStarwords = () => {
 
         // content data
         const contentsRes = await getContentsData();
-        const aliensPosition = contentDataParse(contentsRes);
+        if (!contentsRes.level_code) throw new Error("content data를 가져오지 못했습니다.");
+        const aliensPosition = contentDataParse({ level: contentsRes.level_code });
+
         setAliensMovePosition(aliensPosition);
 
         // contentsRes.title_len = contentsRes.cont_title.length;
@@ -189,7 +191,7 @@ export const useStarwords = () => {
         }
     };
 
-    const createProblem = (gameData: any, contentData: any) => {
+    const createProblem = (gameData: any, contentsData: any) => {
         //combo 상태일때는 문제 3개만 노출
         const nextIdx = idx + 1;
         setIdx(nextIdx);
@@ -198,7 +200,7 @@ export const useStarwords = () => {
             setIdx(0);
         }
 
-        const alienCnt = contentData.level_code >= "LV06" ? 5 : 4;
+        const alienCnt = contentsData.level_code >= "LV06" ? 5 : 4;
 
         let aliens: ProblemType[] = [];
         let i = 0;
@@ -261,5 +263,4 @@ export const useStarwords = () => {
     }, []);
 
     return { createProblem, problems, resources, sounds, gameData, contentsData, userData };
-    // return { gameDataParse, createProblem, problem };
 };

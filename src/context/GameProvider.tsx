@@ -11,9 +11,13 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
     const sec = useRef<number>(0);
 
     const init = () => {
+        setInCorrectAnimActive(false);
         setComboActive(false);
         setComboCnt(0);
         setComboDestroyNum(NaN);
+        setAlienRemoveNum(NaN);
+        setAnimActive(false);
+        sec.current = 0;
     };
 
     return (

@@ -3,6 +3,9 @@ import { useContext, useEffect, useMemo, useState } from "react";
 import { ResourceContext } from "../../context/ResourceContext";
 import { getFrameNumber } from "../../util";
 import { GameContext } from "../../context/GameContext";
+import { useSetRecoilState } from "recoil";
+import { AlienActionState, gameActionState } from "../../store/assetsStore";
+import { AlienActions, GameActions } from "../../types/actionsType";
 
 interface AlienDestroyAnimProps {
     idx: number;
@@ -11,8 +14,9 @@ interface AlienDestroyAnimProps {
 }
 
 export const AlienDestroyAnim = ({ idx, correctAnimActive, setCorrectAnimActive }: AlienDestroyAnimProps) => {
-    const { resources, createProblem, gameData, contentsData } = useContext(ResourceContext);
+    const { resources } = useContext(ResourceContext);
     const { comboCnt, comboDestroyNum, setComboDestroyNum, setAnimActive } = useContext(GameContext);
+    const setAlienAction = useSetRecoilState(AlienActionState);
     const [destroyAnimActive, setDestroyAnimActive] = useState<boolean>(false);
 
     const destroyFrames = useMemo(
@@ -26,7 +30,8 @@ export const AlienDestroyAnim = ({ idx, correctAnimActive, setCorrectAnimActive 
     const handleCompleteCorrectAnim = () => {
         setCorrectAnimActive(false);
         setAnimActive(false);
-        createProblem(gameData, contentsData);
+        // setAlienAction(AlienActions.NEXT);
+        // createProblem(gameData, contentsData);
     };
 
     const handleCompleteDestroyAnim = () => {

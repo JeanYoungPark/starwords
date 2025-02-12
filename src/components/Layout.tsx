@@ -15,10 +15,10 @@ import { Ranking } from "./pages/Ranking";
 import { GameProvider } from "../context/GameProvider";
 
 export const Layout = () => {
-    const { resources, sounds } = useContext(ResourceContext);
+    const { resources, sounds, gameData, contentsData } = useContext(ResourceContext);
     const action = useRecoilValue(actionState);
 
-    if (!resources || !sounds) return <Loading />;
+    if (!resources || !sounds || !gameData || !contentsData) return <Loading />;
 
     return (
         <Container>

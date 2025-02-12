@@ -12,6 +12,8 @@ export interface WordType {
 export interface AlienMovePositionType {
     x: number;
     y: number;
+    direction_x: string;
+    direction_y: string;
 }
 
 export interface ProblemType {

@@ -1,5 +1,5 @@
 import { atom } from "recoil";
-import { Actions, GameActions } from "../types/actionsType";
+import { Actions, AlienActions, GameActions } from "../types/actionsType";
 
 // 컴포넌트 상태 관리
 export const actionState = atom<Actions>({
@@ -11,6 +11,12 @@ export const actionState = atom<Actions>({
 export const gameActionState = atom<GameActions>({
     key: "gameActionState",
     default: GameActions.STAND_BY,
+});
+
+// 외계인 상태 관리
+export const AlienActionState = atom<AlienActions>({
+    key: "AlienActionState",
+    default: AlienActions.PLAYING,
 });
 
 /**

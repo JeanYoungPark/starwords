@@ -11,10 +11,8 @@ import { gameTypeState } from "../../store/assetsStore";
 import { CONTENT_HEIGHT, CONTENT_WIDTH } from "../../constants/commonConstants";
 import { SubTitle } from "../intro/SubTitle";
 export const Intro = () => {
-    const { resources, sounds } = useContext(ResourceContext);
+    const { resources } = useContext(ResourceContext);
     const gameType = useRecoilValue(gameTypeState);
-
-    if (!resources || !sounds) return null;
 
     return (
         <Container>

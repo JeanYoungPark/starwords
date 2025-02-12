@@ -15,7 +15,7 @@ export const ReloadBtn = () => {
     const onReload = () => {
         init();
         setGameAction(GameActions.STAND_BY);
-        createProblem(gameData, contentsData);
+        // createProblem(gameData, contentsData);
     };
 
     return (
