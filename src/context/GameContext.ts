@@ -14,6 +14,7 @@ interface GameContextType {
     setComboCnt: Dispatch<SetStateAction<number>>;
     setAnimActive: Dispatch<SetStateAction<boolean>>;
     setAlienRemoveNum: Dispatch<SetStateAction<number>>;
+    init: () => void;
 }
 
 export const GameContext = createContext<GameContextType>({
@@ -30,4 +31,5 @@ export const GameContext = createContext<GameContextType>({
     setComboCnt: () => {},
     setAnimActive: () => {},
     setAlienRemoveNum: () => {},
+    init: () => {},
 });

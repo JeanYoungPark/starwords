@@ -4,8 +4,8 @@ import { ResourceContext } from "../../context/ResourceContext";
 import { getFrameNumber } from "../../util";
 import { GameContext } from "../../context/GameContext";
 import { useSetRecoilState } from "recoil";
-import { AlienActionState, gameActionState } from "../../store/assetsStore";
-import { AlienActions, GameActions } from "../../types/actionsType";
+import { AlienActionState } from "../../store/assetsStore";
+import { AlienActions } from "../../types/actionsType";
 
 interface AlienDestroyAnimProps {
     idx: number;
@@ -30,8 +30,7 @@ export const AlienDestroyAnim = ({ idx, correctAnimActive, setCorrectAnimActive 
     const handleCompleteCorrectAnim = () => {
         setCorrectAnimActive(false);
         setAnimActive(false);
-        // setAlienAction(AlienActions.NEXT);
-        // createProblem(gameData, contentsData);
+        setAlienAction(AlienActions.NEXT);
     };
 
     const handleCompleteDestroyAnim = () => {

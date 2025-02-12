@@ -13,6 +13,7 @@ export enum GameActions {
 }
 
 export enum AlienActions {
+    STAND_BY = "STAND_BY",
     PLAYING = "PLAYING",
     NEXT = "NEXT",
 }

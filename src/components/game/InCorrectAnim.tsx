@@ -1,5 +1,5 @@
 import { AnimatedSprite } from "@pixi/react";
-import React, { useContext } from "react";
+import { useContext } from "react";
 import { ResourceContext } from "../../context/ResourceContext";
 import { GameContext } from "../../context/GameContext";
 import { useSetRecoilState } from "recoil";
@@ -17,7 +17,6 @@ export const InCorrectAnim = () => {
         setInCorrectAnimActive(false);
         setAnimActive(false);
         setAlienAction(AlienActions.NEXT);
-        // createProblem(gameData, contentsData);
     };
 
     return (

@@ -8,7 +8,7 @@ import { CONTENT_WIDTH } from "../../constants/commonConstants";
 import { Aliens } from "../game/Aliens";
 import { GameContext } from "../../context/GameContext";
 import { InCorrectAnim } from "../game/InCorrectAnim";
-import { useRecoilValue } from "recoil";
+import { useRecoilState } from "recoil";
 import { AlienActionState } from "../../store/assetsStore";
 import { AlienActions } from "../../types/actionsType";
 
@@ -16,7 +16,7 @@ export const Game = () => {
     const { resources, sounds, gameData, contentsData, problems, createProblem } = useContext(ResourceContext);
     const { comboActive, inCorrectAnimActive } = useContext(GameContext);
 
-    const alienAction = useRecoilValue(AlienActionState);
+    const [alienAction, setAlienAction] = useRecoilState(AlienActionState);
     const containerRef = useRef<PixiRef<typeof Container>>(null);
 
     useEffect(() => {
@@ -25,8 +25,9 @@ export const Game = () => {
     }, []);
 
     useEffect(() => {
-        if (alienAction === AlienActions.PLAYING) {
+        if (alienAction === AlienActions.STAND_BY) {
             createProblem(gameData, contentsData);
+            setAlienAction(AlienActions.PLAYING);
         }
     }, [alienAction]);
 

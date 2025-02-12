@@ -16,7 +16,7 @@ export const gameActionState = atom<GameActions>({
 // 외계인 상태 관리
 export const AlienActionState = atom<AlienActions>({
     key: "AlienActionState",
-    default: AlienActions.PLAYING,
+    default: AlienActions.STAND_BY,
 });
 
 /**

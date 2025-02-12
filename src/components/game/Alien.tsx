@@ -34,7 +34,7 @@ export const Alien = ({ idx, position, problem }: AlienProps) => {
     useEffect(() => {
         const moveOutAnim = async () => {
             await endAnimation();
-            setAlienAction(AlienActions.PLAYING);
+            setAlienAction(AlienActions.STAND_BY);
         };
 
         if (alienAction === AlienActions.NEXT) {

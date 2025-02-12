@@ -1,7 +1,17 @@
 import { ReactNode, useRef, useState } from "react";
 import { GameContext } from "./GameContext";
+import { useSetRecoilState } from "recoil";
+import { answerCntState, comboScoreState, scoreState } from "../store/gameStore";
+import { AlienActionState, gameActionState } from "../store/assetsStore";
+import { AlienActions, GameActions } from "../types/actionsType";
 
 export const GameProvider = ({ children }: { children: ReactNode }) => {
+    const setGameAction = useSetRecoilState(gameActionState);
+    const setAlienAction = useSetRecoilState(AlienActionState);
+    const setScore = useSetRecoilState(scoreState);
+    const setComboScore = useSetRecoilState(comboScoreState);
+    const setAnswerCnt = useSetRecoilState(answerCntState);
+
     const [inCorrectAnimActive, setInCorrectAnimActive] = useState<boolean>(false);
     const [comboCnt, setComboCnt] = useState<number>(0);
     const [comboActive, setComboActive] = useState<boolean>(false);
@@ -11,6 +21,16 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
     const sec = useRef<number>(0);
 
     const init = () => {
+        setGameAction(GameActions.STAND_BY);
+        setAlienAction(AlienActions.STAND_BY);
+
+        setScore(0);
+        setComboScore(0);
+        setAnswerCnt({
+            correct: 0,
+            incorrect: 0,
+        });
+
         setInCorrectAnimActive(false);
         setComboActive(false);
         setComboCnt(0);
@@ -36,6 +56,7 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
                 setComboCnt,
                 setAnimActive,
                 setAlienRemoveNum,
+                init,
             }}>
             {children}
         </GameContext.Provider>
