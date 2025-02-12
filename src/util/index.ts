@@ -16,6 +16,17 @@ export const getCookie = (name: string): string | null => {
 };
 
 /**
+ * api 쿠키 얻어오기
+ */
+export const getRequiredCookies = (keys: string[]) => {
+    const values = keys.map((key) => getCookie(key));
+    if (values.some((val) => !val)) {
+        throw new Error(`${keys.join(", ")} 값이 존재하지 않습니다.`);
+    }
+    return values;
+};
+
+/**
  * 콤보 상태에서 없앨 객체 index 얻어오기
  */
 export const destroyProblemIdx = (aliens: ProblemType[]) => {

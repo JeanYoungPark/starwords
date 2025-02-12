@@ -53,26 +53,26 @@ export const useStarwords = () => {
         | undefined
     >(undefined);
 
-    const getCookieData = async () => {
-        setDeviceOs(getCookie("device_os"));
-        setFuId(getCookie("fx7"));
-        setHwCode(Number(getCookie("hw_no")));
+    // const getCookieData = async () => {
+    //     setDeviceOs(getCookie("device_os"));
+    //     // setFuId(getCookie("fx7"));
+    //     setHwCode(Number(getCookie("hw_no")));
 
-        const cookieGameType = getCookie("game_type");
-        setGameType(cookieGameType);
+    //     const cookieGameType = getCookie("game_type");
+    //     setGameType(cookieGameType);
 
-        if (cookieGameType === "word_master") {
-            setWordMasterSeq(getCookie("word_master_seq"));
-            setStage(Number(getCookie("stage")));
-            setLangCode(getCookie("lang_code"));
-        } else {
-            setFcId(getCookie("Starwords_fc_id"));
+    //     if (cookieGameType === "word_master") {
+    //         setWordMasterSeq(getCookie("word_master_seq"));
+    //         setStage(Number(getCookie("stage")));
+    //         setLangCode(getCookie("lang_code"));
+    //     } else {
+    //         // setFcId(getCookie("Starwords_fc_id"));
 
-            if (cookieGameType === "class_id") {
-                setClassId(Number(getCookie("class_id")));
-            }
-        }
-    };
+    //         if (cookieGameType === "class") {
+    //             setClassId(Number(getCookie("class_id")));
+    //         }
+    //     }
+    // };
 
     const loadFonts = async () => {
         const fontPromises = fonts.map((font: { family: string; url: string }) => {
@@ -124,13 +124,6 @@ export const useStarwords = () => {
                 { x: -268, y: 214 },
                 { x: 268, y: 214 },
             ];
-            // return [
-            //     { x: -453, y: -75, direction_x: "left", direction_y: "top" },
-            //     { x: 0, y: -75, direction_x: "center", direction_y: "top" },
-            //     { x: 453, y: -75, direction_x: "right", direction_y: "top" },
-            //     { x: -268, y: 214, direction_x: "left", direction_y: "bottom" },
-            //     { x: 268, y: 214, direction_x: "right", direction_y: "bottom" },
-            // ];
         } else {
             return [
                 { x: -268, y: -75 },
@@ -138,12 +131,6 @@ export const useStarwords = () => {
                 { x: -268, y: 214 },
                 { x: 268, y: 214 },
             ];
-            // return [
-            //     { x: -268, y: -75, direction_x: "left", direction_y: "top" },
-            //     { x: 268, y: -75, direction_x: "right", direction_y: "top" },
-            //     { x: -268, y: 214, direction_x: "left", direction_y: "bottom" },
-            //     { x: 268, y: 214, direction_x: "right", direction_y: "bottom" },
-            // ];
         }
     };
 
@@ -259,7 +246,7 @@ export const useStarwords = () => {
     };
 
     const loadGameData = async () => {
-        await getCookieData();
+        // await getCookieData();
         await loadFonts();
         await loadData();
         await loadAssets();
