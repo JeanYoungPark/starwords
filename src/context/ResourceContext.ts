@@ -1,8 +1,6 @@
 import { createContext } from "react";
 
 interface ResourceContextType {
-    createProblem: (gameData: any, contentData: any) => void;
-    problems: any;
     resources: any;
     sounds: any;
     gameData: any;
@@ -11,8 +9,6 @@ interface ResourceContextType {
 }
 
 export const ResourceContext = createContext<ResourceContextType>({
-    createProblem: () => {},
-    problems: null,
     resources: undefined,
     sounds: undefined,
     gameData: undefined,

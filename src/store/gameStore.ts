@@ -1,5 +1,10 @@
 import { atom } from "recoil";
-import { AlienMovePositionType } from "../types/resourcesType";
+import { AlienMovePositionType, IncorrectType } from "../types/resourcesType";
+
+export const problemIdxState = atom<number>({
+    key: "problemIdx",
+    default: -1,
+});
 
 export const alienPositionState = atom<AlienMovePositionType[]>({
     key: "alienPosition",
@@ -25,4 +30,10 @@ export const answerCntState = atom<{ correct: number; incorrect: number }>({
         correct: 0,
         incorrect: 0,
     },
+});
+
+// 미정답 리스트
+export const incorrectListState = atom<IncorrectType[]>({
+    key: "incorrectListState",
+    default: [],
 });

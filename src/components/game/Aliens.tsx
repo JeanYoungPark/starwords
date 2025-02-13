@@ -1,14 +1,12 @@
 import { memo, useContext, useEffect } from "react";
 import { useRecoilValue } from "recoil";
-import { AlienMovePositionType } from "../../types/resourcesType";
+import { AlienMovePositionType, ProblemType, WordType } from "../../types/resourcesType";
 import { alienPositionState } from "../../store/gameStore";
 import { destroyProblemIdx } from "../../util";
 import { Alien } from "./Alien";
 import { GameContext } from "../../context/GameContext";
-import { ResourceContext } from "../../context/ResourceContext";
 
-export const Aliens = memo(() => {
-    const { problems } = useContext(ResourceContext);
+export const Aliens = memo(({ problems }: { problems: { item: WordType; aliens: ProblemType[] } }) => {
     const { comboActive, comboDestroyNum, alienRemoveNum, setAlienRemoveNum } = useContext(GameContext);
     const aliensMovePosition = useRecoilValue(alienPositionState);
 

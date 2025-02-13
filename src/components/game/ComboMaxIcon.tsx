@@ -73,9 +73,10 @@ const MaxIcon = memo(({ data, onClick }: { data: { x: number; y: number }; onCli
 });
 
 export const ComboMaxIcon = memo(({ data }: { data: { x: number; y: number } }) => {
-    const { problems } = useContext(ResourceContext);
-    const { comboCnt, setComboCnt, setComboActive, setComboDestroyNum, setAlienRemoveNum } = useContext(GameContext);
+    const { problems, comboCnt, setComboCnt, setComboActive, setComboDestroyNum } = useContext(GameContext);
     const comboSec = useRef<number>(0);
+
+    if (!problems) return null;
 
     const handleOnClickMaxCombo = () => {
         setComboActive(true);

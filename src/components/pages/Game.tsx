@@ -13,8 +13,8 @@ import { AlienActionState } from "../../store/assetsStore";
 import { AlienActions } from "../../types/actionsType";
 
 export const Game = () => {
-    const { resources, sounds, gameData, contentsData, problems, createProblem } = useContext(ResourceContext);
-    const { comboActive, inCorrectAnimActive } = useContext(GameContext);
+    const { resources, sounds, gameData, contentsData } = useContext(ResourceContext);
+    const { comboActive, inCorrectAnimActive, problems, createProblem } = useContext(GameContext);
 
     const [alienAction, setAlienAction] = useRecoilState(AlienActionState);
     const containerRef = useRef<PixiRef<typeof Container>>(null);
@@ -46,7 +46,7 @@ export const Game = () => {
             <Text text={problems.item.word_ko} position={[CONTENT_WIDTH / 2, 180]} style={PROBLEM_TEXT_STYLE} anchor={0.5} />
 
             <Container position={[CONTENT_WIDTH / 2, 400]} scale={0.9} anchor={0.5}>
-                <Aliens />
+                <Aliens problems={problems} />
                 {inCorrectAnimActive && <InCorrectAnim />}
             </Container>
 
