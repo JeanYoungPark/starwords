@@ -5,6 +5,7 @@ export enum Actions {
     RANKING = "RANKING",
     GAME_PLAY = "GAME_PLAY",
     GAME_FINISH = "GAME_FINISH",
+    INCORRECT = "INCORRECT",
 }
 
 export enum GameActions {

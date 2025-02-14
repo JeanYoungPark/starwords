@@ -11,10 +11,12 @@ import { Actions, GameActions } from "../../types/actionsType";
 import { GameContext } from "../../context/GameContext";
 import { Gauge } from "./Gauge";
 import { SCORE_TEXT_STYLE, TIME_TEXT_STYLE } from "../../constants/gameConstants";
+import { useIncorrectList } from "../../hooks/game/useIncorrectList";
 
 export const ScoreBar = memo(() => {
     const { resources, sounds, gameData } = useContext(ResourceContext);
     const { sec, comboActive, setInCorrectAnimActive, setAnimActive } = useContext(GameContext);
+    const { handleIncorrectList } = useIncorrectList();
     const setAction = useSetRecoilState(actionState);
     const score = useRecoilValue(scoreState);
     const comboScore = useRecoilValue(comboScoreState);
@@ -40,6 +42,7 @@ export const ScoreBar = memo(() => {
     };
 
     const handleIncorrect = () => {
+        // handleIncorrectList();
         setInCorrectAnimActive(true);
         setAnimActive(true);
         sounds["gameIncorrect"].play();
@@ -57,7 +60,7 @@ export const ScoreBar = memo(() => {
             }, 1000);
 
             const totalTime = setInterval(() => {
-                if (timeLeft.current === 0) {
+                if (timeLeft.current <= 0) {
                     clearInterval(eachSecCheck);
                     clearInterval(totalTime);
                     setAction(Actions.GAME_FINISH);

@@ -14,7 +14,7 @@ export const Title = () => {
         const title = titleRef.current;
         if (!title) return;
 
-        const initialAnimation = gsap.fromTo(
+        gsap.fromTo(
             title.scale,
             {
                 x: TITLE_ANIMATION.INITIAL.scale.start,
@@ -28,7 +28,7 @@ export const Title = () => {
             }
         );
 
-        const loopAnimation = gsap.to(title.scale, {
+        gsap.to(title.scale, {
             x: TITLE_ANIMATION.LOOP.scale,
             y: TITLE_ANIMATION.LOOP.scale,
             duration: TITLE_ANIMATION.LOOP.duration,
@@ -39,8 +39,9 @@ export const Title = () => {
         });
 
         return () => {
-            initialAnimation.kill();
-            loopAnimation.kill();
+            if (title) {
+                gsap.killTweensOf(title);
+            }
         };
     }, []);
 

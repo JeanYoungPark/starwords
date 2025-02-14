@@ -20,3 +20,14 @@ export interface ProblemType {
     word: any;
     correct: string;
 }
+
+export interface IncorrectType {
+    [key: string]: {
+        idx: number;
+        cnt: number;
+        word_ko: string;
+        word_en: string;
+        sound_url: any;
+        // meaning_line: string;
+    };
+}

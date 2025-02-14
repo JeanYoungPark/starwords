@@ -140,6 +140,10 @@ const assets = [
     { alias: "resultRankingBtn02", src: `${resultPath}ranking_btn_02.png` },
     { alias: "resultTryAgainBtn01", src: `${resultPath}tryAgain_btn_01.png` },
     { alias: "resultTryAgainBtn02", src: `${resultPath}tryAgain_btn_02.png` },
+    { alias: "incorrectBg", src: `${resultPath}incorrect_bg.png` },
+    { alias: "incorrectSound", src: `${resultPath}incorrect_sound.png` },
+    { alias: "incorrectLeftBtn", src: `${resultPath}incorrect_left_btn.png` },
+    { alias: "incorrectRightBtn", src: `${resultPath}incorrect_right_btn.png` },
 ];
 
 const audioAssets = [

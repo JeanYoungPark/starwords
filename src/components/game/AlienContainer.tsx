@@ -1,6 +1,6 @@
 import { Container, Sprite, Text } from "@pixi/react";
 import { MutableRefObject, useContext, useEffect, useMemo } from "react";
-import { Container as PIXIContainer, Sprite as PIXISprite, TextStyle } from "pixi.js";
+import { Container as PIXIContainer, Sprite as PIXISprite } from "pixi.js";
 import { GameContext } from "../../context/GameContext";
 import { ProblemType } from "../../types/resourcesType";
 import { useSetRecoilState } from "recoil";
@@ -9,18 +9,22 @@ import { ResourceContext } from "../../context/ResourceContext";
 import { MAX_COMBO_NUMBER } from "../../constants/commonConstants";
 import gsap from "gsap";
 import { ALIEN_TEXT_STYLE } from "../../constants/gameConstants";
+import { useIncorrectList } from "../../hooks/game/useIncorrectList";
 
 interface AlienContainerProps {
     alienRef: MutableRefObject<PIXIContainer | null>;
     spriteRef: MutableRefObject<PIXISprite | null>;
     idx: number;
     problem: ProblemType;
+    // alienAnimActive: MutableRefObject<boolean>;
+    alienAnimActive: boolean;
     setCorrectAnimActive: (val: boolean) => void;
 }
 
-export const AlienContainer = ({ alienRef, spriteRef, idx, problem, setCorrectAnimActive }: AlienContainerProps) => {
+export const AlienContainer = ({ alienRef, spriteRef, idx, problem, alienAnimActive, setCorrectAnimActive }: AlienContainerProps) => {
     const { resources, sounds } = useContext(ResourceContext);
     const { sec, comboActive, comboCnt, comboDestroyNum, animActive, setComboCnt, setInCorrectAnimActive, setAnimActive } = useContext(GameContext);
+    const { handleIncorrectList } = useIncorrectList();
     const setAnswer = useSetRecoilState(answerCntState);
     const setScore = useSetRecoilState(scoreState);
     const setComboScore = useSetRecoilState(comboScoreState);
@@ -56,6 +60,8 @@ export const AlienContainer = ({ alienRef, spriteRef, idx, problem, setCorrectAn
     };
 
     const handleOnClickIncorrect = () => {
+        handleIncorrectList();
+
         setInCorrectAnimActive(true);
         setAnimActive(true);
         sounds["gameIncorrect"].play();
@@ -89,7 +95,7 @@ export const AlienContainer = ({ alienRef, spriteRef, idx, problem, setCorrectAn
     }, [comboDestroyNum, idx]);
 
     return (
-        <Container ref={alienRef} interactive={!animActive ? true : false} pointerdown={checkAnswer}>
+        <Container ref={alienRef} interactive={!animActive && !alienAnimActive ? true : false} pointerdown={checkAnswer}>
             <Sprite ref={spriteRef} texture={resources[`alien0${randomIdx}`]} anchor={0.5} name={`alien0${idx + 1}`} />
             <Text name={`alienText0${idx + 1}`} text={problem.word} position={[0, 100]} style={ALIEN_TEXT_STYLE} anchor={0.5} />
         </Container>

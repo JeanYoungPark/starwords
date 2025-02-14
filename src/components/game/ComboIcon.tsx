@@ -12,6 +12,7 @@ export const ComboIcon = ({ i, data }: { i: number; data: { x: number; y: number
     const { comboCnt } = useContext(GameContext);
 
     const comboTextRefs = useRef<PixiRef<typeof Sprite> | null>(null);
+    const timeoutRef = useRef<ReturnType<typeof window.setTimeout>>();
     const texture = i < comboCnt ? resources[`comboBallOn0${i + 1}`] : resources.comboBall;
 
     useEffect(() => {
@@ -20,6 +21,8 @@ export const ComboIcon = ({ i, data }: { i: number; data: { x: number; y: number
         const comboText = comboTextRefs.current as PIXISprite;
 
         if (comboCnt === i + 1) {
+            comboText.visible = true;
+
             gsap.fromTo(
                 comboText,
                 { y: COMBO_TEXT_POSITION[i].y },
@@ -28,12 +31,24 @@ export const ComboIcon = ({ i, data }: { i: number; data: { x: number; y: number
                     duration: 0.5,
                     ease: "sign",
                     onComplete: () => {
-                        setTimeout(() => {
-                            comboText.visible = false;
+                        timeoutRef.current = setTimeout(() => {
+                            if (comboText) {
+                                comboText.visible = false;
+                            }
                         }, 500);
                     },
                 }
             );
+
+            return () => {
+                if (timeoutRef.current) {
+                    clearTimeout(timeoutRef.current);
+                }
+                gsap.killTweensOf(comboText);
+                if (comboText) {
+                    comboText.visible = false;
+                }
+            };
         }
     }, [comboCnt]);
 

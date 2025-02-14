@@ -24,7 +24,7 @@ export const InCorrectAnim = () => {
             textures={INCORRECT_FRAMES}
             anchor={0.5}
             isPlaying={true}
-            animationSpeed={0.2}
+            animationSpeed={0.3}
             loop={false}
             position={[0, 0]}
             onComplete={handleCompleteIncorrectAnim}

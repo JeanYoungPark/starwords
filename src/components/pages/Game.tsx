@@ -20,6 +20,7 @@ export const Game = () => {
     const containerRef = useRef<PixiRef<typeof Container>>(null);
 
     useEffect(() => {
+        console.log(problems);
         sounds["audioIntroBgm"].stop();
         sounds["gameBgm"].play({ loop: true });
     }, []);

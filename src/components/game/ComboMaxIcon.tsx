@@ -41,14 +41,14 @@ const MaxIcon = memo(({ data, onClick }: { data: { x: number; y: number }; onCli
 
         if (!comboMaxBg || !comboMaxText) return;
 
-        const anim = gsap.to(comboMaxBg, {
+        gsap.to(comboMaxBg, {
             rotation: 100,
             duration: 0.5,
             repeat: -1,
             ease: "sign",
         });
 
-        const anim2 = gsap.to(comboMaxText, {
+        gsap.to(comboMaxText, {
             duration: 0.3,
             repeat: -1, // 무한 반복
             onRepeat: () => {
@@ -58,8 +58,13 @@ const MaxIcon = memo(({ data, onClick }: { data: { x: number; y: number }; onCli
         });
 
         return () => {
-            anim.kill();
-            anim2.kill();
+            if (comboMaxBg) {
+                gsap.killTweensOf(comboMaxBg);
+            }
+
+            if (comboMaxText) {
+                gsap.killTweensOf(comboMaxText);
+            }
         };
     }, []);
 

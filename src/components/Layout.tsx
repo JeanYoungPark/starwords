@@ -13,6 +13,7 @@ import { CONTENT_WIDTH } from "../constants/commonConstants";
 import { GameFinish } from "./pages/GameFinish";
 import { Ranking } from "./pages/Ranking";
 import { GameProvider } from "../context/GameProvider";
+import { IncorrectAnswers } from "./pages/IncorrectAnswers";
 
 export const Layout = () => {
     const { resources, sounds, gameData, contentsData } = useContext(ResourceContext);
@@ -31,6 +32,7 @@ export const Layout = () => {
                     </GameProvider>
                 )}
                 {action === "GAME_FINISH" && <GameFinish />}
+                {action === "INCORRECT" && <IncorrectAnswers />}
                 {action === "RANKING" && <Ranking />}
 
                 <PixiButton name='close' position={[CONTENT_WIDTH - 60, 70]} defaultTexture={resources.close} sound={sounds.audioIntoBtn} />

@@ -21,11 +21,17 @@ export const Alien = ({ idx, position, problem }: AlienProps) => {
     const containerRef = useRef<PixiRef<typeof Container>>(null);
     const alienRef = useRef<PixiRef<typeof Container> | null>(null);
     const spriteRef = useRef<PixiRef<typeof Sprite> | null>(null);
-    const { setupAnimation, endAnimation, cleanupAnimations } = useAlienAnimation({ containerRef, spriteRef, position });
+    const [alienAnimActive, setAlienAnimActive] = useState<boolean>(false);
+    const { setupAnimation, endAnimation, cleanupAnimations } = useAlienAnimation({ containerRef, alienRef, spriteRef, position });
 
     useEffect(() => {
-        setupAnimation();
+        const moveInAnim = async () => {
+            setAlienAnimActive(true);
+            await setupAnimation();
+            setAlienAnimActive(false);
+        };
 
+        moveInAnim();
         return () => {
             cleanupAnimations();
         };
@@ -33,8 +39,10 @@ export const Alien = ({ idx, position, problem }: AlienProps) => {
 
     useEffect(() => {
         const moveOutAnim = async () => {
+            setAlienAnimActive(true);
             await endAnimation();
             setAlienAction(AlienActions.STAND_BY);
+            setAlienAnimActive(false);
         };
 
         if (alienAction === AlienActions.NEXT) {
@@ -47,8 +55,15 @@ export const Alien = ({ idx, position, problem }: AlienProps) => {
     }, [alienAction]);
 
     return (
-        <Container ref={containerRef} position={[position.x, position.y]} anchor={0.5}>
-            <AlienContainer alienRef={alienRef} spriteRef={spriteRef} idx={idx} problem={problem} setCorrectAnimActive={setCorrectAnimActive} />
+        <Container ref={containerRef} anchor={0.5}>
+            <AlienContainer
+                alienRef={alienRef}
+                spriteRef={spriteRef}
+                idx={idx}
+                problem={problem}
+                setCorrectAnimActive={setCorrectAnimActive}
+                alienAnimActive={alienAnimActive}
+            />
             <AlienDestroyAnim idx={idx} correctAnimActive={correctAnimActive} setCorrectAnimActive={setCorrectAnimActive} />
         </Container>
     );

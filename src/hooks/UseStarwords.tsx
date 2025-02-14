@@ -115,6 +115,8 @@ export const useStarwords = () => {
 
             const shuffleGameData = gameDataParse(gameRes);
             gameRes.word_arr = shuffleGameData;
+            console.log("gameData.word_arr:", gameRes.word_arr);
+            console.log("gameData.word_arr:", gameRes.wrong_word_arr);
             setGameData(gameRes);
         }
 
