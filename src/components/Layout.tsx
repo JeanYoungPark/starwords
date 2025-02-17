@@ -35,7 +35,9 @@ export const Layout = () => {
                 {action === "INCORRECT" && <IncorrectAnswers />}
                 {action === "RANKING" && <Ranking />}
 
-                <PixiButton name='close' position={[CONTENT_WIDTH - 60, 70]} defaultTexture={resources.close} sound={sounds.audioIntoBtn} />
+                {action !== "INCORRECT" && (
+                    <PixiButton name='close' position={[CONTENT_WIDTH - 60, 70]} defaultTexture={resources.close} sound={sounds.audioIntoBtn} />
+                )}
             </>
         </Container>
     );

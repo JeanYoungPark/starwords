@@ -20,8 +20,7 @@ const MaxIcon = memo(({ data, onClick }: { data: { x: number; y: number }; onCli
     const [currentTexture, setCurrentTexture] = useState(resources.maxComboBallOn01);
 
     const handleMaxCombo = () => {
-        // Todo
-        // 외계인 색깔 변경
+        // TODO: 외계인 색깔 변경
         const comboMaxContainer = comboMaxContainerRef.current;
         const comboMaxBg = comboMaxContainer?.getChildByName("comboMaxOnBg") as PIXISprite;
         const comboMaxText = comboMaxContainer?.getChildByName("comboMaxText") as PIXISprite;

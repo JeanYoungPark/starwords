@@ -35,7 +35,6 @@ export const getGameData = async () => {
     const res = await axios.get(apiUrl);
 
     if (res.status === 200) {
-        console.log(res.data);
         return res.data;
     }
 };

@@ -1,8 +1,8 @@
 import { Container, PixiRef, Sprite, Text } from "@pixi/react";
 import { memo, useContext, useEffect, useRef } from "react";
 import { ResourceContext } from "../../context/ResourceContext";
-import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
-import { comboScoreState, scoreState } from "../../store/gameStore";
+import { useRecoilState, useSetRecoilState } from "recoil";
+import { answerCntState } from "../../store/gameStore";
 import { COMBO_TEXT_POSITION, MAX_COMBO_NUMBER } from "../../constants/commonConstants";
 import { ComboMaxIcon } from "./ComboMaxIcon";
 import { ComboIcon } from "./ComboIcon";
@@ -12,15 +12,19 @@ import { GameContext } from "../../context/GameContext";
 import { Gauge } from "./Gauge";
 import { SCORE_TEXT_STYLE, TIME_TEXT_STYLE } from "../../constants/gameConstants";
 import { useIncorrectList } from "../../hooks/game/useIncorrectList";
+import { numberComma } from "../../util";
+import { postGameData } from "../../apis/postData";
 
 export const ScoreBar = memo(() => {
     const { resources, sounds, gameData } = useContext(ResourceContext);
     const { sec, comboActive, setInCorrectAnimActive, setAnimActive } = useContext(GameContext);
     const { handleIncorrectList } = useIncorrectList();
     const setAction = useSetRecoilState(actionState);
-    const score = useRecoilValue(scoreState);
-    const comboScore = useRecoilValue(comboScoreState);
+    const [answerCnt, setAnswerCnt] = useRecoilState(answerCntState);
     const [gameAction, setGameAction] = useRecoilState(gameActionState);
+
+    const secTimeoutId = useRef<NodeJS.Timeout | undefined>(undefined);
+    const totalTimeoutId = useRef<NodeJS.Timeout | undefined>(undefined);
 
     const timeLeft = useRef(60);
     const timeSpeed = useRef(0);
@@ -42,37 +46,56 @@ export const ScoreBar = memo(() => {
     };
 
     const handleIncorrect = () => {
-        // handleIncorrectList();
+        handleIncorrectList();
+        setAnswerCnt((prev) => ({ ...prev, incorrect: prev.incorrect + 1 }));
         setInCorrectAnimActive(true);
         setAnimActive(true);
         sounds["gameIncorrect"].play();
     };
 
+    const sendData = async () => {
+        const score = answerCnt.correct * 100;
+        const correctCnt = answerCnt.correct;
+        const incorrectCnt = answerCnt.incorrect;
+        const comboScore = answerCnt.combo * 200;
+
+        // await postGameData({ score, correctCnt, incorrectCnt, comboScore });
+    };
+
     useEffect(() => {
         if (gameAction === GameActions.START) {
-            const eachSecCheck = setInterval(() => {
+            const eachSecCheck = () => {
                 sec.current += 1;
 
-                if (sec.current === 5) {
+                if (sec.current === 6) {
                     handleIncorrect();
                     sec.current = 0;
                 }
-            }, 1000);
 
-            const totalTime = setInterval(() => {
+                secTimeoutId.current = setTimeout(eachSecCheck, 1000);
+            };
+
+            const totalTime = () => {
                 if (timeLeft.current <= 0) {
-                    clearInterval(eachSecCheck);
-                    clearInterval(totalTime);
+                    clearTimeout(secTimeoutId.current);
+                    clearTimeout(totalTimeoutId.current);
+
+                    sendData();
                     setAction(Actions.GAME_FINISH);
                 } else {
                     timeLeft.current = Math.max(timeLeft.current - 1, 0);
                     updateTimeDisplay();
                 }
-            }, 1000);
+
+                totalTimeoutId.current = setTimeout(totalTime, 1000);
+            };
+
+            eachSecCheck();
+            totalTime();
 
             return () => {
-                clearInterval(eachSecCheck);
-                clearInterval(totalTime);
+                if (secTimeoutId.current) clearTimeout(secTimeoutId.current);
+                if (totalTimeoutId.current) clearTimeout(totalTimeoutId.current);
             };
         }
 
@@ -88,18 +111,18 @@ export const ScoreBar = memo(() => {
             <Sprite texture={resources.gameBar} position={[-600, 820]} />
             <Sprite texture={comboActive ? resources.gameComboScoreBg : resources.gameScoreBg} position={comboActive ? [264, 920] : [300, 920]} />
 
-            <Text text={`${score + comboScore}`} position={[425, 1000]} style={SCORE_TEXT_STYLE} anchor={0.5} />
+            <Text
+                text={`${numberComma(answerCnt.correct * 100 + answerCnt.combo * 200)}`}
+                position={[425, 1000]}
+                style={SCORE_TEXT_STYLE}
+                anchor={0.5}
+            />
 
             {COMBO_TEXT_POSITION.map((data, i) => {
                 return <Container key={i}>{i + 1 === MAX_COMBO_NUMBER ? <ComboMaxIcon data={data} /> : <ComboIcon i={i} data={data} />}</Container>;
             })}
 
-            <Text
-                ref={textRef}
-                text={`${Math.floor(timeLeft.current / 60)}:${Math.floor(timeLeft.current % 60)}`}
-                position={[1230, 940]}
-                style={TIME_TEXT_STYLE}
-            />
+            <Text ref={textRef} position={[1230, 940]} style={TIME_TEXT_STYLE} />
         </>
     );
 });

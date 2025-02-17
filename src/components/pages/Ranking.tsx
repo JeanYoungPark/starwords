@@ -7,6 +7,7 @@ import { ResourceContext } from "../../context/ResourceContext";
 import { actionState } from "../../store/assetsStore";
 import { Actions } from "../../types/actionsType";
 import { PixiButton } from "../common/PixiButton";
+import { CONTENT_HEIGHT, CONTENT_WIDTH } from "../../constants/commonConstants";
 
 export const Ranking = () => {
     const { resources, sounds } = useContext(ResourceContext);
@@ -23,7 +24,7 @@ export const Ranking = () => {
 
     return (
         <Container>
-            <Sprite texture={resources.bg} position={[0, 0]} />
+            <Sprite texture={resources.bg} anchor={0.5} position={[CONTENT_WIDTH / 2, CONTENT_HEIGHT / 2]} />
 
             <Container position={[220, 140]}>
                 <Text

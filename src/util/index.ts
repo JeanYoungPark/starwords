@@ -38,4 +38,14 @@ export const destroyProblemIdx = (aliens: ProblemType[]) => {
     return originalIndex;
 };
 
+/**
+ * 프레임 숫자 세팅
+ */
 export const getFrameNumber = (num: number) => (num < 10 ? `0${num}` : num);
+
+/**
+ * 자리수 콤마 찍기
+ */
+export const numberComma = (x: number) => {
+    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+};

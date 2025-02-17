@@ -4,7 +4,7 @@ import { Container as PIXIContainer, Sprite as PIXISprite } from "pixi.js";
 import { GameContext } from "../../context/GameContext";
 import { ProblemType } from "../../types/resourcesType";
 import { useSetRecoilState } from "recoil";
-import { answerCntState, comboScoreState, scoreState } from "../../store/gameStore";
+import { answerCntState } from "../../store/gameStore";
 import { ResourceContext } from "../../context/ResourceContext";
 import { MAX_COMBO_NUMBER } from "../../constants/commonConstants";
 import gsap from "gsap";
@@ -16,7 +16,6 @@ interface AlienContainerProps {
     spriteRef: MutableRefObject<PIXISprite | null>;
     idx: number;
     problem: ProblemType;
-    // alienAnimActive: MutableRefObject<boolean>;
     alienAnimActive: boolean;
     setCorrectAnimActive: (val: boolean) => void;
 }
@@ -26,8 +25,6 @@ export const AlienContainer = ({ alienRef, spriteRef, idx, problem, alienAnimAct
     const { sec, comboActive, comboCnt, comboDestroyNum, animActive, setComboCnt, setInCorrectAnimActive, setAnimActive } = useContext(GameContext);
     const { handleIncorrectList } = useIncorrectList();
     const setAnswer = useSetRecoilState(answerCntState);
-    const setScore = useSetRecoilState(scoreState);
-    const setComboScore = useSetRecoilState(comboScoreState);
 
     const randomIdx = useMemo(() => {
         return Math.floor(Math.random() * 5) + 1;
@@ -41,7 +38,13 @@ export const AlienContainer = ({ alienRef, spriteRef, idx, problem, alienAnimAct
 
         setCorrectAnimActive(true);
         setAnimActive(true);
-        setAnswer((prev) => ({ correct: prev.correct + 1, incorrect: prev.incorrect }));
+
+        if (comboActive) {
+            setAnswer((prev) => ({ ...prev, combo: prev.combo + 1 }));
+        } else {
+            setAnswer((prev) => ({ ...prev, correct: prev.correct + 1 }));
+        }
+
         sounds["gameCorrect"].play();
 
         alien.destroy();
@@ -49,12 +52,6 @@ export const AlienContainer = ({ alienRef, spriteRef, idx, problem, alienAnimAct
         spriteRef.current = null;
 
         if (comboCnt < MAX_COMBO_NUMBER) {
-            // 정답일 경우 combo 증가 (5 이하인 경우에)
-            if (comboActive) {
-                setComboScore((prev) => (prev += 100));
-            }
-
-            setScore((prev) => (prev += 100));
             setComboCnt((prev) => (prev += 1));
         }
     };
@@ -66,7 +63,7 @@ export const AlienContainer = ({ alienRef, spriteRef, idx, problem, alienAnimAct
         setAnimActive(true);
         sounds["gameIncorrect"].play();
 
-        setAnswer((prev) => ({ correct: prev.correct, incorrect: prev.incorrect + 1 }));
+        setAnswer((prev) => ({ ...prev, incorrect: prev.incorrect + 1 }));
     };
 
     const checkAnswer = () => {

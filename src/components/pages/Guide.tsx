@@ -6,6 +6,7 @@ import { ResourceContext } from "../../context/ResourceContext";
 import { PixiButton } from "../common/PixiButton";
 import { actionState } from "../../store/assetsStore";
 import { Actions } from "../../types/actionsType";
+import { CONTENT_HEIGHT, CONTENT_WIDTH } from "../../constants/commonConstants";
 
 export const Guide = () => {
     const { resources, sounds } = useContext(ResourceContext);
@@ -17,7 +18,7 @@ export const Guide = () => {
 
     return (
         <Container>
-            <Sprite texture={resources.bg} position={[0, 0]} />
+            <Sprite texture={resources.bg} anchor={0.5} position={[CONTENT_WIDTH / 2, CONTENT_HEIGHT / 2]} />
 
             <Sprite texture={resources.guide} position={[300, 150]} />
             <Sprite texture={resources.planet03} position={[450, -70]} />

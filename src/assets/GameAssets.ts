@@ -144,6 +144,7 @@ const assets = [
     { alias: "incorrectSound", src: `${resultPath}incorrect_sound.png` },
     { alias: "incorrectLeftBtn", src: `${resultPath}incorrect_left_btn.png` },
     { alias: "incorrectRightBtn", src: `${resultPath}incorrect_right_btn.png` },
+    { alias: "profile", src: `${resultPath}profile.png` },
 ];
 
 const audioAssets = [

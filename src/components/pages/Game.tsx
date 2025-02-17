@@ -4,7 +4,7 @@ import { ResourceContext } from "../../context/ResourceContext";
 import { ScoreBar } from "../game/ScoreBar";
 import { ReloadBtn } from "../game/ReloadBtn";
 import { PROBLEM_TEXT_STYLE } from "../../constants/gameConstants";
-import { CONTENT_WIDTH } from "../../constants/commonConstants";
+import { CONTENT_HEIGHT, CONTENT_WIDTH } from "../../constants/commonConstants";
 import { Aliens } from "../game/Aliens";
 import { GameContext } from "../../context/GameContext";
 import { InCorrectAnim } from "../game/InCorrectAnim";
@@ -36,11 +36,11 @@ export const Game = () => {
 
     return (
         <Container ref={containerRef}>
-            <Sprite texture={resources.bg} anchor={0.5} position={[CONTENT_WIDTH / 2, 640]} />
+            <Sprite texture={resources.bg} anchor={0.5} position={[CONTENT_WIDTH / 2, CONTENT_HEIGHT / 2]} />
             <Sprite texture={resources.gamePlanet01} position={[-50, 0]} />
             <Sprite texture={resources.gamePlanet02} position={[1500, 720]} />
 
-            {comboActive && <Sprite texture={resources.gameComboBg} anchor={0.5} position={[CONTENT_WIDTH / 2, 640]} />}
+            {comboActive && <Sprite texture={resources.gameComboBg} anchor={0.5} position={[CONTENT_WIDTH / 2, CONTENT_HEIGHT / 2]} />}
 
             <ReloadBtn />
 

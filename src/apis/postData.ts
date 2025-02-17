@@ -4,13 +4,13 @@ import { getCookie, getRequiredCookies } from "../util";
 export const postGameData = async ({
     score,
     correctCnt,
-    comboScore,
     incorrectCnt,
+    comboScore,
 }: {
     score: number;
     correctCnt: number;
-    comboScore: number;
     incorrectCnt: number;
+    comboScore: number;
 }) => {
     let apiUrl: string;
     const serviceSite = getCookie("service_site");
