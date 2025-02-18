@@ -50,6 +50,8 @@ const assets = [
     { alias: "rankingProfile", src: `${rankingImgPath}profile.png` },
     { alias: "rankingScoreBg", src: `${rankingImgPath}score_bg.png` },
     { alias: "gold", src: `${rankingImgPath}gold.png` },
+    { alias: "silver", src: `${rankingImgPath}silver.png` },
+    { alias: "bronze", src: `${rankingImgPath}bronze.png` },
     { alias: "rankingUserScoreBg", src: `${rankingImgPath}user_score_bg.png` },
 
     // game

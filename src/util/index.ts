@@ -49,3 +49,27 @@ export const getFrameNumber = (num: number) => (num < 10 ? `0${num}` : num);
 export const numberComma = (x: number) => {
     return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 };
+
+export const getWeekText = () => {
+    const date = new Date();
+    const year = date.getFullYear();
+    const month = date.getMonth();
+    const firstDay = new Date(year, month, 1);
+    const firstDayWeekday = firstDay.getDay();
+
+    const week = Math.ceil((date.getDate() + firstDayWeekday) / 7);
+
+    return `${year}년 ${month + 1}월 ${week}주차`;
+};
+
+export const getTimeRemaining = (updateDate: string) => {
+    const now = new Date();
+    const targetDate = new Date(updateDate);
+    const timeDiff = targetDate.getTime() - now.getTime();
+
+    const days = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((timeDiff / (1000 * 60 * 60)) % 24);
+    const minutes = Math.floor((timeDiff / 1000) % 24);
+
+    return `${days}일 ${hours}시간 ${minutes}분 남음`;
+};

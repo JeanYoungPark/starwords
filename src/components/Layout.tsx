@@ -26,12 +26,10 @@ export const Layout = () => {
             <>
                 {action === "INTRO" && <Intro />}
                 {action === "GUIDE" && <Guide />}
-                {action === "GAME_PLAY" && (
-                    <GameProvider>
-                        <Game />
-                    </GameProvider>
-                )}
-                {action === "GAME_FINISH" && <GameFinish />}
+                <GameProvider>
+                    {action === "GAME_PLAY" && <Game />}
+                    {action === "GAME_FINISH" && <GameFinish />}
+                </GameProvider>
                 {action === "INCORRECT" && <IncorrectAnswers />}
                 {action === "RANKING" && <Ranking />}
 

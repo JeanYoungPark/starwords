@@ -20,11 +20,6 @@ export const BgmBtn = () => {
     };
 
     useEffect(() => {
-        if (!sounds?.audioIntroBgm) {
-            console.warn("BGM resource not found");
-            return;
-        }
-
         try {
             sounds.audioIntroBgm.volume = BGM_BUTTON.INITIAL_VOLUME;
             sounds.audioIntroBgm.play({ loop: true });

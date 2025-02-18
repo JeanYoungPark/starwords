@@ -28,6 +28,14 @@ export interface IncorrectType {
         word_ko: string;
         word_en: string;
         sound_url: any;
-        // meaning_line: string;
     };
+}
+
+export interface RankingType {
+    badge_img_url: string;
+    fu_id: string;
+    last_updated_date: string;
+    nickname: string;
+    rank_no: string;
+    score: string;
 }

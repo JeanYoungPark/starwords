@@ -30,9 +30,7 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
     >(undefined);
 
     const init = () => {
-        // 이걸 안 탐
-        // console.log(1);
-        // setActions(Actions.GAME_PLAY);
+        setActions(Actions.GAME_PLAY);
         setGameAction(GameActions.STAND_BY);
         setAlienAction(AlienActions.STAND_BY);
         setAnswerCnt({

@@ -93,18 +93,35 @@ export const getContentsData = async () => {
             apiUrl = `${process.env.REACT_APP_LITTLEFOX_API_ULR}/starwords_api/contents_info/${fuId}/${fcId}`;
         }
     }
-    /**
-     * game type word master 일때
-     * land code ko일 때
-     * const res = await axios.get(`https://www.littlefox.com/starwords_h5_v3_api/contents_info/${wordMasterSeq}/${stage}`);
-     * land code ko 아닐 때
-     * const res = await axios.get(`https://www.littlefox.com/${langCode}/starwords_h5_v3_api/contents_info/${wordMasterSeq}/${stage}`);
-     */
-    /**
-     * game type class 또는 normal 일 때
-     * const res = await axios.get(`https://www.littlefox.com/starwords_api/contents_info/${fuId}/${fcId}`);
-     */
-    const res = await axios.get("https://www.littlefox.com/starwords_api/contents_info/U202205021507796459/C0011212");
+
+    const res = await axios.get(apiUrl);
+
+    if (res.status === 200) {
+        return res.data;
+    }
+};
+
+export const getRankingData = async () => {
+    let apiUrl: string;
+    const serviceSite = getCookie("service_site");
+
+    if (serviceSite === "foxschool") {
+        const [schoolName, fcId, fuId, fgId] = getRequiredCookies(["school_group_id", "Starwords_fc_id", "fx7", "fg_id"]);
+        apiUrl = `${process.env.REACT_APP_FOXSCHOOL_API_ULR}/${schoolName}/starwords_h5_api/ranking/${fuId}/${fcId}/${fgId}`;
+    } else {
+        const gameType = getCookie("game_type");
+        const fcIdKey = gameType === "class" ? "fc_id" : "Starwords_fc_id";
+        const [fcId, fuId] = getRequiredCookies([fcIdKey, "fx7"]);
+
+        if (gameType === "class") {
+            const [classId] = getRequiredCookies(["class_id"]);
+            apiUrl = `${process.env.REACT_APP_LITTLEFOX_API_ULR}/starwords_api/ranking/${fuId}/${fcId}/${classId}`;
+        } else {
+            apiUrl = `${process.env.REACT_APP_LITTLEFOX_API_ULR}/starwords_api/ranking/${fuId}/${fcId}`;
+        }
+    }
+
+    const res = await axios.get(apiUrl);
 
     if (res.status === 200) {
         return res.data;

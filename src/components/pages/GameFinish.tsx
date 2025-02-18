@@ -24,6 +24,7 @@ export const GameFinish = () => {
     const [resultImg, setResultImg] = useState<Texture<Resource>>(resources.tryAgain);
 
     useEffect(() => {
+        // TODO: 주석해제 후 post 되는지 확인
         // postGameData({  });
 
         sounds["gameBgm"].stop();

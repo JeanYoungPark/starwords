@@ -1,4 +1,4 @@
-import { useContext, useEffect } from "react";
+import { useContext } from "react";
 import { Container, Sprite } from "@pixi/react";
 import { ResourceContext } from "../../context/ResourceContext";
 import { Title } from "../intro/Title";
