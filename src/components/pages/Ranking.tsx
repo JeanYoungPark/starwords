@@ -23,9 +23,10 @@ import {
     RANKING_USER_SCORE_TEXT_STYLE,
 } from "../../constants/rankingConstants";
 import { answerCntState } from "../../store/gameStore";
+import { sound } from "@pixi/sound";
 
 export const Ranking = () => {
-    const { resources, sounds, contentsData, userData } = useContext(ResourceContext);
+    const { resources, contentsData, userData } = useContext(ResourceContext);
     const [action, setAction] = useRecoilState(actionState);
     const answerCnt = useRecoilValue(answerCntState);
     const [rankingArr, setRankingArr] = useState<RankingType[][]>([]);
@@ -132,9 +133,9 @@ export const Ranking = () => {
                 }
             />
 
-            <PixiButton name='back' position={[60, 70]} defaultTexture={resources.back} sound={sounds.audioIntoBtn} onTouchEnd={onTouchEnd} />
+            <PixiButton name='back' position={[60, 70]} defaultTexture={resources.back} sound={sound.find("audioIntoBtn")} onTouchEnd={onTouchEnd} />
 
-            <PixiButton position={[1860, 1020]} defaultTexture={resources.help} sound={sounds.audioIntoBtn} onTouchEnd={handleStartGuide} />
+            <PixiButton position={[1860, 1020]} defaultTexture={resources.help} sound={sound.find("audioIntoBtn")} onTouchEnd={handleStartGuide} />
         </Container>
     );
 };

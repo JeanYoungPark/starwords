@@ -1,38 +1,43 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useRef } from "react";
+import { useRecoilState } from "recoil";
 import { sound } from "@pixi/sound";
 import { Sprite } from "@pixi/react";
 
 import { PixiButton } from "../common/PixiButton";
 import { ResourceContext } from "../../context/ResourceContext";
 import { BGM_BUTTON } from "../../constants/introConstants";
+import { soundMuteState } from "../../store/gameStore";
 
 export const BgmBtn = () => {
-    const { resources, sounds } = useContext(ResourceContext);
-    const [active, setActive] = useState(false);
+    const { resources } = useContext(ResourceContext);
+    const [soundState, setSoundState] = useRecoilState(soundMuteState);
+    const isInitialBgmSet = useRef(false);
 
     const handleSoundToggle = () => {
-        try {
-            sound.toggleMuteAll();
-            setActive((prev) => !prev);
-        } catch (error) {
-            console.error("Failed to toggle sound:", error);
-        }
+        setSoundState((prev) => {
+            const newState = !prev;
+
+            if (newState) {
+                sound.unmuteAll();
+                sound.stop("audioIntroBgm");
+                sound.play("audioIntroBgm", { loop: true, start: 0 });
+            } else {
+                sound.muteAll();
+            }
+
+            return newState;
+        });
     };
 
     useEffect(() => {
-        try {
-            sounds.audioIntroBgm.volume = BGM_BUTTON.INITIAL_VOLUME;
-            sounds.audioIntroBgm.play({ loop: true });
-        } catch (error) {
-            console.error("Failed to initialize BGM:", error);
-        }
+        sound.volume("audioIntroBgm", BGM_BUTTON.INITIAL_VOLUME);
+        sound.play("audioIntroBgm", { loop: true, start: 0 });
+        isInitialBgmSet.current = true;
 
-        return () => {
-            if (sounds.audioIntroBgm) {
-                sounds.audioIntroBgm.stop();
-            }
-        };
-    }, [sounds]);
+        if (!soundState) {
+            sound.muteAll();
+        }
+    }, []);
 
     return (
         <>
@@ -42,7 +47,7 @@ export const BgmBtn = () => {
                 defaultTexture={resources.soundOn}
                 toggle={{
                     active: true,
-                    initToggle: true,
+                    initToggle: soundState,
                     texture: resources.soundOff,
                     onToggle: handleSoundToggle,
                 }}
@@ -52,7 +57,7 @@ export const BgmBtn = () => {
                 texture={resources.soundText}
                 position={[BGM_BUTTON.TEXT.POSITION.x, BGM_BUTTON.TEXT.POSITION.y]}
                 scale={BGM_BUTTON.TEXT.SCALE}
-                visible={active}
+                visible={!soundState}
             />
         </>
     );

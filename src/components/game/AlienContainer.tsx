@@ -10,6 +10,7 @@ import { MAX_COMBO_NUMBER } from "../../constants/commonConstants";
 import gsap from "gsap";
 import { ALIEN_TEXT_STYLE } from "../../constants/gameConstants";
 import { useIncorrectList } from "../../hooks/game/useIncorrectList";
+import { sound } from "@pixi/sound";
 
 interface AlienContainerProps {
     alienRef: MutableRefObject<PIXIContainer | null>;
@@ -21,7 +22,7 @@ interface AlienContainerProps {
 }
 
 export const AlienContainer = ({ alienRef, spriteRef, idx, problem, alienAnimActive, setCorrectAnimActive }: AlienContainerProps) => {
-    const { resources, sounds } = useContext(ResourceContext);
+    const { resources } = useContext(ResourceContext);
     const { sec, comboActive, comboCnt, comboDestroyNum, animActive, setComboCnt, setInCorrectAnimActive, setAnimActive } = useContext(GameContext);
     const { handleIncorrectList } = useIncorrectList();
     const setAnswer = useSetRecoilState(answerCntState);
@@ -45,7 +46,7 @@ export const AlienContainer = ({ alienRef, spriteRef, idx, problem, alienAnimAct
             setAnswer((prev) => ({ ...prev, correct: prev.correct + 1 }));
         }
 
-        sounds["gameCorrect"].play();
+        sound.play("gameCorrect");
 
         alien.destroy();
         gsap.killTweensOf(sprite);
@@ -61,7 +62,7 @@ export const AlienContainer = ({ alienRef, spriteRef, idx, problem, alienAnimAct
 
         setInCorrectAnimActive(true);
         setAnimActive(true);
-        sounds["gameIncorrect"].play();
+        sound.play("gameIncorrect");
 
         setAnswer((prev) => ({ ...prev, incorrect: prev.incorrect + 1 }));
     };
@@ -82,7 +83,7 @@ export const AlienContainer = ({ alienRef, spriteRef, idx, problem, alienAnimAct
             const sprite = spriteRef.current;
 
             if (alien && sprite) {
-                sounds["alienDestroy"].play();
+                sound.play("alienDestroy");
 
                 gsap.killTweensOf(sprite);
                 alien.destroy();

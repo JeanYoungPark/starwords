@@ -1,45 +1,21 @@
 import { useEffect, useState } from "react";
-import { WordType } from "../types/resourcesType";
-import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
-import { alienPositionState, problemIdxState } from "../store/gameStore";
-import { getCookie } from "../util";
-import {
-    actionState,
-    classIdState,
-    deviceOsState,
-    fcIdState,
-    fuIdState,
-    gameTypeState,
-    hwCodeState,
-    langCodeState,
-    stageState,
-    wordMasterSeqState,
-} from "../store/assetsStore";
-import { getContentsData, getGameData, getUserData } from "../apis/getData";
 import { Assets } from "pixi.js";
 import FontFaceObserver from "fontfaceobserver";
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
+import { WordType } from "../types/resourcesType";
+import { alienPositionState, problemIdxState } from "../store/gameStore";
+import { actionState, gameTypeState } from "../store/assetsStore";
+import { getContentsData, getGameData, getUserData } from "../apis/getData";
 import { Actions } from "../types/actionsType";
 
 export const useStarwords = () => {
     const { assets, audioAssets, fonts } = require("../assets/GameAssets").default;
-
-    // get from cookies
-    const setDeviceOs = useSetRecoilState(deviceOsState);
-    const setFuId = useSetRecoilState(fuIdState);
-    const setHwCode = useSetRecoilState(hwCodeState);
-    const setGameType = useSetRecoilState(gameTypeState);
-    const setWordMasterSeq = useSetRecoilState(wordMasterSeqState);
-    const setStage = useSetRecoilState(stageState);
-    const setLangCode = useSetRecoilState(langCodeState);
-    const setFcId = useSetRecoilState(fcIdState);
-    const setClassId = useSetRecoilState(classIdState);
     const [action, setAction] = useRecoilState(actionState);
 
     const gameType = useRecoilValue(gameTypeState);
     const setProblemIdx = useSetRecoilState(problemIdxState);
 
     const [resources, setResources] = useState<any>();
-    const [sounds, setSounds] = useState<any>();
     const [gameData, setGameData] = useState(undefined);
     const [contentsData, setContentsData] = useState(undefined);
     const [userData, setUserData] = useState(undefined);
@@ -65,10 +41,7 @@ export const useStarwords = () => {
         }
     };
 
-    // const setContentInfo = () => {};
-
     const gameDataParse = (data: any) => {
-        // setLeftTime(data.time_limit + 1);
         setProblemIdx(-1);
         return shuffleWord(data.word_arr);
     };
@@ -141,32 +114,23 @@ export const useStarwords = () => {
     };
 
     const loadAssets = async () => {
-        try {
-            const imageAssets = new Map(
-                assets.map((asset: { alias: string; src: string }) => [asset.alias, { alias: asset.alias, src: require(`../assets/${asset.src}`) }])
-            );
+        const imageAssets = new Map(
+            assets.map((asset: { alias: string; src: string }) => [asset.alias, { alias: asset.alias, src: require(`../assets/${asset.src}`) }])
+        );
 
-            const soundAssetsList = new Map(
-                audioAssets.map((asset: { alias: string; src: string }) => [
-                    asset.alias,
-                    { alias: asset.alias, src: require(`../assets/${asset.src}`) },
-                ])
-            );
+        const soundAssetsList = new Map(
+            audioAssets.map((asset: { alias: string; src: string }) => [asset.alias, { alias: asset.alias, src: require(`../assets/${asset.src}`) }])
+        );
 
-            const [loadedTextures, loadedSounds] = await Promise.all([
-                Assets.load(Array.from(imageAssets.values())),
-                Assets.load(Array.from(soundAssetsList.values())),
-            ]);
+        const [loadedTextures, loadedSounds] = await Promise.all([
+            Assets.load(Array.from(imageAssets.values())),
+            Assets.load(Array.from(soundAssetsList.values())),
+        ]);
 
-            setResources(loadedTextures);
-            setSounds(loadedSounds);
-        } catch (error) {
-            console.error("Sound loading error:", error);
-        }
+        setResources(loadedTextures);
     };
 
     const loadGameData = async () => {
-        // await getCookieData();
         await loadFonts();
         await loadData();
         await loadAssets();
@@ -180,5 +144,5 @@ export const useStarwords = () => {
         }
     }, []);
 
-    return { resources, sounds, gameData, contentsData, userData };
+    return { resources, gameData, contentsData, userData };
 };

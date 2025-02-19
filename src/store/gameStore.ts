@@ -11,18 +11,6 @@ export const alienPositionState = atom<AlienMovePositionType[]>({
     default: [],
 });
 
-// 점수
-// export const scoreState = atom<number>({
-//     key: "scoreState",
-//     default: 0,
-// });
-
-// 콤보 추가 점수
-// export const comboScoreState = atom<number>({
-//     key: "comboScoreState",
-//     default: 0,
-// });
-
 // 정답 갯수
 export const answerCntState = atom<{ correct: number; incorrect: number; combo: number }>({
     key: "answerCntState",
@@ -37,4 +25,9 @@ export const answerCntState = atom<{ correct: number; incorrect: number; combo: 
 export const incorrectListState = atom<IncorrectType[]>({
     key: "incorrectListState",
     default: [],
+});
+
+export const soundMuteState = atom<boolean>({
+    key: "soundMuteState",
+    default: true,
 });

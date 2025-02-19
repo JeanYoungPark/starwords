@@ -13,10 +13,11 @@ import { CONTENT_HEIGHT, CONTENT_WIDTH } from "../../constants/commonConstants";
 import { numberComma } from "../../util";
 import { Resource, Texture } from "pixi.js";
 import { postGameData } from "../../apis/postData";
+import { sound } from "@pixi/sound";
 
 export const GameFinish = () => {
     const containerRef = useRef<PixiRef<typeof Container>>(null);
-    const { resources, sounds } = useContext(ResourceContext);
+    const { resources } = useContext(ResourceContext);
     const { init } = useContext(GameContext);
     const answerCnt = useRecoilValue(answerCntState);
     const gameType = useRecoilValue(gameTypeState);
@@ -27,8 +28,8 @@ export const GameFinish = () => {
         // TODO: 주석해제 후 post 되는지 확인
         // postGameData({  });
 
-        sounds["gameBgm"].stop();
-        sounds["result"].play();
+        sound.stop("gameBgm");
+        sound.play("result");
     }, []);
 
     useEffect(() => {
@@ -85,19 +86,19 @@ export const GameFinish = () => {
                             <PixiButton
                                 position={[0, resources.resultBg.height - 50]}
                                 defaultTexture={resources.incorrectBtn}
-                                sound={sounds.audioIntoBtn}
+                                sound={sound.find("audioIntoBtn")}
                                 onTouchEnd={handleIncorrectBtn}
                             />
                             <PixiButton
                                 position={[500, resources.resultBg.height - 50]}
                                 defaultTexture={resources.resultRankingBtn01}
-                                sound={sounds.audioIntoBtn}
+                                sound={sound.find("audioIntoBtn")}
                                 onTouchEnd={handleRankingBtn}
                             />
                             <PixiButton
                                 position={[870, resources.resultBg.height - 50]}
                                 defaultTexture={resources.resultTryAgainBtn01}
-                                sound={sounds.audioIntoBtn}
+                                sound={sound.find("audioIntoBtn")}
                                 interactive={true}
                                 onclick={init}
                             />
@@ -107,12 +108,12 @@ export const GameFinish = () => {
                             <PixiButton
                                 position={[0, resources.resultBg.height - 50]}
                                 defaultTexture={resources.resultRankingBtn02}
-                                sound={sounds.audioIntoBtn}
+                                sound={sound.find("audioIntoBtn")}
                             />
                             <PixiButton
                                 position={[700, resources.resultBg.height - 50]}
                                 defaultTexture={resources.resultTryAgainBtn02}
-                                sound={sounds.audioIntoBtn}
+                                sound={sound.find("audioIntoBtn")}
                                 interactive={true}
                                 onclick={init}
                             />

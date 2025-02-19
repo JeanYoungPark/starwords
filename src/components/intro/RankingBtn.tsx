@@ -9,9 +9,10 @@ import { actionState } from "../../store/assetsStore";
 import { Actions } from "../../types/actionsType";
 import { CONTENT_WIDTH } from "../../constants/commonConstants";
 import { RANKING_BUTTON } from "../../constants/introConstants";
+import { sound } from "@pixi/sound";
 
 export const RankingBtn = () => {
-    const { resources, sounds } = useContext(ResourceContext);
+    const { resources } = useContext(ResourceContext);
     const setAction = useSetRecoilState(actionState);
     const containerRef = useRef<PixiRef<typeof Container>>(null);
 
@@ -46,7 +47,7 @@ export const RankingBtn = () => {
                 name='rankingBtn'
                 position={[CONTENT_WIDTH / 2, RANKING_BUTTON.POSITION.y]}
                 defaultTexture={resources.rankingBtn}
-                sound={sounds.audioIntoBtn}
+                sound={sound.find("audioIntoBtn")}
                 onTouchEnd={handleRanking}
             />
         </Container>

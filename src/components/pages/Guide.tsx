@@ -7,9 +7,10 @@ import { PixiButton } from "../common/PixiButton";
 import { actionState } from "../../store/assetsStore";
 import { Actions } from "../../types/actionsType";
 import { CONTENT_HEIGHT, CONTENT_WIDTH } from "../../constants/commonConstants";
+import { sound } from "@pixi/sound";
 
 export const Guide = () => {
-    const { resources, sounds } = useContext(ResourceContext);
+    const { resources } = useContext(ResourceContext);
     const setAction = useSetRecoilState(actionState);
 
     const onTouchEnd = () => {
@@ -26,7 +27,7 @@ export const Guide = () => {
             <Sprite texture={resources.planet05} position={[-50, 800]} scale={0.9} />
             <Sprite texture={resources.rocket01} position={[0, 0]} scale={0.7} />
 
-            <PixiButton name='back' position={[60, 70]} defaultTexture={resources.back} sound={sounds.audioIntoBtn} onTouchEnd={onTouchEnd} />
+            <PixiButton name='back' position={[60, 70]} defaultTexture={resources.back} sound={sound.find("audioIntoBtn")} onTouchEnd={onTouchEnd} />
         </Container>
     );
 };

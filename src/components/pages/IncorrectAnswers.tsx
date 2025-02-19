@@ -10,9 +10,10 @@ import { INCORRECT_EN_TEXT_STYLE } from "../../constants/resultContants";
 import { PixiButton } from "../common/PixiButton";
 import { actionState } from "../../store/assetsStore";
 import { Actions } from "../../types/actionsType";
+import { sound } from "@pixi/sound";
 
 export const IncorrectAnswers = () => {
-    const { resources, sounds } = useContext(ResourceContext);
+    const { resources } = useContext(ResourceContext);
     const incorrectList = useRecoilValue(incorrectListState);
     const setAction = useSetRecoilState(actionState);
     const [incorrectArr, setIncorrectArr] = useState<IncorrectType[][]>([]);
@@ -70,7 +71,7 @@ export const IncorrectAnswers = () => {
                     scale={0.5}
                     position={[680, -490]}
                     defaultTexture={resources.close}
-                    sound={sounds.audioIntoBtn}
+                    sound={sound.find("audioIntoBtn")}
                     interactive={true}
                     onclick={handleOnClose}
                 />

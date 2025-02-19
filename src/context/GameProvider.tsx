@@ -1,6 +1,6 @@
 import { ReactNode, useRef, useState } from "react";
-import { GameContext } from "./GameContext";
 import { useRecoilState, useSetRecoilState } from "recoil";
+import { GameContext } from "./GameContext";
 import { answerCntState, problemIdxState } from "../store/gameStore";
 import { actionState, AlienActionState, gameActionState } from "../store/assetsStore";
 import { Actions, AlienActions, GameActions } from "../types/actionsType";

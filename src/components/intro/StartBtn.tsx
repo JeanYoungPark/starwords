@@ -9,9 +9,10 @@ import { actionState } from "../../store/assetsStore";
 import { Actions } from "../../types/actionsType";
 import { CONTENT_WIDTH } from "../../constants/commonConstants";
 import { START_BUTTON } from "../../constants/introConstants";
+import { sound } from "@pixi/sound";
 
 export const StartBtn = () => {
-    const { resources, sounds } = useContext(ResourceContext);
+    const { resources } = useContext(ResourceContext);
     const setAction = useSetRecoilState(actionState);
     const startBtnRef = useRef<PixiRef<typeof Container>>(null);
 
@@ -46,7 +47,7 @@ export const StartBtn = () => {
                 name='startBtn'
                 position={[CONTENT_WIDTH / 2, START_BUTTON.POSITION.y]}
                 defaultTexture={resources.startBtn}
-                sound={sounds.audioIntoBtn}
+                sound={sound.find("audioIntoBtn")}
                 onTouchEnd={handleStart}
             />
         </Container>

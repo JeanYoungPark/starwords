@@ -11,17 +11,18 @@ import { InCorrectAnim } from "../game/InCorrectAnim";
 import { useRecoilState } from "recoil";
 import { AlienActionState } from "../../store/assetsStore";
 import { AlienActions } from "../../types/actionsType";
+import { sound } from "@pixi/sound";
 
 export const Game = () => {
-    const { resources, sounds, gameData, contentsData } = useContext(ResourceContext);
+    const { resources, gameData, contentsData } = useContext(ResourceContext);
     const { comboActive, inCorrectAnimActive, problems, createProblem } = useContext(GameContext);
 
     const [alienAction, setAlienAction] = useRecoilState(AlienActionState);
     const containerRef = useRef<PixiRef<typeof Container>>(null);
 
     useEffect(() => {
-        sounds["audioIntroBgm"].stop();
-        sounds["gameBgm"].play({ loop: true });
+        sound.stop("audioIntroBgm");
+        sound.play("gameBgm", { loop: true, start: 0 });
     }, []);
 
     useEffect(() => {

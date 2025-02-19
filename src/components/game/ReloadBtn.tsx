@@ -2,9 +2,10 @@ import { useContext } from "react";
 import { PixiButton } from "../common/PixiButton";
 import { ResourceContext } from "../../context/ResourceContext";
 import { GameContext } from "../../context/GameContext";
+import { sound } from "@pixi/sound";
 
 export const ReloadBtn = () => {
-    const { resources, sounds } = useContext(ResourceContext);
+    const { resources } = useContext(ResourceContext);
     const { init } = useContext(GameContext);
 
     const onReload = () => {
@@ -16,7 +17,7 @@ export const ReloadBtn = () => {
             name='reload'
             position={[60, 70]}
             defaultTexture={resources.reload}
-            sound={sounds.audioIntoBtn}
+            sound={sound.find("audioIntoBtn")}
             interactive={true}
             onclick={onReload}
         />

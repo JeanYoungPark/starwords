@@ -14,9 +14,10 @@ import { SCORE_TEXT_STYLE, TIME_TEXT_STYLE } from "../../constants/gameConstants
 import { useIncorrectList } from "../../hooks/game/useIncorrectList";
 import { numberComma } from "../../util";
 import { postGameData } from "../../apis/postData";
+import { sound } from "@pixi/sound";
 
 export const ScoreBar = memo(() => {
-    const { resources, sounds, gameData } = useContext(ResourceContext);
+    const { resources, gameData } = useContext(ResourceContext);
     const { sec, comboActive, setInCorrectAnimActive, setAnimActive } = useContext(GameContext);
     const { handleIncorrectList } = useIncorrectList();
     const setAction = useSetRecoilState(actionState);
@@ -50,7 +51,7 @@ export const ScoreBar = memo(() => {
         setAnswerCnt((prev) => ({ ...prev, incorrect: prev.incorrect + 1 }));
         setInCorrectAnimActive(true);
         setAnimActive(true);
-        sounds["gameIncorrect"].play();
+        sound.play("gameIncorrect");
     };
 
     const sendData = async () => {

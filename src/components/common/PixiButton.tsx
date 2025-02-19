@@ -1,7 +1,7 @@
 import { PixiRef, Sprite, _ReactPixi, useApp } from "@pixi/react";
 import { Sound } from "@pixi/sound";
 import { Sprite as PIXISprite, Texture } from "pixi.js";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 interface Props extends _ReactPixi.ISprite {
     defaultTexture: Texture;
@@ -55,6 +55,12 @@ export const PixiButton = ({ defaultTexture, toggle, onTouchEnd, sound, position
             toggle?.onToggle && toggle.onToggle();
         }
     };
+
+    useEffect(() => {
+        if (toggle?.active && toggle?.texture) {
+            setTexture(isToggled ? defaultTexture : toggle.texture);
+        }
+    }, []);
 
     return (
         <Sprite

@@ -14,12 +14,13 @@ import { GameFinish } from "./pages/GameFinish";
 import { Ranking } from "./pages/Ranking";
 import { GameProvider } from "../context/GameProvider";
 import { IncorrectAnswers } from "./pages/IncorrectAnswers";
+import { sound } from "@pixi/sound";
 
 export const Layout = () => {
-    const { resources, sounds, gameData, contentsData } = useContext(ResourceContext);
+    const { resources, gameData, contentsData } = useContext(ResourceContext);
     const action = useRecoilValue(actionState);
 
-    if (!resources || !sounds || !gameData || !contentsData) return <Loading />;
+    if (!resources || !gameData || !contentsData) return <Loading />;
 
     return (
         <Container>
@@ -34,7 +35,12 @@ export const Layout = () => {
                 {action === "RANKING" && <Ranking />}
 
                 {action !== "INCORRECT" && (
-                    <PixiButton name='close' position={[CONTENT_WIDTH - 60, 70]} defaultTexture={resources.close} sound={sounds.audioIntoBtn} />
+                    <PixiButton
+                        name='close'
+                        position={[CONTENT_WIDTH - 60, 70]}
+                        defaultTexture={resources.close}
+                        sound={sound.find("audioIntoBtn")}
+                    />
                 )}
             </>
         </Container>
