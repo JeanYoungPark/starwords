@@ -20,9 +20,9 @@ export const getCookie = (name: string): string | null => {
  */
 export const getRequiredCookies = (keys: string[]) => {
     const values = keys.map((key) => getCookie(key));
-    if (values.some((val) => !val)) {
-        throw new Error(`${keys.join(", ")} 값이 존재하지 않습니다.`);
-    }
+    // if (values.some((val) => !val)) {
+    //     throw new Error(`${keys.join(", ")} 값이 존재하지 않습니다.`);
+    // }
     return values;
 };
 

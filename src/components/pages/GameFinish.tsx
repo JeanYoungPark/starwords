@@ -26,7 +26,11 @@ export const GameFinish = () => {
 
     useEffect(() => {
         // TODO: 주석해제 후 post 되는지 확인
-        // postGameData({  });
+        const score = answerCnt.correct * 100 + answerCnt.combo * 200;
+        const correctCnt = answerCnt.correct;
+        const incorrectCnt = answerCnt.incorrect;
+        const comboScore = answerCnt.combo * 200;
+        postGameData({ score, correctCnt, comboScore, incorrectCnt });
 
         sound.stop("gameBgm");
         sound.play("result");
@@ -109,6 +113,8 @@ export const GameFinish = () => {
                                 position={[0, resources.resultBg.height - 50]}
                                 defaultTexture={resources.resultRankingBtn02}
                                 sound={sound.find("audioIntoBtn")}
+                                interactive={true}
+                                onTouchEnd={handleRankingBtn}
                             />
                             <PixiButton
                                 position={[700, resources.resultBg.height - 50]}

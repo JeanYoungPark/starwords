@@ -13,7 +13,6 @@ import { Gauge } from "./Gauge";
 import { SCORE_TEXT_STYLE, TIME_TEXT_STYLE } from "../../constants/gameConstants";
 import { useIncorrectList } from "../../hooks/game/useIncorrectList";
 import { numberComma } from "../../util";
-import { postGameData } from "../../apis/postData";
 import { sound } from "@pixi/sound";
 
 export const ScoreBar = memo(() => {
@@ -54,15 +53,6 @@ export const ScoreBar = memo(() => {
         sound.play("gameIncorrect");
     };
 
-    const sendData = async () => {
-        const score = answerCnt.correct * 100;
-        const correctCnt = answerCnt.correct;
-        const incorrectCnt = answerCnt.incorrect;
-        const comboScore = answerCnt.combo * 200;
-
-        // await postGameData({ score, correctCnt, incorrectCnt, comboScore });
-    };
-
     useEffect(() => {
         if (gameAction === GameActions.START) {
             const eachSecCheck = () => {
@@ -81,7 +71,6 @@ export const ScoreBar = memo(() => {
                     clearTimeout(secTimeoutId.current);
                     clearTimeout(totalTimeoutId.current);
 
-                    sendData();
                     setAction(Actions.GAME_FINISH);
                 } else {
                     timeLeft.current = Math.max(timeLeft.current - 1, 0);

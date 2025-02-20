@@ -7,12 +7,12 @@ import { alienPositionState, problemIdxState } from "../store/gameStore";
 import { actionState, gameTypeState } from "../store/assetsStore";
 import { getContentsData, getGameData, getUserData } from "../apis/getData";
 import { Actions } from "../types/actionsType";
+import { getCookie } from "../util";
 
 export const useStarwords = () => {
     const { assets, audioAssets, fonts } = require("../assets/GameAssets").default;
     const [action, setAction] = useRecoilState(actionState);
 
-    const gameType = useRecoilValue(gameTypeState);
     const setProblemIdx = useSetRecoilState(problemIdxState);
 
     const [resources, setResources] = useState<any>();
@@ -105,12 +105,13 @@ export const useStarwords = () => {
         setContentsData(contentsRes);
 
         // etc
-        if (gameType === "class" || gameType === "normal") {
-            const userRes = await getUserData();
-            if (userRes.status === 200) {
-                setUserData(userRes.data);
-            }
-        }
+        // const gameType = getCookie("game_type");
+        // if (gameType === "class" || gameType === "normal") {
+        //     const userRes = await getUserData();
+        //     if (userRes.status === 200) {
+        //         setUserData(userRes.data);
+        //     }
+        // }
     };
 
     const loadAssets = async () => {

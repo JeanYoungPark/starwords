@@ -1,5 +1,5 @@
 import { Container, Sprite, Text } from "@pixi/react";
-import React, { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { TextStyle, Texture } from "pixi.js";
 import { useRecoilState, useRecoilValue } from "recoil";
 
@@ -8,8 +8,8 @@ import { actionState } from "../../store/assetsStore";
 import { Actions } from "../../types/actionsType";
 import { PixiButton } from "../common/PixiButton";
 import { CONTENT_HEIGHT, CONTENT_WIDTH } from "../../constants/commonConstants";
-import { getRankingData } from "../../apis/getData";
-import { RankingType } from "../../types/resourcesType";
+import { getRankingData, getUserData } from "../../apis/getData";
+import { RankingType, UserDataType } from "../../types/resourcesType";
 import _ from "lodash";
 import { getTimeRemaining, numberComma, getWeekText } from "../../util";
 import { Loading } from "../Loading";
@@ -26,9 +26,10 @@ import { answerCntState } from "../../store/gameStore";
 import { sound } from "@pixi/sound";
 
 export const Ranking = () => {
-    const { resources, contentsData, userData } = useContext(ResourceContext);
+    const { resources, contentsData } = useContext(ResourceContext);
     const [action, setAction] = useRecoilState(actionState);
     const answerCnt = useRecoilValue(answerCntState);
+    const [userData, setUserData] = useState<UserDataType | null>(null);
     const [rankingArr, setRankingArr] = useState<RankingType[][]>([]);
     const [rankingUpdateTime, setRankingUpdateTime] = useState<string>("");
     const [page, setPage] = useState<number>(0);
@@ -40,7 +41,12 @@ export const Ranking = () => {
         setRankingUpdateTime(rankingData.update_time);
     };
 
+    const getUserInfoData = async () => {
+        const userData = await getUserData();
+        setUserData(userData);
+    };
     useEffect(() => {
+        getUserInfoData();
         getData();
     }, []);
 
@@ -58,6 +64,29 @@ export const Ranking = () => {
         <Container>
             <Sprite texture={resources.bg} anchor={0.5} position={[CONTENT_WIDTH / 2, CONTENT_HEIGHT / 2]} />
 
+            {rankingArr.length > 1 && (
+                <>
+                    {page > 0 && (
+                        <Sprite
+                            texture={resources.incorrectLeftBtn}
+                            anchor={0.5}
+                            position={[230, CONTENT_HEIGHT / 2 + 60]}
+                            interactive={true}
+                            onclick={() => setPage((prev) => prev - 1)}
+                        />
+                    )}
+                    {page < rankingArr.length - 1 && (
+                        <Sprite
+                            texture={resources.incorrectRightBtn}
+                            anchor={0.5}
+                            position={[CONTENT_WIDTH - 250, CONTENT_HEIGHT / 2 + 60]}
+                            interactive={true}
+                            onclick={() => setPage((prev) => prev + 1)}
+                        />
+                    )}
+                </>
+            )}
+
             <Container position={[230, 100]}>
                 <Container>
                     <Text text={contentsData.cont_name} position={[0, 0]} style={RANKING_TITLE_TEXT_STYLE} />
@@ -74,7 +103,7 @@ export const Ranking = () => {
                         <Sprite texture={resources.rankingScoreBg} position={[0, 0]} width={506} height={130} />
                         <Sprite texture={resources.rankingProfile} position={[30, 22]} scale={0.45} />
                         <Text
-                            text={`${answerCnt.correct * 100 + answerCnt.combo * 200}`}
+                            text={numberComma(Number(userData?.best_score_week) || 0)}
                             anchor={[0.5, 0.5]}
                             position={[280, 65]}
                             style={RANKING_SCORE_TEXT_STYLE}
@@ -88,7 +117,7 @@ export const Ranking = () => {
             <Sprite texture={resources.rankingBg} position={[CONTENT_WIDTH / 2, CONTENT_HEIGHT / 2 + 100]} scale={0.75} anchor={0.5}>
                 <Container position={[-CONTENT_WIDTH / 2 + 50, -380]}>
                     {rankingArr[page]?.map((item, idx) => {
-                        const split = rankingArr[page].length / 2;
+                        const split = 5;
                         const rankResource = item.rank_no === "1" ? resources.gold : item.rank_no === "2" ? resources.silver : resources.bronze;
 
                         const leftPosition = idx >= split ? 830 : 0;
@@ -96,7 +125,7 @@ export const Ranking = () => {
 
                         return (
                             <Container key={idx} position={[leftPosition, topPosition]}>
-                                {idx < 3 ? (
+                                {!page && idx < 3 ? (
                                     <Sprite texture={rankResource} position={[150, 40]} scale={0.75} />
                                 ) : (
                                     <Text text={`${idx + 1}`} position={[170, 50]} style={RANKING_NUM_TEXT_STYLE} />
