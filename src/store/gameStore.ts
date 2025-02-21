@@ -1,22 +1,33 @@
 import { atom } from "recoil";
-import { AlienMovePositionType } from "../types/resourcesType";
+import { AlienMovePositionType, IncorrectType } from "../types/resourcesType";
 
-export const alienPositionState = atom<AlienMovePositionType[] | null>({
+export const problemIdxState = atom<number>({
+    key: "problemIdx",
+    default: -1,
+});
+
+export const alienPositionState = atom<AlienMovePositionType[]>({
     key: "alienPosition",
-    default: null,
+    default: [],
 });
 
-export const comboCntState = atom<number>({
-    key: "comboCntState",
-    default: 0,
+// 정답 갯수
+export const answerCntState = atom<{ correct: number; incorrect: number; combo: number }>({
+    key: "answerCntState",
+    default: {
+        correct: 0,
+        incorrect: 0,
+        combo: 0,
+    },
 });
 
-export const isComboState = atom<boolean>({
-    key: "isComboActiveState",
-    default: false,
+// 미정답 리스트
+export const incorrectListState = atom<IncorrectType[]>({
+    key: "incorrectListState",
+    default: [],
 });
 
-export const scoreState = atom<number>({
-    key: "scoreState",
-    default: 0,
+export const soundMuteState = atom<boolean>({
+    key: "soundMuteState",
+    default: true,
 });

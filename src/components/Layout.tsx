@@ -1,32 +1,48 @@
-import { Container, Sprite } from "@pixi/react";
+import { Container } from "@pixi/react";
 import { useContext } from "react";
-import { ResourceContext } from "../context/ResourceContext";
 import { useRecoilValue } from "recoil";
+
+import { ResourceContext } from "../context/ResourceContext";
 import { actionState } from "../store/assetsStore";
-import { Intro } from "./Intro";
-import { Guide } from "./Guide";
-import { Ranking } from "./Ranking";
+import { Intro } from "../pages/Intro";
+import { Guide } from "../pages/Guide";
 import { Loading } from "./Loading";
-import { PixiButton } from "./PixiButton";
-import { Game } from "./Game";
+import { PixiButton } from "./common/PixiButton";
+import { Game } from "../pages/Game";
+import { CONTENT_WIDTH } from "../constants/commonConstants";
+import { GameResult } from "../pages/GameResult";
+import { Ranking } from "../pages/Ranking";
+import { GameProvider } from "../context/GameProvider";
+import { IncorrectAnswers } from "../pages/IncorrectAnswers";
+import { sound } from "@pixi/sound";
+
 export const Layout = () => {
-    const { resources, sounds } = useContext(ResourceContext);
+    const { resources, gameData, contentsData } = useContext(ResourceContext);
     const action = useRecoilValue(actionState);
+
+    if (!resources || !gameData || !contentsData) return <Loading />;
 
     return (
         <Container>
-            {resources ? (
-                <>
-                    {action === "INTRO" && <Intro />}
-                    {action === "GUIDE" && <Guide />}
-                    {action === "RANKING" && <Ranking />}
-                    {action === "GAME_START" && <Game />}
+            <>
+                {action === "INTRO" && <Intro />}
+                {action === "GUIDE" && <Guide />}
+                <GameProvider>
+                    {action === "GAME_PLAY" && <Game />}
+                    {action === "GAME_FINISH" && <GameResult />}
+                </GameProvider>
+                {action === "INCORRECT" && <IncorrectAnswers />}
+                {action === "RANKING" && <Ranking />}
 
-                    <PixiButton name='close' position={[1860, 70]} defaultTexture={resources.close} sound={sounds.audioIntoBtn} align='RIGHT' />
-                </>
-            ) : (
-                <Loading />
-            )}
+                {action !== "INCORRECT" && (
+                    <PixiButton
+                        name='close'
+                        position={[CONTENT_WIDTH - 60, 70]}
+                        defaultTexture={resources.close}
+                        sound={sound.find("audioIntoBtn")}
+                    />
+                )}
+            </>
         </Container>
     );
 };

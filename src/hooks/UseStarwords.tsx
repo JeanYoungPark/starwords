@@ -1,24 +1,59 @@
-import React, { useState } from "react";
-import { AlienMovePositionType, ProblemType, WordType } from "../types/resourcesType";
-import { useRecoilValue } from "recoil";
-import { isComboState } from "../store/gameStore";
+import { useEffect, useState } from "react";
+import { Assets, Texture } from "pixi.js";
+import FontFaceObserver from "fontfaceobserver";
+import { useRecoilState, useSetRecoilState } from "recoil";
+import { WordType } from "../types/resourcesType";
+import { alienPositionState, problemIdxState } from "../store/gameStore";
+import { actionState } from "../store/assetsStore";
+import { getContentsData, getGameData } from "../apis/getData";
+import { Actions } from "../types/actionsType";
+import { initGame } from "../util/interface";
+import { getCookie } from "../util";
 
-export const UseStarwords = () => {
-    const [leftTime, setLeftTime] = useState(0);
-    const [idx, setIdx] = useState(-1);
-    const [problem, setProblem] = useState<
-        | {
-              item: WordType;
-              aliens: ProblemType[];
-          }
-        | undefined
-    >(undefined);
-    const isCombo = useRecoilValue(isComboState);
+export const useStarwords = () => {
+    const { assets, audioAssets, fonts } = require("../assets/GameAssets").default;
+    const [action, setAction] = useRecoilState(actionState);
 
-    const setContentInfo = () => {};
+    const setProblemIdx = useSetRecoilState(problemIdxState);
 
-    const contentDataParse = (data: any) => {
-        if (data.level_code >= "LV06") {
+    const [resources, setResources] = useState<Texture>();
+    const [gameData, setGameData] = useState(undefined);
+    const [contentsData, setContentsData] = useState(undefined);
+    const setAliensMovePosition = useSetRecoilState(alienPositionState);
+
+    const loadFonts = async () => {
+        fonts.map((font: { family: string; url: string }) => {
+            // 폰트 face 정의
+            const fontFace = new FontFace(font.family, `url(${require(`../assets/${font.url}`)}`);
+
+            // 폰트를 document fonts에 추가
+            return fontFace.load().then((loadedFont) => {
+                document.fonts.add(loadedFont);
+                return new FontFaceObserver(font.family).load();
+            });
+        });
+    };
+
+    const gameDataParse = (data: any) => {
+        setProblemIdx(-1);
+        return shuffleWord(data.word_arr);
+    };
+
+    const shuffleWord = (data: WordType[]) => {
+        if (data.length > 0) {
+            for (var i = data.length - 1; i > 0; i--) {
+                var j = Math.floor(Math.random() * (i + 1));
+                var temp = data[i];
+                data[i] = data[j];
+                data[j] = temp;
+            }
+
+            return data;
+        }
+    };
+
+    const contentDataParse = ({ level }: { level: string }) => {
+        if (level >= "LV06") {
             return [
                 { x: -453, y: -75, direction_x: "left", direction_y: "top" },
                 { x: 0, y: -75, direction_x: "center", direction_y: "top" },
@@ -36,86 +71,63 @@ export const UseStarwords = () => {
         }
     };
 
-    const gameDataParse = (data: any) => {
-        setLeftTime(data.time_limit + 1);
-        setIdx(-1);
-        return shuffleWord(data.word_arr);
+    const loadData = async () => {
+        // game data
+        const gameRes = await getGameData();
+
+        if (gameRes.code === 200) {
+            gameRes.leftTime = gameRes.time_limit + 1;
+            gameRes.idx = -1;
+
+            const shuffleGameData = gameDataParse(gameRes);
+            gameRes.word_arr = shuffleGameData;
+            setGameData(gameRes);
+        }
+
+        // content data
+        const contentsRes = await getContentsData();
+        if (!contentsRes.level_code) throw new Error("content data를 가져오지 못했습니다.");
+        const aliensPosition = contentDataParse({ level: contentsRes.level_code });
+
+        setAliensMovePosition(aliensPosition);
+        setContentsData(contentsRes);
     };
 
-    const shuffleWord = (data: WordType[]) => {
-        if (data.length > 0) {
-            for (var i = data.length - 1; i > 0; i--) {
-                var j = Math.floor(Math.random() * (i + 1));
-                var temp = data[i];
-                data[i] = data[j];
-                data[j] = temp;
-            }
+    const loadAssets = async () => {
+        const imageAssets = new Map(
+            assets.map((asset: { alias: string; src: string }) => [asset.alias, { alias: asset.alias, src: require(`../assets/${asset.src}`) }])
+        );
 
-            return data;
-        }
+        const soundAssetsList = new Map(
+            audioAssets.map((asset: { alias: string; src: string }) => [asset.alias, { alias: asset.alias, src: require(`../assets/${asset.src}`) }])
+        );
+
+        const [loadedTextures] = await Promise.all([
+            Assets.load(Array.from(imageAssets.values())),
+            Assets.load(Array.from(soundAssetsList.values())),
+        ]);
+
+        setResources(loadedTextures);
     };
 
-    const createProblem = (gameData: any, contentData: any) => {
-        //combo 상태일때는 문제 3개만 노출
-        const nextIdx = idx + 1;
-        setIdx(nextIdx);
-
-        if (nextIdx >= gameData.length) {
-            setIdx(0);
-        }
-
-        let alienCnt = 4;
-
-        if (isCombo) {
-            alienCnt = contentData.level_code >= "LV06" ? 4 : 3;
-        } else {
-            alienCnt = contentData.level_code >= "LV06" ? 5 : 4;
-        }
-
-        let aliens: ProblemType[] = [];
-        let i = 0;
-        let breakCnt = 0;
-
-        // 오답 만들기
-        while (aliens.length < alienCnt) {
-            // 무한루프 방지
-            breakCnt++;
-            if (breakCnt > 50) break;
-
-            // 오답 리스트중 한개 랜덤으로 선택
-            let rand_word = gameData.wrong_word_arr[Math.floor(Math.random() * gameData.wrong_word_arr.length)].word_en;
-
-            // 랜덤 오답 단어가 기존 오답과 동일하지 않고 정답 단어와도 동일하지 않은 경우
-            if (
-                !aliens.find((ele) => {
-                    return ele.word === rand_word;
-                }) &&
-                !aliens.find((ele) => {
-                    return ele.word === gameData.word_arr[nextIdx].word_en;
-                })
-            ) {
-                // 오답 리스트에 추가
-                aliens[i] = {
-                    word: rand_word,
-                    correct: "N",
-                };
-
-                i++;
-            }
-        }
-
-        // 정답
-        const correctRand = Math.floor(Math.random() * aliens.length);
-        aliens[correctRand] = {
-            word: gameData.word_arr[nextIdx].word_en,
-            correct: "Y",
-        };
-
-        setProblem({
-            item: gameData.word_arr[nextIdx],
-            aliens: aliens,
-        });
+    const loadGameData = async () => {
+        await loadFonts();
+        await loadData();
+        await loadAssets();
     };
 
-    return { contentDataParse, gameDataParse, createProblem, problem };
+    const init = async () => {
+        const os = getCookie("device_os");
+        await loadGameData();
+        os && initGame(os);
+        setAction(Actions.INTRO);
+    };
+
+    useEffect(() => {
+        if (action === "INIT") {
+            init();
+        }
+    }, []);
+
+    return { resources, gameData, contentsData };
 };

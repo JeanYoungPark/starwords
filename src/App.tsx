@@ -1,5 +1,5 @@
 import React from "react";
-import { Starwords } from "./components/Starwords";
+import { Starwords } from "./pages/Starwords";
 
 declare global {
     //전역 설정
