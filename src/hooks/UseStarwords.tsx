@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Assets } from "pixi.js";
+import { Assets, Texture } from "pixi.js";
 import FontFaceObserver from "fontfaceobserver";
 import { useRecoilState, useSetRecoilState } from "recoil";
 import { WordType } from "../types/resourcesType";
@@ -7,6 +7,8 @@ import { alienPositionState, problemIdxState } from "../store/gameStore";
 import { actionState } from "../store/assetsStore";
 import { getContentsData, getGameData } from "../apis/getData";
 import { Actions } from "../types/actionsType";
+import { initGame } from "../util/interface";
+import { getCookie } from "../util";
 
 export const useStarwords = () => {
     const { assets, audioAssets, fonts } = require("../assets/GameAssets").default;
@@ -14,13 +16,13 @@ export const useStarwords = () => {
 
     const setProblemIdx = useSetRecoilState(problemIdxState);
 
-    const [resources, setResources] = useState<any>();
+    const [resources, setResources] = useState<Texture>();
     const [gameData, setGameData] = useState(undefined);
     const [contentsData, setContentsData] = useState(undefined);
     const setAliensMovePosition = useSetRecoilState(alienPositionState);
 
     const loadFonts = async () => {
-        const fontPromises = fonts.map((font: { family: string; url: string }) => {
+        fonts.map((font: { family: string; url: string }) => {
             // 폰트 face 정의
             const fontFace = new FontFace(font.family, `url(${require(`../assets/${font.url}`)}`);
 
@@ -30,13 +32,6 @@ export const useStarwords = () => {
                 return new FontFaceObserver(font.family).load();
             });
         });
-
-        try {
-            await Promise.all(fontPromises);
-            console.log("All fonts loaded successfully");
-        } catch (error) {
-            console.error("Font loading error:", error);
-        }
     };
 
     const gameDataParse = (data: any) => {
@@ -86,9 +81,6 @@ export const useStarwords = () => {
 
             const shuffleGameData = gameDataParse(gameRes);
             gameRes.word_arr = shuffleGameData;
-            console.log("gameData.word_arr:", gameRes);
-            console.log("gameData.word_arr:", gameRes.word_arr);
-            console.log("gameData.wrong_word_arr:", gameRes.wrong_word_arr);
             setGameData(gameRes);
         }
 
@@ -122,13 +114,18 @@ export const useStarwords = () => {
         await loadFonts();
         await loadData();
         await loadAssets();
+    };
 
+    const init = async () => {
+        const os = getCookie("device_os");
+        await loadGameData();
+        os && initGame(os);
         setAction(Actions.INTRO);
     };
 
     useEffect(() => {
         if (action === "INIT") {
-            loadGameData();
+            init();
         }
     }, []);
 

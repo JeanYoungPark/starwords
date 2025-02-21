@@ -1,3 +1,5 @@
+import { Texture } from "pixi.js";
+
 export interface Resource {
     [key: string]: any;
 }
@@ -54,4 +56,10 @@ export interface UserDataType {
     total_gold_balance: null;
     total_playcount: string;
     upd_date: string;
+}
+
+export interface ResultButtonConfig {
+    position: [number, number];
+    texture: Texture;
+    handler: () => void;
 }

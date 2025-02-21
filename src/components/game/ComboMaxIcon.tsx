@@ -49,7 +49,7 @@ const MaxIcon = memo(({ data, onClick }: { data: { x: number; y: number }; onCli
 
         gsap.to(comboMaxText, {
             duration: 0.3,
-            repeat: -1, // 무한 반복
+            repeat: -1,
             onRepeat: () => {
                 frame = (frame + 1) % textures.length;
                 setCurrentTexture(textures[frame]);
@@ -79,8 +79,21 @@ const MaxIcon = memo(({ data, onClick }: { data: { x: number; y: number }; onCli
 export const ComboMaxIcon = memo(({ data }: { data: { x: number; y: number } }) => {
     const { problems, comboCnt, setComboCnt, setComboActive, setComboDestroyNum } = useContext(GameContext);
     const comboSec = useRef<number>(0);
+    const comboTimeoutId = useRef<NodeJS.Timeout | undefined>(undefined);
 
     if (!problems) return null;
+
+    const comboTime = () => {
+        comboSec.current += 1;
+
+        if (comboSec.current === 10) {
+            console.log("combo done");
+            comboSec.current = 0;
+            setComboActive(false);
+        }
+
+        comboTimeoutId.current = setTimeout(comboTime, 1000);
+    };
 
     const handleOnClickMaxCombo = () => {
         setComboActive(true);
@@ -88,17 +101,7 @@ export const ComboMaxIcon = memo(({ data }: { data: { x: number; y: number } }) 
 
         const originalIndex = destroyProblemIdx(problems.aliens);
         setComboDestroyNum(originalIndex);
-
-        // 콤보 시간 시작
-        const eachSecCheck = setInterval(() => {
-            comboSec.current += 1;
-
-            if (comboSec.current === 10) {
-                comboSec.current = 0;
-                setComboActive(false);
-                clearInterval(eachSecCheck);
-            }
-        }, 1000);
+        comboTime();
     };
 
     return (

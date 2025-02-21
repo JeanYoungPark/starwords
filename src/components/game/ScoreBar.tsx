@@ -32,7 +32,8 @@ export const ScoreBar = memo(() => {
     const textRef = useRef<PixiRef<typeof Text>>(null);
 
     const timeSetting = () => {
-        timeLeft.current = gameData.leftTime;
+        // timeLeft.current = gameData.leftTime;
+        timeLeft.current = 10;
         timeSpeed.current = resources.gauge.width / gameData.leftTime / 60;
         setGameAction(GameActions.START);
     };
@@ -99,14 +100,14 @@ export const ScoreBar = memo(() => {
             <Sprite texture={resources.gameBarBg} position={[0, 920]} width={2000} height={250} />
             <Gauge timeLeft={timeLeft} timeSpeed={timeSpeed} />
             <Sprite texture={resources.gameBar} position={[-600, 820]} />
-            <Sprite texture={comboActive ? resources.gameComboScoreBg : resources.gameScoreBg} position={comboActive ? [264, 920] : [300, 920]} />
-
-            <Text
-                text={`${numberComma(answerCnt.correct * 100 + answerCnt.combo * 200)}`}
-                position={[425, 1000]}
-                style={SCORE_TEXT_STYLE}
-                anchor={0.5}
-            />
+            <Sprite texture={comboActive ? resources.gameComboScoreBg : resources.gameScoreBg} position={comboActive ? [264, 920] : [300, 920]}>
+                <Text
+                    text={`${numberComma(answerCnt.correct * 100 + answerCnt.combo * 200)}`}
+                    position={comboActive ? [resources.gameComboScoreBg.width / 2 + 20, 80] : [resources.gameScoreBg.width / 2, 80]}
+                    style={SCORE_TEXT_STYLE}
+                    anchor={0.5}
+                />
+            </Sprite>
 
             {COMBO_TEXT_POSITION.map((data, i) => {
                 return <Container key={i}>{i + 1 === MAX_COMBO_NUMBER ? <ComboMaxIcon data={data} /> : <ComboIcon i={i} data={data} />}</Container>;

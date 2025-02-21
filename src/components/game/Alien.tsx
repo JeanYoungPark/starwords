@@ -33,6 +33,7 @@ export const Alien = ({ idx, position, problem }: AlienProps) => {
 
         moveInAnim();
         return () => {
+            console.log("cleanup 1");
             cleanupAnimations();
         };
     }, []);
@@ -50,6 +51,7 @@ export const Alien = ({ idx, position, problem }: AlienProps) => {
         }
 
         return () => {
+            console.log("cleanup 2");
             cleanupAnimations();
         };
     }, [alienAction]);

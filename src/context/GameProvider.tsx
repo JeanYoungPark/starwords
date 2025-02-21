@@ -62,8 +62,7 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
         let aliens: ProblemType[] = [];
         let i = 0;
         let breakCnt = 0;
-        console.log("==============================");
-        console.log("nextIdx: ", nextIdx);
+
         // 오답 만들기
         while (aliens.length < alienCnt) {
             // 무한루프 방지
@@ -72,8 +71,7 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
 
             // 오답 리스트중 한개 랜덤으로 선택
             let rand_word = gameData.wrong_word_arr[Math.floor(Math.random() * gameData.wrong_word_arr.length)].word_en;
-            console.log("-----------");
-            console.log("aliens:", aliens);
+
             // 랜덤 오답 단어가 기존 오답과 동일하지 않고 정답 단어와도 동일하지 않은 경우
             if (
                 !aliens.find((ele) => {
@@ -89,8 +87,32 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
                     correct: "N",
                 };
 
+                while (true) {
+                    if (
+                        aliens.find(function (ele) {
+                            return ele.word === gameData.word_arr[nextIdx].word_en;
+                        })
+                    ) {
+                        delete aliens[i];
+
+                        aliens[i] = {
+                            word: gameData.wrong_word_arr[Math.floor(Math.random() * gameData.wrong_word_arr.length)].word_en,
+                            correct: "N",
+                        };
+                    }
+
+                    if (
+                        aliens.find(function (ele) {
+                            return ele.word !== gameData.word_arr[nextIdx].word_en;
+                        })
+                    ) {
+                        break;
+                    }
+                }
+
                 i++;
             }
+            console.log("after_aliens:", aliens);
         }
 
         // 정답

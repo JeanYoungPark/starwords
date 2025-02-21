@@ -7,11 +7,16 @@ export const SUBTITLE_BG = {
     ALPHA: 0.5,
 };
 
-export const COMMON_TEXT_STYLE = new TextStyle({
-    fontFamily: "NotoSans",
+export const MAIN_TEXT_STYLE = new TextStyle({
+    fontFamily: "NotoSans-bold",
     fontSize: 34,
     fill: "rgba(170, 242, 246)",
-    fontWeight: "700",
+});
+
+export const SUB_TEXT_STYLE = new TextStyle({
+    fontFamily: "NotoSans-medium",
+    fontSize: 34,
+    fill: "rgba(170, 242, 246)",
 });
 
 export const TITLE_ANIMATION = {

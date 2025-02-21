@@ -163,12 +163,12 @@ const audioAssets = [
 
 const fonts = [
     {
-        family: "NotoSans",
+        family: "NotoSans-medium",
         weight: 400,
         url: `${fontPath}notosanskr-medium.woff2`, // 폰트 파일 경로
     },
     {
-        family: "NotoSans",
+        family: "NotoSans-bold",
         weight: 700,
         url: `${fontPath}notosanskr-bold.woff2`, // 폰트 파일 경로
     },

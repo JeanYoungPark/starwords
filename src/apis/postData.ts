@@ -44,11 +44,9 @@ export const postGameData = async ({
         }
     }
 
-    console.log(apiUrl);
     const res = await axios.post(apiUrl);
 
     if (res.status === 200) {
-        console.log(res.data);
         return res.data;
     }
 };

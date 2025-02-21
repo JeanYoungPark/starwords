@@ -5,7 +5,7 @@ import { Container, Sprite, Text } from "@pixi/react";
 import { CONTENT_WIDTH } from "../../constants/commonConstants";
 import { ResourceContext } from "../../context/ResourceContext";
 import { gameTypeState } from "../../store/assetsStore";
-import { COMMON_TEXT_STYLE, SUBTITLE_BG } from "../../constants/introConstants";
+import { MAIN_TEXT_STYLE, SUB_TEXT_STYLE, SUBTITLE_BG } from "../../constants/introConstants";
 
 export const SubTitle = () => {
     const { resources, contentsData } = useContext(ResourceContext);
@@ -28,13 +28,13 @@ export const SubTitle = () => {
                 alpha={SUBTITLE_BG.ALPHA}
             />
 
-            <Text text={getMainTitle()} anchor={0.5} position={[0, hasMidName ? 30 : 50]} style={COMMON_TEXT_STYLE} />
+            <Text text={getMainTitle()} anchor={0.5} position={[0, hasMidName ? 30 : 50]} style={MAIN_TEXT_STYLE} />
 
             {!isWordMaster && contentsData.mid_name && (
-                <Text text={contentsData.mid_name} anchor={[0.5, 0.5]} position={[0, 80]} style={COMMON_TEXT_STYLE} />
+                <Text text={contentsData.mid_name} anchor={[0.5, 0.5]} position={[0, 80]} style={MAIN_TEXT_STYLE} />
             )}
 
-            <Text text={getSubTitle()} anchor={[0.5, 0.5]} position={[0, hasMidName ? 130 : 100]} style={COMMON_TEXT_STYLE} />
+            <Text text={getSubTitle()} anchor={[0.5, 0.5]} position={[0, hasMidName ? 130 : 100]} style={SUB_TEXT_STYLE} />
         </Container>
     );
 };

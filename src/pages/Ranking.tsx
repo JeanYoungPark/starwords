@@ -1,10 +1,10 @@
 import { Container, Sprite, Text } from "@pixi/react";
 import { useContext, useEffect, useState } from "react";
 import { TextStyle, Texture } from "pixi.js";
-import { useSetRecoilState } from "recoil";
+import { useRecoilValue, useSetRecoilState } from "recoil";
 
 import { ResourceContext } from "../context/ResourceContext";
-import { actionState } from "../store/assetsStore";
+import { actionState, gameTypeState } from "../store/assetsStore";
 import { Actions } from "../types/actionsType";
 import { PixiButton } from "../components/common/PixiButton";
 import { CONTENT_HEIGHT, CONTENT_WIDTH } from "../constants/commonConstants";
@@ -26,11 +26,17 @@ import { sound } from "@pixi/sound";
 
 export const Ranking = () => {
     const { resources, contentsData } = useContext(ResourceContext);
+    const gameType = useRecoilValue(gameTypeState);
     const setAction = useSetRecoilState(actionState);
     const [userData, setUserData] = useState<UserDataType | null>(null);
     const [rankingArr, setRankingArr] = useState<RankingType[][]>([]);
     const [rankingUpdateTime, setRankingUpdateTime] = useState<string>("");
     const [page, setPage] = useState<number>(0);
+
+    const isWordMaster = gameType === "word_master";
+    const hasMidName = Boolean(contentsData.mid_name);
+    const getMainTitle = () => (isWordMaster ? contentsData.cont_title : contentsData.cont_name);
+    const getSubTitle = () => (isWordMaster ? `Stage ${contentsData.stage}` : contentsData.cont_sub_name);
 
     const getData = async () => {
         const rankingData = await getRankingData();
@@ -43,8 +49,9 @@ export const Ranking = () => {
         const userData = await getUserData();
         setUserData(userData);
     };
+
     useEffect(() => {
-        getUserInfoData();
+        if (gameType !== "word_master") getUserInfoData();
         getData();
     }, []);
 
@@ -87,8 +94,11 @@ export const Ranking = () => {
 
             <Container position={[230, 100]}>
                 <Container>
-                    <Text text={contentsData.cont_name} position={[0, 0]} style={RANKING_TITLE_TEXT_STYLE} />
-                    <Text text={contentsData.cont_sub_name} position={[0, 40]} style={RANKING_TITLE_TEXT_STYLE} />
+                    <Text text={getMainTitle()} position={[0, hasMidName ? -30 : 0]} style={RANKING_TITLE_TEXT_STYLE} />
+                    {!isWordMaster && contentsData.mid_name && (
+                        <Text text={contentsData.mid_name} position={[0, 10]} style={RANKING_TITLE_TEXT_STYLE} />
+                    )}
+                    <Text text={getSubTitle()} position={[0, hasMidName ? 50 : 40]} style={RANKING_TITLE_TEXT_STYLE} />
                 </Container>
 
                 <Container>
