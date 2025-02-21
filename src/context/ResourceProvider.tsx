@@ -7,7 +7,7 @@ import { getCookie } from "../util";
 import { soundMuteState } from "../store/gameStore";
 
 export const ResourceProvider = ({ children }: { children: ReactNode }) => {
-    const { resources, gameData, contentsData, userData } = useStarwords();
+    const { resources, gameData, contentsData } = useStarwords();
     const setDeviceOs = useSetRecoilState(deviceOsState);
     const setSoundMuteState = useSetRecoilState(soundMuteState);
 
@@ -17,5 +17,5 @@ export const ResourceProvider = ({ children }: { children: ReactNode }) => {
         setSoundMuteState(os === "iOS" ? false : true);
     }, []);
 
-    return <ResourceContext.Provider value={{ resources, gameData, contentsData, userData }}>{children}</ResourceContext.Provider>;
+    return <ResourceContext.Provider value={{ resources, gameData, contentsData }}>{children}</ResourceContext.Provider>;
 };

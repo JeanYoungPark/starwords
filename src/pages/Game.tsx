@@ -1,16 +1,16 @@
 import { Container, PixiRef, Sprite, Text } from "@pixi/react";
 import { useContext, useEffect, useRef } from "react";
-import { ResourceContext } from "../../context/ResourceContext";
-import { ScoreBar } from "../game/ScoreBar";
-import { ReloadBtn } from "../game/ReloadBtn";
-import { PROBLEM_TEXT_STYLE } from "../../constants/gameConstants";
-import { CONTENT_HEIGHT, CONTENT_WIDTH } from "../../constants/commonConstants";
-import { Aliens } from "../game/Aliens";
-import { GameContext } from "../../context/GameContext";
-import { InCorrectAnim } from "../game/InCorrectAnim";
+import { ResourceContext } from "../context/ResourceContext";
+import { ScoreBar } from "../components/game/ScoreBar";
+import { ReloadBtn } from "../components/game/ReloadBtn";
+import { PROBLEM_TEXT_STYLE } from "../constants/gameConstants";
+import { CONTENT_HEIGHT, CONTENT_WIDTH } from "../constants/commonConstants";
+import { Aliens } from "../components/game/Aliens";
+import { GameContext } from "../context/GameContext";
+import { InCorrectAnim } from "../components/game/InCorrectAnim";
 import { useRecoilState } from "recoil";
-import { AlienActionState } from "../../store/assetsStore";
-import { AlienActions } from "../../types/actionsType";
+import { AlienActionState } from "../store/assetsStore";
+import { AlienActions } from "../types/actionsType";
 import { sound } from "@pixi/sound";
 
 export const Game = () => {

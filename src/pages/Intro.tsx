@@ -1,15 +1,15 @@
 import { useContext } from "react";
 import { Container, Sprite } from "@pixi/react";
-import { ResourceContext } from "../../context/ResourceContext";
-import { Title } from "../intro/Title";
-import { BgmBtn } from "../intro/BgmBtn";
-import { HelpBtn } from "../intro/HelpBtn";
-import { StartBtn } from "../intro/StartBtn";
-import { RankingBtn } from "../intro/RankingBtn";
+import { ResourceContext } from "../context/ResourceContext";
+import { Title } from "../components/intro/Title";
+import { BgmBtn } from "../components/intro/BgmBtn";
+import { HelpBtn } from "../components/intro/HelpBtn";
+import { StartBtn } from "../components/intro/StartBtn";
+import { RankingBtn } from "../components/intro/RankingBtn";
 import { useRecoilValue } from "recoil";
-import { gameTypeState } from "../../store/assetsStore";
-import { CONTENT_HEIGHT, CONTENT_WIDTH } from "../../constants/commonConstants";
-import { SubTitle } from "../intro/SubTitle";
+import { gameTypeState } from "../store/assetsStore";
+import { CONTENT_HEIGHT, CONTENT_WIDTH } from "../constants/commonConstants";
+import { SubTitle } from "../components/intro/SubTitle";
 export const Intro = () => {
     const { resources } = useContext(ResourceContext);
     const gameType = useRecoilValue(gameTypeState);

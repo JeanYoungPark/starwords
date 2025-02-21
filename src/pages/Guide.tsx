@@ -2,11 +2,11 @@ import { Container, Sprite } from "@pixi/react";
 import { useContext } from "react";
 import { useSetRecoilState } from "recoil";
 
-import { ResourceContext } from "../../context/ResourceContext";
-import { PixiButton } from "../common/PixiButton";
-import { actionState } from "../../store/assetsStore";
-import { Actions } from "../../types/actionsType";
-import { CONTENT_HEIGHT, CONTENT_WIDTH } from "../../constants/commonConstants";
+import { ResourceContext } from "../context/ResourceContext";
+import { PixiButton } from "../components/common/PixiButton";
+import { actionState } from "../store/assetsStore";
+import { Actions } from "../types/actionsType";
+import { CONTENT_HEIGHT, CONTENT_WIDTH } from "../constants/commonConstants";
 import { sound } from "@pixi/sound";
 
 export const Guide = () => {

@@ -4,16 +4,16 @@ import { useRecoilValue } from "recoil";
 
 import { ResourceContext } from "../context/ResourceContext";
 import { actionState } from "../store/assetsStore";
-import { Intro } from "./pages/Intro";
-import { Guide } from "./pages/Guide";
+import { Intro } from "../pages/Intro";
+import { Guide } from "../pages/Guide";
 import { Loading } from "./Loading";
 import { PixiButton } from "./common/PixiButton";
-import { Game } from "./pages/Game";
+import { Game } from "../pages/Game";
 import { CONTENT_WIDTH } from "../constants/commonConstants";
-import { GameFinish } from "./pages/GameFinish";
-import { Ranking } from "./pages/Ranking";
+import { GameResult } from "../pages/GameResult";
+import { Ranking } from "../pages/Ranking";
 import { GameProvider } from "../context/GameProvider";
-import { IncorrectAnswers } from "./pages/IncorrectAnswers";
+import { IncorrectAnswers } from "../pages/IncorrectAnswers";
 import { sound } from "@pixi/sound";
 
 export const Layout = () => {
@@ -29,7 +29,7 @@ export const Layout = () => {
                 {action === "GUIDE" && <Guide />}
                 <GameProvider>
                     {action === "GAME_PLAY" && <Game />}
-                    {action === "GAME_FINISH" && <GameFinish />}
+                    {action === "GAME_FINISH" && <GameResult />}
                 </GameProvider>
                 {action === "INCORRECT" && <IncorrectAnswers />}
                 {action === "RANKING" && <Ranking />}

@@ -2,20 +2,20 @@ import { Container, PixiRef, Sprite, Text } from "@pixi/react";
 import { useContext, useEffect, useRef, useState } from "react";
 import { useRecoilValue, useSetRecoilState } from "recoil";
 
-import { ResourceContext } from "../../context/ResourceContext";
-import { actionState, gameTypeState } from "../../store/assetsStore";
-import { Actions } from "../../types/actionsType";
-import { answerCntState } from "../../store/gameStore";
-import { PixiButton } from "../common/PixiButton";
-import { GameContext } from "../../context/GameContext";
-import { RESULT_CORRECT_COMBO_TEXT_STYLE, RESULT_CORRECT_TEXT_STYLE, RESULT_SCORE_TEXT_STYLE } from "../../constants/resultContants";
-import { CONTENT_HEIGHT, CONTENT_WIDTH } from "../../constants/commonConstants";
-import { numberComma } from "../../util";
+import { ResourceContext } from "../context/ResourceContext";
+import { actionState, gameTypeState } from "../store/assetsStore";
+import { Actions } from "../types/actionsType";
+import { answerCntState } from "../store/gameStore";
+import { PixiButton } from "../components/common/PixiButton";
+import { GameContext } from "../context/GameContext";
+import { RESULT_CORRECT_COMBO_TEXT_STYLE, RESULT_CORRECT_TEXT_STYLE, RESULT_SCORE_TEXT_STYLE } from "../constants/resultContants";
+import { CONTENT_HEIGHT, CONTENT_WIDTH } from "../constants/commonConstants";
+import { numberComma } from "../util";
 import { Resource, Texture } from "pixi.js";
-import { postGameData } from "../../apis/postData";
+import { postGameData } from "../apis/postData";
 import { sound } from "@pixi/sound";
 
-export const GameFinish = () => {
+export const GameResult = () => {
     const containerRef = useRef<PixiRef<typeof Container>>(null);
     const { resources } = useContext(ResourceContext);
     const { init } = useContext(GameContext);

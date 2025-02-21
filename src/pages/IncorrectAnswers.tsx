@@ -1,15 +1,15 @@
 import { Container, Sprite, Text } from "@pixi/react";
 import { useContext, useEffect, useState } from "react";
 import { useRecoilValue, useSetRecoilState } from "recoil";
-import { ResourceContext } from "../../context/ResourceContext";
-import { incorrectListState } from "../../store/gameStore";
-import { CONTENT_HEIGHT, CONTENT_WIDTH } from "../../constants/commonConstants";
-import { IncorrectType } from "../../types/resourcesType";
+import { ResourceContext } from "../context/ResourceContext";
+import { incorrectListState } from "../store/gameStore";
+import { CONTENT_HEIGHT, CONTENT_WIDTH } from "../constants/commonConstants";
+import { IncorrectType } from "../types/resourcesType";
 import _ from "lodash";
-import { INCORRECT_EN_TEXT_STYLE } from "../../constants/resultContants";
-import { PixiButton } from "../common/PixiButton";
-import { actionState } from "../../store/assetsStore";
-import { Actions } from "../../types/actionsType";
+import { INCORRECT_EN_TEXT_STYLE } from "../constants/resultContants";
+import { PixiButton } from "../components/common/PixiButton";
+import { actionState } from "../store/assetsStore";
+import { Actions } from "../types/actionsType";
 import { sound } from "@pixi/sound";
 
 export const IncorrectAnswers = () => {

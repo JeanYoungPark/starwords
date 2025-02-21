@@ -1,13 +1,12 @@
 import { useEffect, useState } from "react";
 import { Assets } from "pixi.js";
 import FontFaceObserver from "fontfaceobserver";
-import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
+import { useRecoilState, useSetRecoilState } from "recoil";
 import { WordType } from "../types/resourcesType";
 import { alienPositionState, problemIdxState } from "../store/gameStore";
-import { actionState, gameTypeState } from "../store/assetsStore";
-import { getContentsData, getGameData, getUserData } from "../apis/getData";
+import { actionState } from "../store/assetsStore";
+import { getContentsData, getGameData } from "../apis/getData";
 import { Actions } from "../types/actionsType";
-import { getCookie } from "../util";
 
 export const useStarwords = () => {
     const { assets, audioAssets, fonts } = require("../assets/GameAssets").default;
@@ -18,7 +17,6 @@ export const useStarwords = () => {
     const [resources, setResources] = useState<any>();
     const [gameData, setGameData] = useState(undefined);
     const [contentsData, setContentsData] = useState(undefined);
-    const [userData, setUserData] = useState(undefined);
     const setAliensMovePosition = useSetRecoilState(alienPositionState);
 
     const loadFonts = async () => {
@@ -100,18 +98,7 @@ export const useStarwords = () => {
         const aliensPosition = contentDataParse({ level: contentsRes.level_code });
 
         setAliensMovePosition(aliensPosition);
-
-        // contentsRes.title_len = contentsRes.cont_title.length;
         setContentsData(contentsRes);
-
-        // etc
-        // const gameType = getCookie("game_type");
-        // if (gameType === "class" || gameType === "normal") {
-        //     const userRes = await getUserData();
-        //     if (userRes.status === 200) {
-        //         setUserData(userRes.data);
-        //     }
-        // }
     };
 
     const loadAssets = async () => {
@@ -123,7 +110,7 @@ export const useStarwords = () => {
             audioAssets.map((asset: { alias: string; src: string }) => [asset.alias, { alias: asset.alias, src: require(`../assets/${asset.src}`) }])
         );
 
-        const [loadedTextures, loadedSounds] = await Promise.all([
+        const [loadedTextures] = await Promise.all([
             Assets.load(Array.from(imageAssets.values())),
             Assets.load(Array.from(soundAssetsList.values())),
         ]);
@@ -145,5 +132,5 @@ export const useStarwords = () => {
         }
     }, []);
 
-    return { resources, gameData, contentsData, userData };
+    return { resources, gameData, contentsData };
 };

@@ -1,18 +1,18 @@
 import { Container, Sprite, Text } from "@pixi/react";
 import { useContext, useEffect, useState } from "react";
 import { TextStyle, Texture } from "pixi.js";
-import { useRecoilState, useRecoilValue } from "recoil";
+import { useSetRecoilState } from "recoil";
 
-import { ResourceContext } from "../../context/ResourceContext";
-import { actionState } from "../../store/assetsStore";
-import { Actions } from "../../types/actionsType";
-import { PixiButton } from "../common/PixiButton";
-import { CONTENT_HEIGHT, CONTENT_WIDTH } from "../../constants/commonConstants";
-import { getRankingData, getUserData } from "../../apis/getData";
-import { RankingType, UserDataType } from "../../types/resourcesType";
+import { ResourceContext } from "../context/ResourceContext";
+import { actionState } from "../store/assetsStore";
+import { Actions } from "../types/actionsType";
+import { PixiButton } from "../components/common/PixiButton";
+import { CONTENT_HEIGHT, CONTENT_WIDTH } from "../constants/commonConstants";
+import { getRankingData, getUserData } from "../apis/getData";
+import { RankingType, UserDataType } from "../types/resourcesType";
 import _ from "lodash";
-import { getTimeRemaining, numberComma, getWeekText } from "../../util";
-import { Loading } from "../Loading";
+import { getTimeRemaining, numberComma, getWeekText } from "../util";
+import { Loading } from "../components/Loading";
 import {
     RANKING_DATE_TEXT_STYLE,
     RANKING_NUM_TEXT_STYLE,
@@ -21,14 +21,12 @@ import {
     RANKING_TITLE_TEXT_STYLE,
     RANKING_USER_NAME_TEXT_STYLE,
     RANKING_USER_SCORE_TEXT_STYLE,
-} from "../../constants/rankingConstants";
-import { answerCntState } from "../../store/gameStore";
+} from "../constants/rankingConstants";
 import { sound } from "@pixi/sound";
 
 export const Ranking = () => {
     const { resources, contentsData } = useContext(ResourceContext);
-    const [action, setAction] = useRecoilState(actionState);
-    const answerCnt = useRecoilValue(answerCntState);
+    const setAction = useSetRecoilState(actionState);
     const [userData, setUserData] = useState<UserDataType | null>(null);
     const [rankingArr, setRankingArr] = useState<RankingType[][]>([]);
     const [rankingUpdateTime, setRankingUpdateTime] = useState<string>("");
