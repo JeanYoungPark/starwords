@@ -1,6 +1,7 @@
 {
     "name": "starwars",
     "version": "0.1.0",
+    "homepage": "/js/game/supplement/starwords",
     "private": true,
     "dependencies": {
         "@pixi/react": "^7.1.2",
