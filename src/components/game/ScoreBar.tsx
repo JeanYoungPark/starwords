@@ -32,8 +32,7 @@ export const ScoreBar = memo(() => {
     const textRef = useRef<PixiRef<typeof Text>>(null);
 
     const timeSetting = () => {
-        // timeLeft.current = gameData.leftTime;
-        timeLeft.current = 10;
+        timeLeft.current = gameData.leftTime;
         timeSpeed.current = resources.gauge.width / gameData.leftTime / 60;
         setGameAction(GameActions.START);
     };
