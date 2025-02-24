@@ -112,7 +112,6 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
 
                 i++;
             }
-            console.log("after_aliens:", aliens);
         }
 
         // 정답

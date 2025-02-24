@@ -70,8 +70,7 @@ export const getContentsData = async () => {
         apiUrl = `${process.env.REACT_APP_FOXSCHOOL_API_ULR}/${schoolName}/starwords_h5_api/contents_info/${fuId}/${fcId}`;
     } else {
         const gameType = getCookie("game_type");
-        // const hwCode = getCookie("hw_no");
-        console.log(gameType);
+
         if (gameType === "word_master") {
             const [wordMasterSeq, stage, langCode] = getRequiredCookies(["word_master_seq", "stage", "lang_code"]);
 

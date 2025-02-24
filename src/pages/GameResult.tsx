@@ -1,13 +1,10 @@
 import { Container, PixiRef, Sprite, Text } from "@pixi/react";
 import { useContext, useEffect, useRef, useState } from "react";
-import { useRecoilValue, useSetRecoilState } from "recoil";
+import { useRecoilValue } from "recoil";
 
 import { ResourceContext } from "../context/ResourceContext";
-import { actionState, gameTypeState } from "../store/assetsStore";
-import { Actions } from "../types/actionsType";
+import { gameTypeState } from "../store/assetsStore";
 import { answerCntState } from "../store/gameStore";
-import { PixiButton } from "../components/common/PixiButton";
-import { GameContext } from "../context/GameContext";
 import {
     RESULT_CORRECT_COMBO_TEXT_STYLE,
     RESULT_CORRECT_TEXT_STYLE,
@@ -20,15 +17,14 @@ import { Resource, Texture } from "pixi.js";
 import { postGameData } from "../apis/postData";
 import { sound } from "@pixi/sound";
 import { getUserData } from "../apis/getData";
-import { ResultButtonConfig, UserDataType } from "../types/resourcesType";
+import { UserDataType } from "../types/resourcesType";
+import { Buttons } from "../components/result/Buttons";
 
 export const GameResult = () => {
     const containerRef = useRef<PixiRef<typeof Container>>(null);
     const { resources } = useContext(ResourceContext);
-    const { init } = useContext(GameContext);
     const answerCnt = useRecoilValue(answerCntState);
     const gameType = useRecoilValue(gameTypeState);
-    const setActions = useSetRecoilState(actionState);
     const [resultImg, setResultImg] = useState<Texture<Resource>>(resources.tryAgain);
     const [rankNo, setRankNo] = useState<string>("");
     const [userData, setUserData] = useState<UserDataType | null>(null);
@@ -70,52 +66,6 @@ export const GameResult = () => {
         setResultImg(img);
     }, [gameType]);
 
-    const handleIncorrectBtn = () => {
-        setActions(Actions.INCORRECT);
-    };
-
-    const handleRankingBtn = () => {
-        setActions(Actions.RANKING);
-    };
-
-    const buttonConfigs: { [key: string]: ResultButtonConfig } = {
-        incorrect: {
-            position: [0, resources.resultBg.height - 50],
-            texture: resources.incorrectBtn,
-            handler: handleIncorrectBtn,
-        },
-        ranking01: {
-            position: [500, resources.resultBg.height - 50],
-            texture: resources.resultRankingBtn01,
-            handler: handleRankingBtn,
-        },
-        ranking02: {
-            position: [0, resources.resultBg.height - 50],
-            texture: resources.resultRankingBtn02,
-            handler: handleRankingBtn,
-        },
-        tryAgain01: {
-            position: [870, resources.resultBg.height - 50],
-            texture: resources.resultTryAgainBtn01,
-            handler: init,
-        },
-        tryAgain02: {
-            position: [700, resources.resultBg.height - 50],
-            texture: resources.resultTryAgainBtn02,
-            handler: init,
-        },
-    };
-
-    const CommonButton = ({ config }: { config: ResultButtonConfig }) => (
-        <PixiButton
-            position={config.position}
-            defaultTexture={config.texture}
-            sound={sound.find("audioIntoBtn")}
-            interactive={true}
-            onTouchEnd={config.handler}
-        />
-    );
-
     return (
         <Container ref={containerRef}>
             <Sprite texture={resources.bg} anchor={0.5} position={[CONTENT_WIDTH / 2, CONTENT_HEIGHT / 2]} />
@@ -151,29 +101,7 @@ export const GameResult = () => {
                         anchor={0.5}
                     />
                 </Sprite>
-                <Container position={[370, -70]} anchor={0.5}>
-                    {answerCnt.incorrect > 0 ? (
-                        gameType === "word_master" ? (
-                            <>
-                                <CommonButton config={buttonConfigs.incorrect} />
-                                <CommonButton config={buttonConfigs.tryAgain02} />
-                            </>
-                        ) : (
-                            <>
-                                <CommonButton config={buttonConfigs.incorrect} />
-                                <CommonButton config={buttonConfigs.ranking01} />
-                                <CommonButton config={buttonConfigs.tryAgain01} />
-                            </>
-                        )
-                    ) : gameType === "word_master" ? (
-                        <CommonButton config={{ ...buttonConfigs.tryAgain02, position: [350, buttonConfigs.tryAgain02.position[1]] }} />
-                    ) : (
-                        <>
-                            <CommonButton config={buttonConfigs.ranking02} />
-                            <CommonButton config={buttonConfigs.tryAgain02} />
-                        </>
-                    )}
-                </Container>
+                <Buttons />
             </Container>
 
             <Sprite texture={resultImg} anchor={0.5} position={[1920 / 2, 130]} scale={0.8} />
