@@ -10,6 +10,7 @@ import { useRecoilValue } from "recoil";
 import { gameTypeState } from "../store/assetsStore";
 import { CONTENT_HEIGHT, CONTENT_WIDTH } from "../constants/commonConstants";
 import { SubTitle } from "../components/intro/SubTitle";
+
 export const Intro = () => {
     const { resources } = useContext(ResourceContext);
     const gameType = useRecoilValue(gameTypeState);

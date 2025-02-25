@@ -24,7 +24,7 @@ export const Buttons = ({
                             anchor={0.5}
                             position={[230, CONTENT_HEIGHT / 2 + 60]}
                             interactive={true}
-                            onclick={() => handlePageBtn(-1)}
+                            ontouchstart={() => handlePageBtn(-1)}
                         />
                     )}
                     {rankingArrLength - 1 && (
@@ -33,7 +33,7 @@ export const Buttons = ({
                             anchor={0.5}
                             position={[CONTENT_WIDTH - 250, CONTENT_HEIGHT / 2 + 60]}
                             interactive={true}
-                            onclick={() => handlePageBtn(1)}
+                            ontouchstart={() => handlePageBtn(1)}
                         />
                     )}
                 </>

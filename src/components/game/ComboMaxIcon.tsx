@@ -13,7 +13,7 @@ const NormalIcon = memo(({ data }: { data: { x: number; y: number } }) => {
     return <Sprite texture={resources.maxComboBall} position={[data.x, data.y]} rotation={0} />;
 });
 
-const MaxIcon = memo(({ data, onClick }: { data: { x: number; y: number }; onClick: () => void }) => {
+const MaxIcon = memo(({ data, onTouchend }: { data: { x: number; y: number }; onTouchend: () => void }) => {
     const { resources } = useContext(ResourceContext);
     const { animActive } = useContext(GameContext);
     const comboMaxContainerRef = useRef<PixiRef<typeof Container>>(null);
@@ -27,7 +27,7 @@ const MaxIcon = memo(({ data, onClick }: { data: { x: number; y: number }; onCli
 
         gsap.killTweensOf(comboMaxBg);
         gsap.killTweensOf(comboMaxText);
-        onClick();
+        onTouchend();
     };
 
     useEffect(() => {
@@ -68,7 +68,7 @@ const MaxIcon = memo(({ data, onClick }: { data: { x: number; y: number }; onCli
     }, []);
 
     return (
-        <Container ref={comboMaxContainerRef} interactive={!animActive ? true : false} onclick={handleMaxCombo}>
+        <Container ref={comboMaxContainerRef} interactive={!animActive ? true : false} ontouchend={handleMaxCombo}>
             <Sprite name='comboMaxOnBg' texture={resources.maxComboBallOnBg} anchor={0.5} position={[data.x + 85, data.y + 91]} />
             <Sprite name='comboMaxText' texture={currentTexture} anchor={0.5} position={[data.x + 85, data.y + 91]} />
             <Sprite anchor={0.5} texture={resources.maxComboBallOnText} position={[data.x + 90, data.y + 90]} />
@@ -107,7 +107,7 @@ export const ComboMaxIcon = memo(({ data }: { data: { x: number; y: number } }) 
     return (
         <Container>
             {comboCnt === MAX_COMBO_NUMBER ? (
-                <MaxIcon data={{ x: data.x, y: data.y }} onClick={handleOnClickMaxCombo} />
+                <MaxIcon data={{ x: data.x, y: data.y }} onTouchend={handleOnClickMaxCombo} />
             ) : (
                 <NormalIcon data={{ x: data.x, y: data.y }} />
             )}

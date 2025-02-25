@@ -1,16 +1,16 @@
 import { ReactNode, useRef, useState } from "react";
 import { useRecoilState, useSetRecoilState } from "recoil";
 import { GameContext } from "./GameContext";
-import { answerCntState, problemIdxState } from "../store/gameStore";
-import { actionState, AlienActionState, gameActionState } from "../store/assetsStore";
-import { Actions, AlienActions, GameActions } from "../types/actionsType";
+import { answerCntState, incorrectListState, problemIdxState } from "../store/gameStore";
 import { ProblemType, WordType } from "../types/resourcesType";
+import { AlienActionState, gameActionState } from "../store/assetsStore";
+import { AlienActions, GameActions } from "../types/actionsType";
 
 export const GameProvider = ({ children }: { children: ReactNode }) => {
-    const setActions = useSetRecoilState(actionState);
+    const setAnswerCnt = useSetRecoilState(answerCntState);
+    const setIncorrectList = useSetRecoilState(incorrectListState);
     const setGameAction = useSetRecoilState(gameActionState);
     const setAlienAction = useSetRecoilState(AlienActionState);
-    const setAnswerCnt = useSetRecoilState(answerCntState);
 
     const [problemIdx, setProblemIdx] = useRecoilState(problemIdxState);
     const [inCorrectAnimActive, setInCorrectAnimActive] = useState<boolean>(false);
@@ -30,15 +30,16 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
     >(undefined);
 
     const init = () => {
-        setActions(Actions.GAME_PLAY);
         setGameAction(GameActions.STAND_BY);
         setAlienAction(AlienActions.STAND_BY);
+
         setAnswerCnt({
             correct: 0,
             incorrect: 0,
             combo: 0,
         });
 
+        setIncorrectList([]);
         setInCorrectAnimActive(false);
         setComboActive(false);
         setComboCnt(0);

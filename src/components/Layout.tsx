@@ -30,9 +30,9 @@ export const Layout = () => {
                 <GameProvider>
                     {action === "GAME_PLAY" && <Game />}
                     {action === "GAME_FINISH" && <GameResult />}
+                    {action === "RANKING" && <Ranking />}
                 </GameProvider>
                 {action === "INCORRECT" && <IncorrectAnswers />}
-                {action === "RANKING" && <Ranking />}
 
                 {action !== "INCORRECT" && (
                     <PixiButton

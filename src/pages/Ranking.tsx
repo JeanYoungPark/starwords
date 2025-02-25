@@ -19,9 +19,11 @@ import { DateTitle } from "../components/ranking/DateTitle";
 import { Score } from "../components/ranking/Score";
 import { List } from "../components/ranking/List";
 import { Loading } from "../components/ranking/Loading";
+import { GameContext } from "../context/GameContext";
 
 export const Ranking = () => {
     const { resources } = useContext(ResourceContext);
+    const { init } = useContext(GameContext);
     const setAction = useSetRecoilState(actionState);
     const [rankingArr, setRankingArr] = useState<RankingType[][]>([]);
     const [rankingUpdateTime, setRankingUpdateTime] = useState<string>("");
@@ -45,6 +47,7 @@ export const Ranking = () => {
 
     const onTouchEnd = () => {
         setAction(Actions.INTRO);
+        init();
     };
 
     const handlePageBtn = (val: number) => {

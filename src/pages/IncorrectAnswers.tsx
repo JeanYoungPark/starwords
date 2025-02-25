@@ -39,7 +39,7 @@ export const IncorrectAnswers = () => {
                             anchor={0.5}
                             position={[250, CONTENT_HEIGHT / 2]}
                             interactive={true}
-                            onclick={() => setPage((prev) => prev - 1)}
+                            ontouchstart={() => setPage((prev) => prev - 1)}
                         />
                     )}
                     {page < incorrectArr.length - 1 && (
@@ -48,7 +48,7 @@ export const IncorrectAnswers = () => {
                             anchor={0.5}
                             position={[CONTENT_WIDTH - 250, CONTENT_HEIGHT / 2]}
                             interactive={true}
-                            onclick={() => setPage((prev) => prev + 1)}
+                            ontouchstart={() => setPage((prev) => prev + 1)}
                         />
                     )}
                 </>
@@ -73,7 +73,7 @@ export const IncorrectAnswers = () => {
                     defaultTexture={resources.close}
                     sound={sound.find("audioIntoBtn")}
                     interactive={true}
-                    onclick={handleOnClose}
+                    onTouchEnd={handleOnClose}
                 />
             </Sprite>
         </Container>
