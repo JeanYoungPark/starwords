@@ -4,9 +4,9 @@ import { ResultButtonConfig } from "../../types/resourcesType";
 import { PixiButton } from "../common/PixiButton";
 import { sound } from "@pixi/sound";
 import { useRecoilValue, useSetRecoilState } from "recoil";
-import { actionState, gameTypeState } from "../../store/assetsStore";
+import { actionState, AlienActionState, gameActionState, gameTypeState } from "../../store/assetsStore";
 import { GameContext } from "../../context/GameContext";
-import { Actions } from "../../types/actionsType";
+import { Actions, AlienActions, GameActions } from "../../types/actionsType";
 import { ResourceContext } from "../../context/ResourceContext";
 import { answerCntState } from "../../store/gameStore";
 
@@ -14,6 +14,8 @@ export const Buttons = () => {
     const { resources } = useContext(ResourceContext);
     const { init } = useContext(GameContext);
     const setActions = useSetRecoilState(actionState);
+    const setGameAction = useSetRecoilState(gameActionState);
+    const setAlienAction = useSetRecoilState(AlienActionState);
     const answerCnt = useRecoilValue(answerCntState);
     const gameType = useRecoilValue(gameTypeState);
 
@@ -23,6 +25,11 @@ export const Buttons = () => {
 
     const handleRankingBtn = () => {
         setActions(Actions.RANKING);
+    };
+
+    const handleTryAgainBtn = () => {
+        setActions(Actions.GAME_PLAY);
+        init();
     };
 
     const CommonButton = ({ config }: { config: ResultButtonConfig }) => (
@@ -54,12 +61,12 @@ export const Buttons = () => {
         tryAgain01: {
             position: [870, resources.resultBg.height - 50],
             texture: resources.resultTryAgainBtn01,
-            handler: init,
+            handler: handleTryAgainBtn,
         },
         tryAgain02: {
             position: [700, resources.resultBg.height - 50],
             texture: resources.resultTryAgainBtn02,
-            handler: init,
+            handler: handleTryAgainBtn,
         },
     };
 

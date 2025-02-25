@@ -38,9 +38,9 @@ export const postGameData = async ({
 
             apiUrl = `${process.env.REACT_APP_LITTLEFOX_API_ULR}/starwords_api/record/${fuId}/${fcId}/${score}/${correctCnt}/${comboScore}/${incorrectCnt}/0/${classId}`;
         } else {
-            const [fuId, fcId, hwCode] = getRequiredCookies(["fx7 ", "Starwords_fc_id", "hw_code"]);
+            const [fuId, fcId, hwNo] = getRequiredCookies(["fx7 ", "Starwords_fc_id", "hw_no"]);
 
-            apiUrl = `${process.env.REACT_APP_LITTLEFOX_API_ULR}/starwords_api/record/${fuId}/${fcId}/${score}/${correctCnt}/${comboScore}/${incorrectCnt}/${hwCode}`;
+            apiUrl = `${process.env.REACT_APP_LITTLEFOX_API_ULR}/starwords_api/record/${fuId}/${fcId}/${score}/${correctCnt}/${comboScore}/${incorrectCnt}/${hwNo}`;
         }
     }
 
