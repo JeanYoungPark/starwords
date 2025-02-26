@@ -36,8 +36,10 @@ export const Gauge = ({ timeLeft, timeSpeed }: props) => {
             if (gauge) {
                 gauge.x -= timeSpeed.current * delta;
 
-                if (timeLeft.current === 10) {
+                if (timeLeft.current <= 10) {
                     gauge.texture = resources.gauge2;
+                } else {
+                    gauge.texture = resources.gauge;
                 }
             }
         }
