@@ -3,6 +3,7 @@ export enum Actions {
     INTRO = "INTRO",
     GUIDE = "GUIDE",
     RANKING = "RANKING",
+    RANKING_END = "RANKING_END",
     GAME_PLAY = "GAME_PLAY",
     GAME_FINISH = "GAME_FINISH",
     INCORRECT = "INCORRECT",

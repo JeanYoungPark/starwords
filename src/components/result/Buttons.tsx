@@ -1,12 +1,12 @@
 import { Container } from "@pixi/react";
-import React, { useContext } from "react";
+import { useContext } from "react";
 import { ResultButtonConfig } from "../../types/resourcesType";
 import { PixiButton } from "../common/PixiButton";
 import { sound } from "@pixi/sound";
 import { useRecoilValue, useSetRecoilState } from "recoil";
-import { actionState, AlienActionState, gameActionState, gameTypeState } from "../../store/assetsStore";
+import { actionState, gameTypeState } from "../../store/assetsStore";
 import { GameContext } from "../../context/GameContext";
-import { Actions, AlienActions, GameActions } from "../../types/actionsType";
+import { Actions } from "../../types/actionsType";
 import { ResourceContext } from "../../context/ResourceContext";
 import { answerCntState } from "../../store/gameStore";
 
@@ -14,8 +14,6 @@ export const Buttons = () => {
     const { resources } = useContext(ResourceContext);
     const { init } = useContext(GameContext);
     const setActions = useSetRecoilState(actionState);
-    const setGameAction = useSetRecoilState(gameActionState);
-    const setAlienAction = useSetRecoilState(AlienActionState);
     const answerCnt = useRecoilValue(answerCntState);
     const gameType = useRecoilValue(gameTypeState);
 
@@ -24,7 +22,7 @@ export const Buttons = () => {
     };
 
     const handleRankingBtn = () => {
-        setActions(Actions.RANKING);
+        setActions(Actions.RANKING_END);
     };
 
     const handleTryAgainBtn = () => {

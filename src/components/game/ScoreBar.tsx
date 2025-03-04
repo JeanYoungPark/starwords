@@ -38,7 +38,8 @@ export const ScoreBar = memo(() => {
         clearTimeout(comboTimeoutId.current);
         comboSec.current = 0;
 
-        timeLeft.current = gameData.leftTime;
+        timeLeft.current = 10;
+        // timeLeft.current = gameData.leftTime;
         timeSpeed.current = resources.gauge.width / gameData.leftTime / 60;
         setGameAction(GameActions.START);
     };

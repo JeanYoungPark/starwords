@@ -1,5 +1,5 @@
 import { Container } from "@pixi/react";
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { useRecoilValue } from "recoil";
 
 import { ResourceContext } from "../context/ResourceContext";
@@ -15,6 +15,7 @@ import { Ranking } from "../pages/Ranking";
 import { GameProvider } from "../context/GameProvider";
 import { IncorrectAnswers } from "../pages/IncorrectAnswers";
 import { sound } from "@pixi/sound";
+import { Actions } from "../types/actionsType";
 
 export const Layout = () => {
     const { resources, gameData, contentsData } = useContext(ResourceContext);
@@ -25,16 +26,16 @@ export const Layout = () => {
     return (
         <Container>
             <>
-                {action === "INTRO" && <Intro />}
-                {action === "GUIDE" && <Guide />}
+                {action === Actions.INTRO && <Intro />}
+                {action === Actions.GUIDE && <Guide />}
                 <GameProvider>
-                    {action === "GAME_PLAY" && <Game />}
-                    {action === "GAME_FINISH" && <GameResult />}
-                    {action === "RANKING" && <Ranking />}
+                    {action === Actions.GAME_PLAY && <Game />}
+                    {action === Actions.GAME_FINISH && <GameResult />}
+                    {(action === Actions.RANKING || action === Actions.RANKING_END) && <Ranking />}
                 </GameProvider>
-                {action === "INCORRECT" && <IncorrectAnswers />}
+                {action === Actions.INCORRECT && <IncorrectAnswers />}
 
-                {action !== "INCORRECT" && (
+                {action !== Actions.INCORRECT && (
                     <PixiButton
                         name='close'
                         position={[CONTENT_WIDTH - 60, 70]}
