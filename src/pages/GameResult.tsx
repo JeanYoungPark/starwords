@@ -31,6 +31,7 @@ export const GameResult = () => {
 
     const getUserInfoData = async () => {
         const userData = await getUserData();
+        console.log(userData)
         setUserData(userData);
     };
 
@@ -39,17 +40,17 @@ export const GameResult = () => {
         sound.play("result");
 
         // TODO: 주석해제 후 post 되는지 확인
-        const sendResult = async () => {
-            const score = answerCnt.correct * 100 + answerCnt.combo * 200;
-            const correctCnt = answerCnt.correct;
-            const incorrectCnt = answerCnt.incorrect;
-            const comboScore = answerCnt.combo * 200;
-            const res = await postGameData({ score, correctCnt, comboScore, incorrectCnt });
-            setRankNo(res.rank_no);
-        };
+        // const sendResult = async () => {
+        //     const score = answerCnt.correct * 100 + answerCnt.combo * 200;
+        //     const correctCnt = answerCnt.correct;
+        //     const incorrectCnt = answerCnt.incorrect;
+        //     const comboScore = answerCnt.combo * 200;
+        //     const res = await postGameData({ score, correctCnt, comboScore, incorrectCnt });
+        //     setRankNo(res.rank_no);
+        // };
 
         if (gameType !== "word_master") getUserInfoData();
-        sendResult();
+        // sendResult();
     }, []);
 
     useEffect(() => {

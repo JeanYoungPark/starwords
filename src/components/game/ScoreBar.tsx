@@ -25,13 +25,19 @@ export const ScoreBar = memo(() => {
 
     const secTimeoutId = useRef<NodeJS.Timeout | undefined>(undefined);
     const totalTimeoutId = useRef<NodeJS.Timeout | undefined>(undefined);
+    const comboTimeoutId = useRef<NodeJS.Timeout | undefined>(undefined);
 
     const timeLeft = useRef(60);
     const timeSpeed = useRef(0);
+    const comboSec = useRef<number>(0);
 
     const textRef = useRef<PixiRef<typeof Text>>(null);
 
     const timeSetting = () => {
+        clearTimeout(totalTimeoutId.current);
+        clearTimeout(comboTimeoutId.current);
+        comboSec.current = 0;
+
         timeLeft.current = gameData.leftTime;
         timeSpeed.current = resources.gauge.width / gameData.leftTime / 60;
         setGameAction(GameActions.START);
@@ -109,7 +115,15 @@ export const ScoreBar = memo(() => {
             </Sprite>
 
             {COMBO_TEXT_POSITION.map((data, i) => {
-                return <Container key={i}>{i + 1 === MAX_COMBO_NUMBER ? <ComboMaxIcon data={data} /> : <ComboIcon i={i} data={data} />}</Container>;
+                return (
+                    <Container key={i}>
+                        {i + 1 === MAX_COMBO_NUMBER ? (
+                            <ComboMaxIcon data={data} comboTimeoutId={comboTimeoutId} comboSec={comboSec} />
+                        ) : (
+                            <ComboIcon i={i} data={data} />
+                        )}
+                    </Container>
+                );
             })}
 
             <Text ref={textRef} position={[1230, 940]} style={TIME_TEXT_STYLE} />

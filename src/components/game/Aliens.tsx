@@ -11,7 +11,7 @@ export const Aliens = memo(({ problems }: { problems: { item: WordType; aliens: 
     const aliensMovePosition = useRecoilValue(alienPositionState);
 
     const chooseDestroyIdx = () => {
-        if (!comboActive && alienRemoveNum) {
+        if (!comboActive && !isNaN(alienRemoveNum)) {
             setAlienRemoveNum(NaN);
             return;
         }
