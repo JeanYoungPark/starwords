@@ -20,6 +20,14 @@ export const AlienActionState = atom<AlienActions>({
 });
 
 /**
+ * 국가 코드
+ */
+export const langCodeState = atom<string | null>({
+    key: "langCodeState",
+    default: null,
+});
+
+/**
  * 기기 정보
  */
 export const deviceOsState = atom<String | null>({

@@ -19,6 +19,9 @@ const assets = [
     { alias: "soundOn", src: `${iconImgPath}sound_on.png` },
     { alias: "soundOff", src: `${iconImgPath}sound_off.png` },
     { alias: "soundText", src: `${iconImgPath}sound_text.png` },
+    { alias: "soundTextJp", src: `${iconImgPath}sound_text_jp.png` },
+    { alias: "soundTextCn", src: `${iconImgPath}sound_text_cn.png` },
+    { alias: "soundTextTw", src: `${iconImgPath}sound_text_tw.png` },
     { alias: "close", src: `${iconImgPath}close.png` },
     { alias: "back", src: `${iconImgPath}back.png` },
     { alias: "reload", src: `${iconImgPath}reload.png` },
@@ -38,6 +41,13 @@ const assets = [
 
     //guide
     { alias: "guide", src: `${guideImgPath}guide.png` },
+    { alias: "guideJp", src: `${guideImgPath}guide_jp.png` },
+    { alias: "guideCn", src: `${guideImgPath}guide_cn.png` },
+    { alias: "guideTw", src: `${guideImgPath}guide_tw.png` },
+    { alias: "guideWordMaster", src: `${guideImgPath}guide_word_master.png` },
+    { alias: "guideWordMasterJp", src: `${guideImgPath}guide_word_master_jp.png` },
+    { alias: "guideWordMasterCn", src: `${guideImgPath}guide_word_master_cn.png` },
+    { alias: "guideWordMasterTw", src: `${guideImgPath}guide_word_master_tw.png` },
     { alias: "planet03", src: `${guideImgPath}planet_01.png` },
     { alias: "planet04", src: `${guideImgPath}planet_02.png` },
     { alias: "planet05", src: `${guideImgPath}planet_03.png` },

@@ -1,10 +1,10 @@
 import { Container, Sprite, Text } from "@pixi/react";
 import { useContext, useEffect, useState } from "react";
 import { TextStyle } from "pixi.js";
-import { useSetRecoilState } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 
 import { ResourceContext } from "../context/ResourceContext";
-import { actionState } from "../store/assetsStore";
+import { actionState, gameTypeState } from "../store/assetsStore";
 import { Actions } from "../types/actionsType";
 import { PixiButton } from "../components/common/PixiButton";
 import { CONTENT_HEIGHT, CONTENT_WIDTH } from "../constants/commonConstants";
@@ -22,7 +22,8 @@ import { Loading } from "../components/ranking/Loading";
 
 export const Ranking = () => {
     const { resources } = useContext(ResourceContext);
-    const setAction = useSetRecoilState(actionState);
+    const gameType = useRecoilValue(gameTypeState);
+    const [action, setAction] = useRecoilState(actionState);
     const [rankingArr, setRankingArr] = useState<RankingType[][]>([]);
     const [rankingUpdateTime, setRankingUpdateTime] = useState<string>("");
     const [rankingCode, setRankingCode] = useState<number>(NaN);
@@ -44,7 +45,11 @@ export const Ranking = () => {
     };
 
     const onTouchEnd = () => {
-        setAction(Actions.INTRO);
+        if(action === Actions.RANKING){
+            setAction(Actions.INTRO);
+        }else{
+            setAction(Actions.GAME_FINISH);
+        }
     };
 
     const handlePageBtn = (val: number) => {
@@ -69,16 +74,18 @@ export const Ranking = () => {
                 </Container>
             </Sprite>
 
-            <Text
-                text={`초기화까지 ${getTimeRemaining(rankingUpdateTime)} 남음`}
-                position={[220, 970]}
-                style={
-                    new TextStyle({
-                        fontSize: 20,
-                        fill: "rgba(172, 169, 182)",
-                    })
-                }
-            />
+            {gameType !== 'class' && (
+                <Text
+                    text={`초기화까지 ${getTimeRemaining(rankingUpdateTime)} 남음`}
+                    position={[220, 970]}
+                    style={
+                        new TextStyle({
+                            fontSize: 20,
+                            fill: "rgba(172, 169, 182)",
+                        })
+                    }
+                />
+            )}
 
             <Buttons rankingArrLength={rankingArr.length} page={page} handlePageBtn={handlePageBtn} />
             <PixiButton name='back' position={[60, 70]} defaultTexture={resources.back} sound={sound.find("audioIntoBtn")} onTouchEnd={onTouchEnd} />

@@ -1,5 +1,5 @@
 import { Container, Sprite, Text } from "@pixi/react";
-import React, { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { ResourceContext } from "../../context/ResourceContext";
 import { numberComma } from "../../util";
 import { RANKING_SCORE_KR_TEXT_STYLE, RANKING_SCORE_TEXT_STYLE } from "../../constants/rankingConstants";

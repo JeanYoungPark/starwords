@@ -1,8 +1,8 @@
 import { Container, PixiRef, Sprite, Text } from "@pixi/react";
 import { memo, useContext, useEffect, useRef } from "react";
 import { ResourceContext } from "../../context/ResourceContext";
-import { useRecoilState, useSetRecoilState } from "recoil";
-import { answerCntState } from "../../store/gameStore";
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
+import { answerCntState, problemIdxState, rankState } from "../../store/gameStore";
 import { COMBO_TEXT_POSITION, MAX_COMBO_NUMBER } from "../../constants/commonConstants";
 import { ComboMaxIcon } from "./ComboMaxIcon";
 import { ComboIcon } from "./ComboIcon";
@@ -14,12 +14,15 @@ import { SCORE_TEXT_STYLE, TIME_TEXT_STYLE } from "../../constants/gameConstants
 import { useIncorrectList } from "../../hooks/game/useIncorrectList";
 import { numberComma } from "../../util";
 import { sound } from "@pixi/sound";
+import { postGameData } from "../../apis/postData";
 
 export const ScoreBar = memo(() => {
     const { resources, gameData } = useContext(ResourceContext);
     const { sec, comboActive, setInCorrectAnimActive, setAnimActive } = useContext(GameContext);
     const { handleIncorrectList } = useIncorrectList();
+    const problemIdx = useRecoilValue(problemIdxState)
     const setAction = useSetRecoilState(actionState);
+    const setRankNo = useSetRecoilState(rankState);
     const [answerCnt, setAnswerCnt] = useRecoilState(answerCntState);
     const [gameAction, setGameAction] = useRecoilState(gameActionState);
 
@@ -59,6 +62,15 @@ export const ScoreBar = memo(() => {
         sound.play("gameIncorrect");
     };
 
+    const sendResult = async () => {
+        const score = answerCnt.correct * 100 + answerCnt.combo * 200;
+        const correctCnt = answerCnt.correct;
+        const incorrectCnt = answerCnt.incorrect;
+        const comboScore = answerCnt.combo * 200;
+        const res = await postGameData({ score, correctCnt, comboScore, incorrectCnt });
+        setRankNo(res.rank_no);
+    };
+
     useEffect(() => {
         if (gameAction === GameActions.START) {
             const eachSecCheck = () => {
@@ -77,6 +89,7 @@ export const ScoreBar = memo(() => {
                     clearTimeout(secTimeoutId.current);
                     clearTimeout(totalTimeoutId.current);
 
+                    sendResult();
                     setAction(Actions.GAME_FINISH);
                 } else {
                     timeLeft.current = Math.max(timeLeft.current - 1, 0);

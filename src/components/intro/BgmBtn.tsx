@@ -1,5 +1,5 @@
 import { useContext, useEffect, useRef } from "react";
-import { useRecoilState } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import { sound } from "@pixi/sound";
 import { Sprite } from "@pixi/react";
 
@@ -7,11 +7,20 @@ import { PixiButton } from "../common/PixiButton";
 import { ResourceContext } from "../../context/ResourceContext";
 import { BGM_BUTTON } from "../../constants/introConstants";
 import { soundMuteState } from "../../store/gameStore";
+import { langCodeState } from "../../store/assetsStore";
 
 export const BgmBtn = () => {
     const { resources } = useContext(ResourceContext);
     const [soundState, setSoundState] = useRecoilState(soundMuteState);
+    const langCode = useRecoilValue(langCodeState);
     const isInitialBgmSet = useRef(false);
+
+    const getTexture = () => {
+        if(langCode === 'jp') return resources.soundTextJp;
+        if(langCode === 'cn') return resources.soundTextCn;
+        if(langCode === 'tw' || langCode === 'hk') return resources.soundTextTw;
+        return resources.soundText;
+    }
 
     const handleSoundToggle = () => {
         setSoundState((prev) => {
@@ -54,7 +63,7 @@ export const BgmBtn = () => {
             />
             <Sprite
                 name='soundText'
-                texture={resources.soundText}
+                texture={getTexture()}
                 position={[BGM_BUTTON.TEXT.POSITION.x, BGM_BUTTON.TEXT.POSITION.y]}
                 scale={BGM_BUTTON.TEXT.SCALE}
                 visible={!soundState}

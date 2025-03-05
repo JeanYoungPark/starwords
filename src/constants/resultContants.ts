@@ -28,3 +28,10 @@ export const INCORRECT_EN_TEXT_STYLE = new TextStyle({
     fontFamily: "NotoSans-bold",
     fontSize: 35,
 });
+
+export const INCORRECT_KO_TEXT_STYLE = new TextStyle({
+    fontFamily: "NotoSans-medium",
+    fontSize: 25,
+    wordWrap: true,
+    wordWrapWidth: 700,
+});

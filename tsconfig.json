@@ -1,25 +1,44 @@
 {
   "compilerOptions": {
     "target": "es5",
+    
+    /////////// module ///////////
+    "module": "esnext",
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "isolatedModules": true,
+    
+    /////////// React ///////////
+    "jsx": "react-jsx",
+    
+    /////////// JS ///////////
+    "allowJs": true,
+    
+    /////////// Lint ///////////
+    "strict": true,
+    // "allowUnusedLabels": true,
+    // "noUnusedLocals": true,
+    // "noUnusedParameters": true,
+    "forceConsistentCasingInFileNames": true,
+    "noFallthroughCasesInSwitch": true,
+    
+    /////////// edit outfile ///////////
+    "noEmit": true,
+    // "noEmitOnError": true,
+    
+    /////////// more spec ///////////
     "lib": [
       "dom",
       "dom.iterable",
       "esnext"
     ],
-    "allowJs": true,
+    
+    /////////// etc ///////////
     "skipLibCheck": true,
-    "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true,
-    "strict": true,
-    "forceConsistentCasingInFileNames": true,
-    "noFallthroughCasesInSwitch": true,
-    "module": "esnext",
-    "moduleResolution": "node",
-    "resolveJsonModule": true,
-    "isolatedModules": true,
-    "noEmit": true,
-    "jsx": "react-jsx"
   },
+
   "include": [
     "src"
   ]

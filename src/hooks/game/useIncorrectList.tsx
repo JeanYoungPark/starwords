@@ -1,16 +1,16 @@
 import { useContext } from "react";
-import { useRecoilValue, useSetRecoilState } from "recoil";
+import { useRecoilCallback, useSetRecoilState } from "recoil";
 import { incorrectListState, problemIdxState } from "../../store/gameStore";
 import { ResourceContext } from "../../context/ResourceContext";
 
 export const useIncorrectList = () => {
     const { gameData } = useContext(ResourceContext);
-    const problemIdx = useRecoilValue(problemIdxState);
     const setIncorrectList = useSetRecoilState(incorrectListState);
 
-    const handleIncorrectList = () => {
-        const answerData = gameData.word_arr[problemIdx];
-
+    const handleIncorrectList = useRecoilCallback(({snapshot}) => async() => {
+        const currentProblemIdx = await snapshot.getPromise(problemIdxState);
+        const answerData = gameData.word_arr[currentProblemIdx];
+        
         setIncorrectList((prev) => {
             const updatedList = prev.map((item) => {
                 const key = Object.keys(item)[0];
@@ -42,6 +42,7 @@ export const useIncorrectList = () => {
 
             return updatedList;
         });
-    };
+    }, []);
+
     return { handleIncorrectList };
 };

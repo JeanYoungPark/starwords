@@ -1,12 +1,14 @@
-import { Container, PixiRef, Sprite } from "@pixi/react";
+import { Container, PixiRef, Sprite, Text } from "@pixi/react";
 import { useEffect, useRef, useState } from "react";
 import { ProblemType } from "../../types/resourcesType";
 import { AlienDestroyAnim } from "./AlienDestroyAnim";
 import { AlienContainer } from "./AlienContainer";
 import { useAlienAnimation } from "../../hooks/game/useAlienAnimation";
-import { useRecoilState } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import { AlienActionState } from "../../store/assetsStore";
 import { AlienActions } from "../../types/actionsType";
+import { isTestState } from "../../store/gameStore";
+import { TextStyle } from "pixi.js";
 
 interface AlienProps {
     idx: number;
@@ -15,6 +17,7 @@ interface AlienProps {
 }
 
 export const Alien = ({ idx, position, problem }: AlienProps) => {
+    const isTest = useRecoilValue(isTestState);
     const [alienAction, setAlienAction] = useRecoilState(AlienActionState);
     const [correctAnimActive, setCorrectAnimActive] = useState<boolean>(false);
 
@@ -64,6 +67,12 @@ export const Alien = ({ idx, position, problem }: AlienProps) => {
                 setCorrectAnimActive={setCorrectAnimActive}
                 alienAnimActive={alienAnimActive}
             />
+            {isTest && problem.correct === 'Y' && (
+                <Text text='정답' position={[-80,-70]} anchor={0.5} style={new TextStyle({
+                    fontSize: 30,
+                    fill: "rgba(256,256,256)",
+                })}/>
+            )}
             <AlienDestroyAnim idx={idx} correctAnimActive={correctAnimActive} setCorrectAnimActive={setCorrectAnimActive} />
         </Container>
     );

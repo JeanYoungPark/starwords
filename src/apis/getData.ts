@@ -78,8 +78,6 @@ export const getContentsData = async () => {
                 langCode === "kr" ? process.env.REACT_APP_LITTLEFOX_API_ULR : `${process.env.REACT_APP_LITTLEFOX_GLOBAL_API_ULR}/${langCode}`;
 
             apiUrl = `${baseUrl}/starwords_h5_v3_api/contents_info/${wordMasterSeq}/${stage}`;
-
-            console.log(apiUrl);
         } else {
             const fcIdKey = gameType === "class" ? "fc_id" : "Starwords_fc_id";
             const [fcId, fuId] = getRequiredCookies([fcIdKey, "fx7"]);

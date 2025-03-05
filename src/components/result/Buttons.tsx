@@ -22,7 +22,7 @@ export const Buttons = () => {
     };
 
     const handleRankingBtn = () => {
-        setActions(Actions.RANKING);
+        setActions(Actions.RANKING_END);
     };
 
     const CommonButton = ({ config }: { config: ResultButtonConfig }) => (

@@ -4,7 +4,7 @@ import { useRecoilValue } from "recoil";
 
 import { ResourceContext } from "../context/ResourceContext";
 import { gameTypeState } from "../store/assetsStore";
-import { answerCntState } from "../store/gameStore";
+import { answerCntState, rankState } from "../store/gameStore";
 import {
     RESULT_CORRECT_COMBO_TEXT_STYLE,
     RESULT_CORRECT_TEXT_STYLE,
@@ -14,7 +14,6 @@ import {
 import { CONTENT_HEIGHT, CONTENT_WIDTH } from "../constants/commonConstants";
 import { numberComma } from "../util";
 import { Resource, Texture } from "pixi.js";
-import { postGameData } from "../apis/postData";
 import { sound } from "@pixi/sound";
 import { getUserData } from "../apis/getData";
 import { UserDataType } from "../types/resourcesType";
@@ -25,13 +24,12 @@ export const GameResult = () => {
     const { resources } = useContext(ResourceContext);
     const answerCnt = useRecoilValue(answerCntState);
     const gameType = useRecoilValue(gameTypeState);
+    const rankNo = useRecoilValue(rankState);
     const [resultImg, setResultImg] = useState<Texture<Resource>>(resources.tryAgain);
-    const [rankNo, setRankNo] = useState<string>("");
     const [userData, setUserData] = useState<UserDataType | null>(null);
 
     const getUserInfoData = async () => {
         const userData = await getUserData();
-        console.log(userData)
         setUserData(userData);
     };
 
@@ -39,18 +37,7 @@ export const GameResult = () => {
         sound.stop("gameBgm");
         sound.play("result");
 
-        // TODO: 주석해제 후 post 되는지 확인
-        // const sendResult = async () => {
-        //     const score = answerCnt.correct * 100 + answerCnt.combo * 200;
-        //     const correctCnt = answerCnt.correct;
-        //     const incorrectCnt = answerCnt.incorrect;
-        //     const comboScore = answerCnt.combo * 200;
-        //     const res = await postGameData({ score, correctCnt, comboScore, incorrectCnt });
-        //     setRankNo(res.rank_no);
-        // };
-
         if (gameType !== "word_master") getUserInfoData();
-        // sendResult();
     }, []);
 
     useEffect(() => {
@@ -90,7 +77,7 @@ export const GameResult = () => {
                     />
 
                     <Text
-                        text={Number(rankNo) > 0 ? `${rankNo} 위` : "-"}
+                        text={rankNo && Number(rankNo) > 0 ? `${rankNo} 위` : "-"}
                         style={RESULT_RANK_TEXT_STYLE}
                         position={[resources.resultBg.width - 590, 380]}
                         anchor={0.5}

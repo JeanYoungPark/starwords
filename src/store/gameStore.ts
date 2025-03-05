@@ -1,11 +1,19 @@
 import { atom } from "recoil";
 import { AlienMovePositionType, IncorrectType } from "../types/resourcesType";
 
+// 테스트 환경 여부 확인
+export const isTestState = atom<boolean>({
+    key: "isTestState",
+    default: false
+})
+
+// 문제 인덱스
 export const problemIdxState = atom<number>({
     key: "problemIdx",
     default: -1,
 });
 
+// 외계인 위치 저장
 export const alienPositionState = atom<AlienMovePositionType[]>({
     key: "alienPosition",
     default: [],
@@ -27,7 +35,14 @@ export const incorrectListState = atom<IncorrectType[]>({
     default: [],
 });
 
+// 음소거 여부 확인
 export const soundMuteState = atom<boolean>({
     key: "soundMuteState",
     default: true,
 });
+
+// 랭킹
+export const rankState = atom<string | null>({
+    key: "rankState",
+    default: null
+})
