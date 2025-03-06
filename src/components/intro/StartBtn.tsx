@@ -1,5 +1,5 @@
 import { useContext, useEffect, useRef } from "react";
-import { Container, PixiRef } from "@pixi/react";
+import { Container, PixiRef, Text } from "@pixi/react";
 import { useSetRecoilState } from "recoil";
 import gsap from "gsap";
 

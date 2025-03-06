@@ -1,6 +1,6 @@
 import { useContext, useEffect, useRef } from "react";
 import { useSetRecoilState } from "recoil";
-import { Container, PixiRef } from "@pixi/react";
+import { Container, PixiRef, Text } from "@pixi/react";
 import gsap from "gsap";
 
 import { PixiButton } from "../common/PixiButton";

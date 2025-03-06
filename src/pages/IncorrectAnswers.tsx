@@ -74,6 +74,7 @@ export const IncorrectAnswers = () => {
                     sound={sound.find("audioIntoBtn")}
                     interactive={true}
                     onclick={handleOnClose}
+                    ontouchend={handleOnClose}
                 />
             </Sprite>
         </Container>
