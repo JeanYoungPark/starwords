@@ -40,7 +40,8 @@ export const IncorrectAnswers = () => {
                             position={[250, CONTENT_HEIGHT / 2]}
                             interactive={true}
                             onclick={() => setPage((prev) => prev - 1)}
-                        />
+                            ontouchend={() => setPage((prev) => prev - 1)}
+                            />
                     )}
                     {page < incorrectArr.length - 1 && (
                         <Sprite
@@ -49,6 +50,7 @@ export const IncorrectAnswers = () => {
                             position={[CONTENT_WIDTH - 250, CONTENT_HEIGHT / 2]}
                             interactive={true}
                             onclick={() => setPage((prev) => prev + 1)}
+                            ontouchend={() => setPage((prev) => prev + 1)}
                         />
                     )}
                 </>
