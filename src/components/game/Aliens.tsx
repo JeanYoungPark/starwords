@@ -1,14 +1,13 @@
 import { memo, useContext, useEffect } from "react";
-import { useRecoilValue } from "recoil";
 import { AlienMovePositionType, ProblemType, WordType } from "../../types/resourcesType";
-import { alienPositionState } from "../../store/gameStore";
 import { destroyProblemIdx } from "../../util";
 import { Alien } from "./Alien";
 import { GameContext } from "../../context/GameContext";
+import { ResourceContext } from "../../context/ResourceContext";
 
 export const Aliens = memo(({ problems }: { problems: { item: WordType; aliens: ProblemType[] } }) => {
     const { comboActive, comboDestroyNum, alienRemoveNum, setAlienRemoveNum } = useContext(GameContext);
-    const aliensMovePosition = useRecoilValue(alienPositionState);
+    const { aliensPosition } = useContext(ResourceContext);
 
     const chooseDestroyIdx = () => {
         if (!comboActive && !isNaN(alienRemoveNum)) {
@@ -28,7 +27,7 @@ export const Aliens = memo(({ problems }: { problems: { item: WordType; aliens: 
 
     return (
         <>
-            {aliensMovePosition?.map((data: AlienMovePositionType, idx: number) => {
+            {aliensPosition?.map((data: AlienMovePositionType, idx: number) => {
                 if (alienRemoveNum === idx) return null;
 
                 return <Alien key={`alien-${idx}-${problems.item.word_en}`} idx={idx} position={data} problem={problems.aliens[idx]} />;

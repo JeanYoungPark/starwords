@@ -3,7 +3,7 @@ import { Assets, Texture } from "pixi.js";
 import FontFaceObserver from "fontfaceobserver";
 import { useRecoilState, useSetRecoilState } from "recoil";
 import { WordType } from "../types/resourcesType";
-import { alienPositionState, problemIdxState } from "../store/gameStore";
+import { problemIdxState } from "../store/gameStore";
 import { actionState } from "../store/assetsStore";
 import { getContentsData, getGameData } from "../apis/getData";
 import { Actions } from "../types/actionsType";
@@ -17,9 +17,8 @@ export const useStarwords = () => {
     const setProblemIdx = useSetRecoilState(problemIdxState);
 
     const [resources, setResources] = useState<Texture>();
-    const [gameData, setGameData] = useState(undefined);
-    const [contentsData, setContentsData] = useState(undefined);
-    const setAliensMovePosition = useSetRecoilState(alienPositionState);
+    const [gameData, setGameData] = useState<any>(undefined);
+    const [contentsData, setContentsData] = useState<any>([undefined]);
 
     const loadFonts = async () => {
         fonts.map((font: { family: string; url: string }) => {
@@ -52,25 +51,6 @@ export const useStarwords = () => {
         }
     };
 
-    const contentDataParse = ({ level }: { level: string }) => {
-        if (level >= "LV06") {
-            return [
-                { x: -453, y: -75, direction_x: "left", direction_y: "top" },
-                { x: 0, y: -75, direction_x: "center", direction_y: "top" },
-                { x: 453, y: -75, direction_x: "right", direction_y: "top" },
-                { x: -268, y: 214, direction_x: "left", direction_y: "bottom" },
-                { x: 268, y: 214, direction_x: "right", direction_y: "bottom" },
-            ];
-        } else {
-            return [
-                { x: -268, y: -75, direction_x: "left", direction_y: "top" },
-                { x: 268, y: -75, direction_x: "right", direction_y: "top" },
-                { x: -268, y: 214, direction_x: "left", direction_y: "bottom" },
-                { x: 268, y: 214, direction_x: "right", direction_y: "bottom" },
-            ];
-        }
-    };
-
     const loadData = async () => {
         // game data
         const gameRes = await getGameData();
@@ -86,10 +66,6 @@ export const useStarwords = () => {
 
         // content data
         const contentsRes = await getContentsData();
-        if (!contentsRes.level_code) throw new Error("content data를 가져오지 못했습니다.");
-        const aliensPosition = contentDataParse({ level: contentsRes.level_code });
-
-        setAliensMovePosition(aliensPosition);
         setContentsData(contentsRes);
     };
 

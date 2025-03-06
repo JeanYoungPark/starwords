@@ -13,12 +13,6 @@ export const problemIdxState = atom<number>({
     default: -1,
 });
 
-// 외계인 위치 저장
-export const alienPositionState = atom<AlienMovePositionType[]>({
-    key: "alienPosition",
-    default: [],
-});
-
 // 정답 갯수
 export const answerCntState = atom<{ correct: number; incorrect: number; combo: number }>({
     key: "answerCntState",

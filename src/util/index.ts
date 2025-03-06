@@ -47,6 +47,9 @@ export const numberComma = (x: number) => {
     return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 };
 
+/**
+ * ranking text
+ */
 export const getWeekText = () => {
     const date = new Date();
     const year = date.getFullYear();
@@ -59,6 +62,9 @@ export const getWeekText = () => {
     return `${year}년 ${month + 1}월 ${week}주차`;
 };
 
+/**
+ * ranking 남은시간 text
+ */
 export const getTimeRemaining = (updateDate: string) => {
     const now = new Date();
     const targetDate = new Date(updateDate);
@@ -69,4 +75,26 @@ export const getTimeRemaining = (updateDate: string) => {
     const minutes = Math.floor((timeDiff / 1000) % 24);
 
     return `${days}일 ${hours}시간 ${minutes}분 남음`;
+};
+
+/**
+ * 외계인 위치 구하기
+ */
+export const alienPositionParse = ({ level }: { level: string }) => {
+    if (level >= "LV06") {
+        return [
+            { x: -453, y: -75, direction_x: "left", direction_y: "top" },
+            { x: 0, y: -75, direction_x: "center", direction_y: "top" },
+            { x: 453, y: -75, direction_x: "right", direction_y: "top" },
+            { x: -268, y: 214, direction_x: "left", direction_y: "bottom" },
+            { x: 268, y: 214, direction_x: "right", direction_y: "bottom" },
+        ];
+    } else {
+        return [
+            { x: -268, y: -75, direction_x: "left", direction_y: "top" },
+            { x: 268, y: -75, direction_x: "right", direction_y: "top" },
+            { x: -268, y: 214, direction_x: "left", direction_y: "bottom" },
+            { x: 268, y: 214, direction_x: "right", direction_y: "bottom" },
+        ];
+    }
 };

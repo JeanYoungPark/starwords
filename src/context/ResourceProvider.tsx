@@ -1,10 +1,11 @@
-import { ReactNode, useEffect } from "react";
+import { ReactNode, useEffect, useState } from "react";
 import { ResourceContext } from "./ResourceContext";
 import { useStarwords } from "../hooks/useStarwords";
 import { useSetRecoilState } from "recoil";
 import { deviceOsState, gameTypeState, langCodeState } from "../store/assetsStore";
-import { getCookie } from "../util";
+import { alienPositionParse, getCookie } from "../util";
 import { isTestState, soundMuteState } from "../store/gameStore";
+import { AlienMovePositionType } from "../types/resourcesType";
 
 export const ResourceProvider = ({ children }: { children: ReactNode }) => {
     const { resources, gameData, contentsData } = useStarwords();
@@ -13,6 +14,7 @@ export const ResourceProvider = ({ children }: { children: ReactNode }) => {
     const setLangCode = useSetRecoilState(langCodeState);
     const setSoundMuteState = useSetRecoilState(soundMuteState);
     const setIsTest = useSetRecoilState(isTestState);
+    const [aliensPosition, setAliensPosition] = useState<AlienMovePositionType[]>([]);
 
     const getCookieAndSet = () => {
         const os = getCookie("device_os");
@@ -29,9 +31,15 @@ export const ResourceProvider = ({ children }: { children: ReactNode }) => {
         setIsTest(isTest === 'Y');
     };
 
+    const defineAlienPosition = () => {
+        const aliensPosition = alienPositionParse({ level: contentsData.level_code });
+        setAliensPosition(aliensPosition);
+    }
+
     useEffect(() => {
         getCookieAndSet();
+        defineAlienPosition();
     }, []);
 
-    return <ResourceContext.Provider value={{ resources, gameData, contentsData }}>{children}</ResourceContext.Provider>;
+    return <ResourceContext.Provider value={{ resources, gameData, contentsData, aliensPosition }}>{children}</ResourceContext.Provider>;
 };

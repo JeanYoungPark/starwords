@@ -3,7 +3,7 @@ import { useContext } from "react";
 import { useRecoilValue } from "recoil";
 
 import { ResourceContext } from "../context/ResourceContext";
-import { actionState } from "../store/assetsStore";
+import { actionState, deviceOsState } from "../store/assetsStore";
 import { Intro } from "../pages/Intro";
 import { Guide } from "../pages/Guide";
 import { Loading } from "./Loading";
@@ -16,10 +16,12 @@ import { GameProvider } from "../context/GameProvider";
 import { IncorrectAnswers } from "../pages/IncorrectAnswers";
 import { sound } from "@pixi/sound";
 import { Actions } from "../types/actionsType";
+import { webviewClose } from "../util/interface";
 
 export const Layout = () => {
     const { resources, gameData, contentsData } = useContext(ResourceContext);
     const action = useRecoilValue(actionState);
+    const os = useRecoilValue(deviceOsState);
 
     if (!resources || !gameData || !contentsData) return <Loading />;
 
@@ -41,6 +43,8 @@ export const Layout = () => {
                         position={[CONTENT_WIDTH - 60, 70]}
                         defaultTexture={resources.close}
                         sound={sound.find("audioIntoBtn")}
+                        onclick={() => os && webviewClose(os)}
+                        ontouchend={() =>  os && webviewClose(os)}
                     />
                 )}
             </>
