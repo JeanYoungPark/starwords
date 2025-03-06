@@ -20,6 +20,7 @@ export const ReloadBtn = () => {
             sound={sound.find("audioIntoBtn")}
             interactive={true}
             onclick={onReload}
-        />
+            ontouchend={onReload}
+            />
     );
 };

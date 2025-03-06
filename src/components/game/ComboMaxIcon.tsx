@@ -1,6 +1,6 @@
 import { Container, PixiRef, Sprite } from "@pixi/react";
 import { memo, MutableRefObject, useContext, useEffect, useRef, useState } from "react";
-import { Sprite as PIXISprite } from "pixi.js";
+import { Sprite as PIXISprite, FederatedPointerEvent } from "pixi.js";
 import gsap from "gsap";
 
 import { ResourceContext } from "../../context/ResourceContext";
@@ -18,8 +18,10 @@ const MaxIcon = memo(({ data, onTouchend }: { data: { x: number; y: number }; on
     const { animActive } = useContext(GameContext);
     const comboMaxContainerRef = useRef<PixiRef<typeof Container>>(null);
     const [currentTexture, setCurrentTexture] = useState(resources.maxComboBallOn01);
+    
+    const handleMaxCombo = (e: FederatedPointerEvent) => {
+        e.preventDefault();
 
-    const handleMaxCombo = () => {
         // TODO: 외계인 색깔 변경
         const comboMaxContainer = comboMaxContainerRef.current;
         const comboMaxBg = comboMaxContainer?.getChildByName("comboMaxOnBg") as PIXISprite;
@@ -68,7 +70,7 @@ const MaxIcon = memo(({ data, onTouchend }: { data: { x: number; y: number }; on
     }, []);
 
     return (
-        <Container ref={comboMaxContainerRef} interactive={!animActive ? true : false} ontouchend={handleMaxCombo} onclick={handleMaxCombo}>
+        <Container ref={comboMaxContainerRef} interactive={!animActive ? true : false} ontouchend={(e) => handleMaxCombo(e)} onclick={handleMaxCombo}>
             <Sprite name='comboMaxOnBg' texture={resources.maxComboBallOnBg} anchor={0.5} position={[data.x + 85, data.y + 91]} />
             <Sprite name='comboMaxText' texture={currentTexture} anchor={0.5} position={[data.x + 85, data.y + 91]} />
             <Sprite anchor={0.5} texture={resources.maxComboBallOnText} position={[data.x + 90, data.y + 90]} />
@@ -86,12 +88,12 @@ export const ComboMaxIcon = memo(
         comboSec: MutableRefObject<number>;
         comboTimeoutId: MutableRefObject<NodeJS.Timeout | undefined>;
     }) => {
-        const { problems, comboCnt, setComboCnt, setComboActive, setComboDestroyNum } = useContext(GameContext);
+        const { problems, comboCnt, comboActive, setComboCnt, setComboActive, setComboDestroyNum } = useContext(GameContext);
 
         if (!problems) return null;
 
         const comboTime = () => {
-            if (comboSec.current === 10) {
+            if (comboSec.current > 10) {
                 comboSec.current = 0;
                 setComboActive(false);
                 clearTimeout(comboTimeoutId.current);
@@ -104,11 +106,16 @@ export const ComboMaxIcon = memo(
         };
 
         const handleOnClickMaxCombo = () => {
+            if(comboActive){
+                comboSec.current = 0;
+                clearTimeout(comboTimeoutId.current);
+            }else{
+                const originalIndex = destroyProblemIdx(problems.aliens);
+                setComboDestroyNum(originalIndex);
+            }
+            
             setComboActive(true);
             setComboCnt(0);
-
-            const originalIndex = destroyProblemIdx(problems.aliens);
-            setComboDestroyNum(originalIndex);
             comboTime();
         };
 

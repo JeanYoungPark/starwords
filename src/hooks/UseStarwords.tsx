@@ -74,7 +74,7 @@ export const useStarwords = () => {
     const loadData = async () => {
         // game data
         const gameRes = await getGameData();
-
+        
         if (gameRes.code === 200) {
             gameRes.leftTime = gameRes.time_limit + 1;
             gameRes.idx = -1;

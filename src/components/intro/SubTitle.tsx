@@ -22,7 +22,8 @@ export const SubTitle = () => {
             <Sprite
                 name='titleBg'
                 texture={resources.titleBg}
-                position={[-(SUBTITLE_BG.WIDTH / 2), 0]}
+                anchor={[0.5, 0]}
+                position={[0, 0]}
                 width={SUBTITLE_BG.WIDTH}
                 height={SUBTITLE_BG.HEIGHT}
                 alpha={SUBTITLE_BG.ALPHA}
@@ -31,10 +32,10 @@ export const SubTitle = () => {
             <Text text={getMainTitle()} anchor={0.5} position={[0, hasMidName ? 30 : 50]} style={MAIN_TEXT_STYLE} />
 
             {!isWordMaster && contentsData.mid_name && (
-                <Text text={contentsData.mid_name} anchor={[0.5, 0.5]} position={[0, 80]} style={MAIN_TEXT_STYLE} />
+                <Text text={contentsData.mid_name} anchor={0.5} position={[0, 80]} style={MAIN_TEXT_STYLE} />
             )}
 
-            <Text text={getSubTitle()} anchor={[0.5, 0.5]} position={[0, hasMidName ? 130 : 100]} style={SUB_TEXT_STYLE} />
+            <Text text={getSubTitle()} anchor={0.5} position={[0, hasMidName ? 130 : 100]} style={SUB_TEXT_STYLE} />
         </Container>
     );
 };

@@ -60,7 +60,7 @@ export const useAlienAnimation = ({ containerRef, alienRef, spriteRef, position 
             const moveAnim = gsap.fromTo(
                 container,
                 { x: 0, y: 100 },
-                { x: position.x, y: position.y, duration: 1.5, ease: "expo.out", onComplete: () => resolve() }
+                { x: position.x, y: position.y, duration: 1.55, ease: "expo.out", onComplete: () => resolve() }
             );
             animationsRef.current.push(moveAnim);
 
@@ -111,7 +111,7 @@ export const useAlienAnimation = ({ containerRef, alienRef, spriteRef, position 
                 {
                     x: position.direction_x === "left" ? -CONTENT_WIDTH - 200 : CONTENT_WIDTH + 200,
                     y: position.direction_y === "top" ? -CONTENT_HEIGHT - 200 : CONTENT_HEIGHT + 200,
-                    duration: 0.3,
+                    duration: 0.35,
                     ease: "sine",
                     onComplete: resolve,
                 }

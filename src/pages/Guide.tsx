@@ -37,7 +37,7 @@ export const Guide = () => {
         <Container>
             <Sprite texture={resources.bg} anchor={0.5} position={[CONTENT_WIDTH / 2, CONTENT_HEIGHT / 2]} />
 
-            <Sprite texture={getTexture()} position={[CONTENT_WIDTH / 2 - getTexture().width/2, 150]} />
+            <Sprite texture={getTexture()} position={[CONTENT_WIDTH / 2 - getTexture().width/2, CONTENT_HEIGHT/2 - getTexture().height/2]} />
             <Sprite texture={resources.planet03} position={[450, -70]} />
             <Sprite texture={resources.planet04} position={[1650, -80]} scale={0.9} />
             <Sprite texture={resources.planet05} position={[-50, 800]} scale={0.9} />

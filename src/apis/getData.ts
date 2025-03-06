@@ -12,12 +12,12 @@ export const getGameData = async () => {
     } else {
         const gameType = getCookie("game_type");
         const fuId = getCookie("fx7");
-
+        
         if (gameType === "word_master") {
             const [wordMasterSeq, stage, langCode] = getRequiredCookies(["word_master_seq", "stage", "lang_code"]);
 
             const baseUrl =
-                langCode !== "kr" ? `${process.env.REACT_APP_LITTLEFOX_GLOBAL_API_ULR}/${langCode}` : process.env.REACT_APP_LITTLEFOX_API_ULR;
+            langCode && langCode !== "kr" ? `${process.env.REACT_APP_LITTLEFOX_GLOBAL_API_ULR}/${langCode}` : process.env.REACT_APP_LITTLEFOX_API_ULR;
 
             apiUrl = `${baseUrl}/starwords_h5_v3_api/game_info/${langCode}/${wordMasterSeq}/${stage}${fuId ? `/${fuId}` : ""}`;
         } else {
