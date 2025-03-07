@@ -1,4 +1,4 @@
-import { ProblemType } from "../types/resourcesType";
+import { ProblemType, RankingRefeshDataType, RankingWeekDataType } from "../types/resourcesType";
 
 /*
  * 모바일 체크
@@ -50,22 +50,24 @@ export const numberComma = (x: number) => {
 /**
  * ranking text
  */
-export const getWeekText = () => {
+export const getWeekInfo = (): RankingWeekDataType => {
     const date = new Date();
     const year = date.getFullYear();
     const month = date.getMonth();
+    const currentDate = date.getDate();
+    
     const firstDay = new Date(year, month, 1);
     const firstDayWeekday = firstDay.getDay();
-
-    const week = Math.ceil((date.getDate() + firstDayWeekday) / 7);
-
-    return `${year}년 ${month + 1}월 ${week}주차`;
+    
+    const week = Math.ceil((currentDate + firstDayWeekday) / 7);
+    
+    return {year: year, month: month + 1, week: week};
 };
 
 /**
  * ranking 남은시간 text
  */
-export const getTimeRemaining = (updateDate: string) => {
+export const getTimeRemaining = (updateDate: string) : RankingRefeshDataType => {
     const now = new Date();
     const targetDate = new Date(updateDate);
     const timeDiff = targetDate.getTime() - now.getTime();
@@ -74,7 +76,7 @@ export const getTimeRemaining = (updateDate: string) => {
     const hours = Math.floor((timeDiff / (1000 * 60 * 60)) % 24);
     const minutes = Math.floor((timeDiff / 1000) % 24);
 
-    return `${days}일 ${hours}시간 ${minutes}분 남음`;
+    return {days: days, hours: hours, min: minutes}
 };
 
 /**

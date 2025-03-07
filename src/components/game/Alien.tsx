@@ -30,10 +30,8 @@ export const Alien = ({ idx, position, problem }: AlienProps) => {
     useEffect(() => {
         const moveInAnim = async () => {
             // 외계인 movein 애니메이션 시작
-            // setAnimActive(true);
             await setupAnimation();
             // 외계인 movein 애니메이션 종료
-            // setAnimActive(false);
         };
 
         moveInAnim();

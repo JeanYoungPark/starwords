@@ -1,13 +1,16 @@
 import React, { useContext } from "react";
 import { ResourceContext } from "../../context/ResourceContext";
 import { Container, Sprite, Text } from "@pixi/react";
-import { RANKING_NUM_TEXT_STYLE, RANKING_USER_NAME_TEXT_STYLE, RANKING_USER_SCORE_TEXT_STYLE } from "../../constants/rankingConstants";
+import { langTemplates, RANKING_NUM_TEXT_STYLE, RANKING_USER_NAME_TEXT_STYLE, RANKING_USER_SCORE_TEXT_STYLE } from "../../constants/rankingConstants";
 import { Texture } from "pixi.js";
 import { numberComma } from "../../util";
 import { RankingType } from "../../types/resourcesType";
+import { langCodeState } from "../../store/assetsStore";
+import { useRecoilValue } from "recoil";
 
 export const List = ({ rankingArr, page }: { rankingArr: RankingType[][]; page: number }) => {
     const { resources } = useContext(ResourceContext);
+    const langCode = useRecoilValue(langCodeState);
 
     return (
         <>
@@ -33,7 +36,7 @@ export const List = ({ rankingArr, page }: { rankingArr: RankingType[][]; page: 
                         <Text text={item.nickname} position={[345, 50]} style={RANKING_USER_NAME_TEXT_STYLE} />
                         <Container position={[(resources.rankingBg.width * 0.75) / 2 - resources.rankingUserScoreBg.width - 30, 40]}>
                             <Sprite texture={resources.rankingUserScoreBg} position={[180, 0]}>
-                                <Text text={`${numberComma(Number(item.score))} 점`} position={[40, 7]} style={RANKING_USER_SCORE_TEXT_STYLE} />
+                                <Text text={`${numberComma(Number(item.score))} ${langTemplates[langCode ?? 'default'].scoreUnit}`} position={[40, 7]} style={RANKING_USER_SCORE_TEXT_STYLE} />
                             </Sprite>
                         </Container>
                     </Container>

@@ -1,5 +1,6 @@
 import { atom } from "recoil";
 import { Actions, AlienActions, GameActions } from "../types/actionsType";
+import { langCodeType } from "../types/resourcesType";
 
 // 컴포넌트 상태 관리
 export const actionState = atom<Actions>({
@@ -22,7 +23,7 @@ export const AlienActionState = atom<AlienActions>({
 /**
  * 국가 코드
  */
-export const langCodeState = atom<string | null>({
+export const langCodeState = atom<langCodeType | null>({
     key: "langCodeState",
     default: null,
 });

@@ -2,15 +2,16 @@ import { Container, Sprite, Text } from "@pixi/react";
 import { useContext, useEffect, useState } from "react";
 import { ResourceContext } from "../../context/ResourceContext";
 import { numberComma } from "../../util";
-import { RANKING_SCORE_KR_TEXT_STYLE, RANKING_SCORE_TEXT_STYLE } from "../../constants/rankingConstants";
+import { langTemplates, RANKING_SCORE_KR_TEXT_STYLE, RANKING_SCORE_TEXT_STYLE } from "../../constants/rankingConstants";
 import { getUserData } from "../../apis/getData";
 import { UserDataType } from "../../types/resourcesType";
 import { useRecoilValue } from "recoil";
-import { gameTypeState } from "../../store/assetsStore";
+import { gameTypeState, langCodeState } from "../../store/assetsStore";
 
 export const Score = () => {
     const { resources } = useContext(ResourceContext);
     const gameType = useRecoilValue(gameTypeState);
+    const langCode = useRecoilValue(langCodeState);
     const [userData, setUserData] = useState<UserDataType | null>(null);
 
     const getUserInfoData = async () => {
@@ -33,7 +34,7 @@ export const Score = () => {
                 style={RANKING_SCORE_TEXT_STYLE}
             />
 
-            <Text text='점' anchor={0.5} position={[460, 65]} style={RANKING_SCORE_KR_TEXT_STYLE} />
+            <Text text={langTemplates[langCode ?? 'default'].scoreUnit} anchor={0.5} position={[460, 65]} style={RANKING_SCORE_KR_TEXT_STYLE} />
         </Container>
     );
 };

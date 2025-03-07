@@ -1,5 +1,7 @@
 import { Texture } from "pixi.js";
 
+export type langCodeType = "jp" | "cn" | "tw" | "hk" | "default";
+
 export interface Resource {
     [key: string]: any;
 }
@@ -62,4 +64,16 @@ export interface ResultButtonConfig {
     position: [number, number];
     texture: Texture;
     handler: () => void;
+}
+
+export interface RankingRefeshDataType {
+    days: number,
+    hours: number,
+    min: number
+}
+
+export interface RankingWeekDataType {
+    year: number,
+    month: number,
+    week: number
 }
