@@ -8,13 +8,11 @@ interface GameContextType {
     comboActive: boolean;
     comboDestroyNum: number;
     comboCnt: number;
-    alienRemoveNum: number;
     createProblem: (gameData: any, contentsData: any) => void;
     setInCorrectAnimActive: Dispatch<SetStateAction<boolean>>;
     setComboDestroyNum: Dispatch<SetStateAction<number>>;
     setComboActive: Dispatch<SetStateAction<boolean>>;
     setComboCnt: Dispatch<SetStateAction<number>>;
-    setAlienRemoveNum: Dispatch<SetStateAction<number>>;
     init: () => void;
 }
 
@@ -25,12 +23,10 @@ export const GameContext = createContext<GameContextType>({
     comboActive: false,
     comboDestroyNum: NaN,
     comboCnt: 0,
-    alienRemoveNum: NaN,
     createProblem: () => {},
     setInCorrectAnimActive: () => {},
     setComboDestroyNum: () => {},
     setComboActive: () => {},
     setComboCnt: () => {},
-    setAlienRemoveNum: () => {},
     init: () => {},
 });

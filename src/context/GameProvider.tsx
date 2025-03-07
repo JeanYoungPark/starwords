@@ -18,7 +18,6 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
     const [comboCnt, setComboCnt] = useState<number>(0);
     const [comboActive, setComboActive] = useState<boolean>(false);
     const [comboDestroyNum, setComboDestroyNum] = useState<number>(NaN);
-    const [alienRemoveNum, setAlienRemoveNum] = useState<number>(NaN);
     const sec = useRef<number>(0);
 
     const [problems, setProblems] = useState<
@@ -43,7 +42,6 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
         setComboActive(false);
         setComboCnt(0);
         setComboDestroyNum(NaN);
-        setAlienRemoveNum(NaN);
         setAnimActive(false);
         sec.current = 0;
     };
@@ -136,13 +134,11 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
                 comboActive,
                 comboDestroyNum,
                 comboCnt,
-                alienRemoveNum,
                 createProblem,
                 setInCorrectAnimActive,
                 setComboActive,
                 setComboDestroyNum,
                 setComboCnt,
-                setAlienRemoveNum,
                 init,
             }}>
             {children}

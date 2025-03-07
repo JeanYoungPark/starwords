@@ -1,4 +1,4 @@
-import { memo, useContext, useEffect } from "react";
+import { memo, useContext, useEffect, useState } from "react";
 import { AlienMovePositionType, ProblemType, WordType } from "../../types/resourcesType";
 import { destroyProblemIdx } from "../../util";
 import { Alien } from "./Alien";
@@ -9,9 +9,11 @@ import { useSetRecoilState } from "recoil";
 import { animActiveState } from "../../store/gameStore";
 
 export const Aliens = memo(({ problems }: { problems: { item: WordType; aliens: ProblemType[] } }) => {
-    const { comboActive, comboDestroyNum, alienRemoveNum, setAlienRemoveNum } = useContext(GameContext);
+    const { comboActive, comboDestroyNum} = useContext(GameContext);
     const { aliensPosition } = useContext(ResourceContext);
     const setAnimActive = useSetRecoilState(animActiveState);
+
+    const [alienRemoveNum, setAlienRemoveNum] = useState<number>(NaN);
 
     const chooseDestroyIdx = () => {
         if (!comboActive && !isNaN(alienRemoveNum)) {

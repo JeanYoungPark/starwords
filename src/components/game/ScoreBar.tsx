@@ -1,8 +1,8 @@
 import { Container, PixiRef, Sprite, Text } from "@pixi/react";
-import { memo, useContext, useEffect, useRef } from "react";
+import { memo, useCallback, useContext, useEffect, useRef } from "react";
 import { ResourceContext } from "../../context/ResourceContext";
-import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
-import { animActiveState, answerCntState, problemIdxState, rankState } from "../../store/gameStore";
+import { useRecoilCallback, useRecoilState, useSetRecoilState } from "recoil";
+import { animActiveState, answerCntState, rankState } from "../../store/gameStore";
 import { COMBO_TEXT_POSITION, MAX_COMBO_NUMBER } from "../../constants/commonConstants";
 import { ComboMaxIcon } from "./ComboMaxIcon";
 import { ComboIcon } from "./ComboIcon";
@@ -63,14 +63,18 @@ export const ScoreBar = memo(() => {
         sound.play("gameIncorrect");
     };
 
-    const sendResult = async () => {
-        const score = answerCnt.correct * 100 + answerCnt.combo * 200;
-        const correctCnt = answerCnt.correct;
-        const incorrectCnt = answerCnt.incorrect;
-        const comboScore = answerCnt.combo * 200;
-        const res = await postGameData({ score, correctCnt, comboScore, incorrectCnt });
-        setRankNo(res.rank_no);
-    };
+    const sendResult = useRecoilCallback(
+        ({ snapshot }) => async () => {
+            const answerCnt = await snapshot.getPromise(answerCntState);            
+            const score = answerCnt.correct * 100 + answerCnt.combo * 200;
+            const correctCnt = answerCnt.correct;
+            const incorrectCnt = answerCnt.incorrect;
+            const comboScore = answerCnt.combo * 200;
+            const res = await postGameData({ score, correctCnt, comboScore, incorrectCnt });
+    
+            setRankNo(res.rank_no);
+        }, []
+    );
 
     useEffect(() => {
         if (gameAction === GameActions.START) {
