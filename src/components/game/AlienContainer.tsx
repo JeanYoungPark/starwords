@@ -79,6 +79,10 @@ export const AlienContainer = ({ alienRef, spriteRef, idx, problem, setCorrectAn
         sec.current = 0;
     };
 
+    const alienImg = () => {
+        return resources[comboActive ? `alienCombo0${randomIdx}` : `alien0${randomIdx}`];
+    }
+
     useEffect(() => {
         if (comboDestroyNum === idx) {
             const alien = alienRef.current;
@@ -97,7 +101,7 @@ export const AlienContainer = ({ alienRef, spriteRef, idx, problem, setCorrectAn
 
     return (
         <Container ref={alienRef} interactive={!animActive} pointerdown={checkAnswer}>
-            <Sprite ref={spriteRef} texture={resources[`alien0${randomIdx}`]} anchor={0.5} name={`alien0${idx + 1}`} />
+            <Sprite ref={spriteRef} texture={alienImg()} anchor={0.5} name={`alien0${idx + 1}`} />
             <Text name={`alienText0${idx + 1}`} text={problem.word} position={[0, 100]} style={ALIEN_TEXT_STYLE} anchor={0.5} />
         </Container>
     );

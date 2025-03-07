@@ -8,13 +8,14 @@ import { IncorrectType } from "../types/resourcesType";
 import _ from "lodash";
 import { INCORRECT_EN_TEXT_STYLE, INCORRECT_KO_TEXT_STYLE } from "../constants/resultContants";
 import { PixiButton } from "../components/common/PixiButton";
-import { actionState } from "../store/assetsStore";
+import { actionState, langCodeState } from "../store/assetsStore";
 import { Actions } from "../types/actionsType";
 import { sound } from "@pixi/sound";
 
 export const IncorrectAnswers = () => {
     const { resources } = useContext(ResourceContext);
     const incorrectList = useRecoilValue(incorrectListState);
+    const langCode = useRecoilValue(langCodeState);
     const setAction = useSetRecoilState(actionState);
     const [incorrectArr, setIncorrectArr] = useState<IncorrectType[][]>([]);
     const [page, setPage] = useState<number>(0);
@@ -22,6 +23,13 @@ export const IncorrectAnswers = () => {
     const handleOnClose = () => {
         setAction(Actions.GAME_FINISH);
     };
+
+    const incorrectBgImg = () => {
+        if(langCode === 'jp') return resources.incorrectJpBg;
+        if(langCode === 'cn') return resources.incorrectCnBg;
+        if(langCode === 'tw' || langCode === 'hk') return resources.incorrectTwBg;
+        return resources.incorrectBg;
+    }
 
     // TODO: bg 이미지 변경
     useEffect(() => {
@@ -55,7 +63,7 @@ export const IncorrectAnswers = () => {
                     )}
                 </>
             )}
-            <Sprite texture={resources.incorrectBg} anchor={0.5} position={[CONTENT_WIDTH / 2, 570]} scale={0.8}>
+            <Sprite texture={incorrectBgImg()} anchor={0.5} position={[CONTENT_WIDTH / 2, 570]} scale={0.8}>
                 {incorrectArr[page]?.map((data, i) => {
                     const key = Object.keys(data)[0];
 

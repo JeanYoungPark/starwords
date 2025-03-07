@@ -77,13 +77,20 @@ const assets = [
     { alias: "alien03", src: `${aliensImgPath}alien_03.png` },
     { alias: "alien04", src: `${aliensImgPath}alien_04.png` },
     { alias: "alien05", src: `${aliensImgPath}alien_05.png` },
+
+    { alias: "alienCombo01", src: `${aliensImgPath}alien_combo_01.png` },
+    { alias: "alienCombo02", src: `${aliensImgPath}alien_combo_02.png` },
+    { alias: "alienCombo03", src: `${aliensImgPath}alien_combo_03.png` },
+    { alias: "alienCombo04", src: `${aliensImgPath}alien_combo_04.png` },
+    { alias: "alienCombo05", src: `${aliensImgPath}alien_combo_05.png` },
+
     { alias: "combo01", src: `${aliensImgPath}combo_cnt_01.png` },
     { alias: "combo02", src: `${aliensImgPath}combo_cnt_02.png` },
     { alias: "combo03", src: `${aliensImgPath}combo_cnt_03.png` },
     { alias: "combo04", src: `${aliensImgPath}combo_cnt_04.png` },
     { alias: "combo05", src: `${aliensImgPath}combo_max.png` },
-    { alias: "gameBar", src: `${scoreBarImgPath}bar.png` },
 
+    { alias: "gameBar", src: `${scoreBarImgPath}bar.png` },
     { alias: "gameBarBg", src: `${scoreBarImgPath}bar_bg.png` },
     { alias: "gameScoreBg", src: `${scoreBarImgPath}score_board.png` },
     { alias: "gameComboScoreBg", src: `${scoreBarImgPath}combo_score_board.png` },
@@ -155,7 +162,11 @@ const assets = [
     { alias: "resultRankingBtn02", src: `${resultPath}ranking_btn_02.png` },
     { alias: "resultTryAgainBtn01", src: `${resultPath}tryAgain_btn_01.png` },
     { alias: "resultTryAgainBtn02", src: `${resultPath}tryAgain_btn_02.png` },
+
     { alias: "incorrectBg", src: `${resultPath}incorrect_bg.png` },
+    { alias: "incorrectJpBg", src: `${resultPath}incorrect_jp_bg.png` },
+    { alias: "incorrectCnBg", src: `${resultPath}incorrect_cn_bg.png` },
+    { alias: "incorrectTwBg", src: `${resultPath}incorrect_tw_bg.png` },
     { alias: "incorrectSound", src: `${resultPath}incorrect_sound.png` },
     { alias: "incorrectLeftBtn", src: `${resultPath}incorrect_left_btn.png` },
     { alias: "incorrectRightBtn", src: `${resultPath}incorrect_right_btn.png` },
