@@ -41,7 +41,7 @@ export const rankState = atom<string | null>({
     default: null
 })
 
-// 랭킹
+// 애니메이션 동작 여부 감지
 export const animActiveState = atom<boolean>({
     key: "animState",
     default: false
