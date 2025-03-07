@@ -31,6 +31,30 @@ export const IncorrectAnswers = () => {
         return resources.incorrectBg;
     }
 
+    const playWordSound = (soundUrl: string) => {
+        if (!soundUrl) return;
+        
+        const soundPath = `https://cdn.littlefox.co.kr/contents/vocab/${soundUrl.substring(0,1)}/${soundUrl}.mp3`;
+        
+        // 사운드가 이미 로드되어 있는지 확인
+        if (sound.exists(soundUrl)) {
+            sound.play(soundUrl);
+        } else {
+            // 사운드 로드 후 재생
+            sound.add(soundUrl, {
+                url: soundPath,
+                preload: true,
+                loaded: (err) => {
+                    if (!err) {
+                        sound.play(soundUrl);
+                    } else {
+                        console.error("Failed to load sound:", err);
+                    }
+                }
+            });
+        }
+    };
+
     // TODO: bg 이미지 변경
     useEffect(() => {
         setIncorrectArr(_.chunk(incorrectList, 7));
@@ -66,10 +90,10 @@ export const IncorrectAnswers = () => {
             <Sprite texture={incorrectBgImg()} anchor={0.5} position={[CONTENT_WIDTH / 2, 570]} scale={0.8}>
                 {incorrectArr[page]?.map((data, i) => {
                     const key = Object.keys(data)[0];
-
+                    console.log(data);
                     return (
                         <Container key={key} position={[-700, -310 + 125 * i]}>
-                            <Sprite texture={resources.incorrectSound} position={[0, -10]} />
+                            <Sprite texture={resources.incorrectSound} position={[0, -10]} interactive={true} onclick={() => playWordSound(data[key].sound_url)} ontouchend={() => playWordSound(data[key].sound_url)}/>
                             <Text text={data[key].word_en} position={[300, 0]} style={INCORRECT_EN_TEXT_STYLE} anchor={0.5} />
                             <Text text={data[key].word_ko} position={[500, 0]} anchor={[0, 0.5]} style={INCORRECT_KO_TEXT_STYLE}/>
                             <Text text={`${data[key].cnt}`} position={[resources.incorrectBg.width - 160, 0]} anchor={0.5} />
