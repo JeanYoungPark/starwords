@@ -15,6 +15,7 @@ export const InCorrectAnim = () => {
 
     const INCORRECT_FRAMES = Array.from({ length: 8 }, (_, i) => resources[`incorrect0${i + 1}`]);
 
+    // 오답 애니메이션 완료
     const handleCompleteIncorrectAnim = () => {
         setInCorrectAnimActive(false);
         setAnimActive(false);
