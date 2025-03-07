@@ -1,5 +1,5 @@
 import { atom } from "recoil";
-import { AlienMovePositionType, IncorrectType } from "../types/resourcesType";
+import { IncorrectType } from "../types/resourcesType";
 
 // 테스트 환경 여부 확인
 export const isTestState = atom<boolean>({
@@ -39,4 +39,10 @@ export const soundMuteState = atom<boolean>({
 export const rankState = atom<string | null>({
     key: "rankState",
     default: null
+})
+
+// 랭킹
+export const animActiveState = atom<boolean>({
+    key: "animState",
+    default: false
 })

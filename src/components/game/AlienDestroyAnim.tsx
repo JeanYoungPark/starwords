@@ -6,6 +6,7 @@ import { GameContext } from "../../context/GameContext";
 import { useSetRecoilState } from "recoil";
 import { AlienActionState } from "../../store/assetsStore";
 import { AlienActions } from "../../types/actionsType";
+import { animActiveState } from "../../store/gameStore";
 
 interface AlienDestroyAnimProps {
     idx: number;
@@ -15,8 +16,9 @@ interface AlienDestroyAnimProps {
 
 export const AlienDestroyAnim = ({ idx, correctAnimActive, setCorrectAnimActive }: AlienDestroyAnimProps) => {
     const { resources } = useContext(ResourceContext);
-    const { comboCnt, comboDestroyNum, setComboDestroyNum, setAnimActive } = useContext(GameContext);
+    const { comboCnt, comboDestroyNum, setComboDestroyNum } = useContext(GameContext);
     const setAlienAction = useSetRecoilState(AlienActionState);
+    const setAnimActive = useSetRecoilState(animActiveState);
     const [destroyAnimActive, setDestroyAnimActive] = useState<boolean>(false);
 
     const destroyFrames = useMemo(
@@ -27,15 +29,17 @@ export const AlienDestroyAnim = ({ idx, correctAnimActive, setCorrectAnimActive 
         [resources]
     );
 
+    // 정답 애니메이션 완료
     const handleCompleteCorrectAnim = () => {
         setCorrectAnimActive(false);
-        setAnimActive(false);
+        setAnimActive(false)
         setAlienAction(AlienActions.NEXT);
     };
 
+    // 오답 애니메이션 완료
     const handleCompleteDestroyAnim = () => {
         setDestroyAnimActive(false);
-        setAnimActive(false);
+        setAnimActive(false)
         setComboDestroyNum(NaN);
     };
 

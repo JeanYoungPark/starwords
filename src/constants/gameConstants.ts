@@ -23,3 +23,6 @@ export const TIME_TEXT_STYLE = new TextStyle({
     fontSize: 20,
     fill: "rgba(177, 184, 255)",
 });
+
+export const MOVE_IN_TIME = 1.55;
+export const MOVE_OUT_TIME = 0.35;

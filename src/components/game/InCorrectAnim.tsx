@@ -5,11 +5,13 @@ import { GameContext } from "../../context/GameContext";
 import { useSetRecoilState } from "recoil";
 import { AlienActionState } from "../../store/assetsStore";
 import { AlienActions } from "../../types/actionsType";
+import { animActiveState } from "../../store/gameStore";
 
 export const InCorrectAnim = () => {
     const { resources } = useContext(ResourceContext);
-    const { setInCorrectAnimActive, setAnimActive } = useContext(GameContext);
+    const { setInCorrectAnimActive } = useContext(GameContext);
     const setAlienAction = useSetRecoilState(AlienActionState);
+    const setAnimActive = useSetRecoilState(animActiveState);
 
     const INCORRECT_FRAMES = Array.from({ length: 8 }, (_, i) => resources[`incorrect0${i + 1}`]);
 

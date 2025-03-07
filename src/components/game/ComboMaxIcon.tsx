@@ -7,6 +7,8 @@ import { ResourceContext } from "../../context/ResourceContext";
 import { MAX_COMBO_NUMBER } from "../../constants/commonConstants";
 import { destroyProblemIdx } from "../../util";
 import { GameContext } from "../../context/GameContext";
+import { useRecoilValue } from "recoil";
+import { animActiveState } from "../../store/gameStore";
 
 const NormalIcon = memo(({ data }: { data: { x: number; y: number } }) => {
     const { resources } = useContext(ResourceContext);
@@ -15,7 +17,7 @@ const NormalIcon = memo(({ data }: { data: { x: number; y: number } }) => {
 
 const MaxIcon = memo(({ data, onTouchend }: { data: { x: number; y: number }; onTouchend: () => void }) => {
     const { resources } = useContext(ResourceContext);
-    const { animActive } = useContext(GameContext);
+    const animActive = useRecoilValue(animActiveState);
     const comboMaxContainerRef = useRef<PixiRef<typeof Container>>(null);
     const [currentTexture, setCurrentTexture] = useState(resources.maxComboBallOn01);
     
@@ -70,7 +72,7 @@ const MaxIcon = memo(({ data, onTouchend }: { data: { x: number; y: number }; on
     }, []);
 
     return (
-        <Container ref={comboMaxContainerRef} interactive={!animActive ? true : false} ontouchend={(e) => handleMaxCombo(e)} onclick={handleMaxCombo}>
+        <Container ref={comboMaxContainerRef} interactive={!animActive} ontouchend={(e) => handleMaxCombo(e)} onclick={handleMaxCombo}>
             <Sprite name='comboMaxOnBg' texture={resources.maxComboBallOnBg} anchor={0.5} position={[data.x + 85, data.y + 91]} />
             <Sprite name='comboMaxText' texture={currentTexture} anchor={0.5} position={[data.x + 85, data.y + 91]} />
             <Sprite anchor={0.5} texture={resources.maxComboBallOnText} position={[data.x + 90, data.y + 90]} />
@@ -93,7 +95,7 @@ export const ComboMaxIcon = memo(
         if (!problems) return null;
 
         const comboTime = () => {
-            if (comboSec.current > 10) {
+            if (comboSec.current >= 10) {
                 comboSec.current = 0;
                 setComboActive(false);
                 clearTimeout(comboTimeoutId.current);

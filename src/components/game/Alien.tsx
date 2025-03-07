@@ -4,10 +4,10 @@ import { ProblemType } from "../../types/resourcesType";
 import { AlienDestroyAnim } from "./AlienDestroyAnim";
 import { AlienContainer } from "./AlienContainer";
 import { useAlienAnimation } from "../../hooks/game/useAlienAnimation";
-import { useRecoilState, useRecoilValue } from "recoil";
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import { AlienActionState } from "../../store/assetsStore";
 import { AlienActions } from "../../types/actionsType";
-import { isTestState } from "../../store/gameStore";
+import { animActiveState, isTestState } from "../../store/gameStore";
 import { TextStyle } from "pixi.js";
 
 interface AlienProps {
@@ -19,19 +19,21 @@ interface AlienProps {
 export const Alien = ({ idx, position, problem }: AlienProps) => {
     const isTest = useRecoilValue(isTestState);
     const [alienAction, setAlienAction] = useRecoilState(AlienActionState);
+    const setAnimActive = useSetRecoilState(animActiveState);
     const [correctAnimActive, setCorrectAnimActive] = useState<boolean>(false);
 
     const containerRef = useRef<PixiRef<typeof Container>>(null);
     const alienRef = useRef<PixiRef<typeof Container> | null>(null);
     const spriteRef = useRef<PixiRef<typeof Sprite> | null>(null);
-    const [alienAnimActive, setAlienAnimActive] = useState<boolean>(false);
     const { setupAnimation, endAnimation, cleanupAnimations } = useAlienAnimation({ containerRef, alienRef, spriteRef, position });
 
     useEffect(() => {
         const moveInAnim = async () => {
-            setAlienAnimActive(true);
+            // 외계인 movein 애니메이션 시작
+            // setAnimActive(true);
             await setupAnimation();
-            setAlienAnimActive(false);
+            // 외계인 movein 애니메이션 종료
+            // setAnimActive(false);
         };
 
         moveInAnim();
@@ -42,10 +44,12 @@ export const Alien = ({ idx, position, problem }: AlienProps) => {
 
     useEffect(() => {
         const moveOutAnim = async () => {
-            setAlienAnimActive(true);
+            // 외계인 moveout 애니메이션 시작
+            setAnimActive(true);
             await endAnimation();
+            // 외계인 moveout 애니메이션 종료
+            setAnimActive(false);
             setAlienAction(AlienActions.STAND_BY);
-            setAlienAnimActive(false);
         };
 
         if (alienAction === AlienActions.NEXT) {
@@ -65,7 +69,6 @@ export const Alien = ({ idx, position, problem }: AlienProps) => {
                 idx={idx}
                 problem={problem}
                 setCorrectAnimActive={setCorrectAnimActive}
-                alienAnimActive={alienAnimActive}
             />
             {isTest && problem.correct === 'Y' && (
                 <Text text='정답' position={[-80,-70]} anchor={0.5} style={new TextStyle({

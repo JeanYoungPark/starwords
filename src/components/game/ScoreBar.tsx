@@ -2,7 +2,7 @@ import { Container, PixiRef, Sprite, Text } from "@pixi/react";
 import { memo, useContext, useEffect, useRef } from "react";
 import { ResourceContext } from "../../context/ResourceContext";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
-import { answerCntState, problemIdxState, rankState } from "../../store/gameStore";
+import { animActiveState, answerCntState, problemIdxState, rankState } from "../../store/gameStore";
 import { COMBO_TEXT_POSITION, MAX_COMBO_NUMBER } from "../../constants/commonConstants";
 import { ComboMaxIcon } from "./ComboMaxIcon";
 import { ComboIcon } from "./ComboIcon";
@@ -18,11 +18,11 @@ import { postGameData } from "../../apis/postData";
 
 export const ScoreBar = memo(() => {
     const { resources, gameData } = useContext(ResourceContext);
-    const { sec, comboActive, setInCorrectAnimActive, setAnimActive } = useContext(GameContext);
+    const { sec, comboActive, setInCorrectAnimActive } = useContext(GameContext);
     const { handleIncorrectList } = useIncorrectList();
-    const problemIdx = useRecoilValue(problemIdxState)
     const setAction = useSetRecoilState(actionState);
     const setRankNo = useSetRecoilState(rankState);
+    const setAnimActive = useSetRecoilState(animActiveState);
     const [answerCnt, setAnswerCnt] = useRecoilState(answerCntState);
     const [gameAction, setGameAction] = useRecoilState(gameActionState);
 
@@ -54,6 +54,7 @@ export const ScoreBar = memo(() => {
         }
     };
 
+    // 시간 초과 오답 처리 -> 애니메이션 시작
     const handleIncorrect = () => {
         handleIncorrectList();
         setAnswerCnt((prev) => ({ ...prev, incorrect: prev.incorrect + 1 }));

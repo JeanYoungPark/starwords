@@ -2,6 +2,7 @@ import { RefObject, useRef } from "react";
 import { Container as PIXIContainer, Sprite as PIXISprite } from "pixi.js";
 import gsap from "gsap";
 import { CONTENT_HEIGHT, CONTENT_WIDTH } from "../../constants/commonConstants";
+import { MOVE_IN_TIME, MOVE_OUT_TIME } from "../../constants/gameConstants";
 
 interface props {
     containerRef: RefObject<PIXIContainer>;
@@ -60,7 +61,7 @@ export const useAlienAnimation = ({ containerRef, alienRef, spriteRef, position 
             const moveAnim = gsap.fromTo(
                 container,
                 { x: 0, y: 100 },
-                { x: position.x, y: position.y, duration: 1.55, ease: "expo.out", onComplete: () => resolve() }
+                { x: position.x, y: position.y, duration: MOVE_IN_TIME, ease: "expo.out", onComplete: () => resolve() }
             );
             animationsRef.current.push(moveAnim);
 
@@ -111,7 +112,7 @@ export const useAlienAnimation = ({ containerRef, alienRef, spriteRef, position 
                 {
                     x: position.direction_x === "left" ? -CONTENT_WIDTH - 200 : CONTENT_WIDTH + 200,
                     y: position.direction_y === "top" ? -CONTENT_HEIGHT - 200 : CONTENT_HEIGHT + 200,
-                    duration: 0.35,
+                    duration: MOVE_OUT_TIME,
                     ease: "sine",
                     onComplete: resolve,
                 }

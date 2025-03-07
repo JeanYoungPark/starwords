@@ -1,7 +1,7 @@
 import { ReactNode, useRef, useState } from "react";
 import { useRecoilState, useSetRecoilState } from "recoil";
 import { GameContext } from "./GameContext";
-import { answerCntState, problemIdxState } from "../store/gameStore";
+import { animActiveState, answerCntState, problemIdxState } from "../store/gameStore";
 import { actionState, AlienActionState, gameActionState } from "../store/assetsStore";
 import { Actions, AlienActions, GameActions } from "../types/actionsType";
 import { ProblemType, WordType } from "../types/resourcesType";
@@ -11,6 +11,7 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
     const setGameAction = useSetRecoilState(gameActionState);
     const setAlienAction = useSetRecoilState(AlienActionState);
     const setAnswerCnt = useSetRecoilState(answerCntState);
+    const setAnimActive = useSetRecoilState(animActiveState);
 
     const [problemIdx, setProblemIdx] = useRecoilState(problemIdxState);
     const [inCorrectAnimActive, setInCorrectAnimActive] = useState<boolean>(false);
@@ -18,7 +19,6 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
     const [comboActive, setComboActive] = useState<boolean>(false);
     const [comboDestroyNum, setComboDestroyNum] = useState<number>(NaN);
     const [alienRemoveNum, setAlienRemoveNum] = useState<number>(NaN);
-    const [animActive, setAnimActive] = useState<boolean>(false);
     const sec = useRef<number>(0);
 
     const [problems, setProblems] = useState<
@@ -136,14 +136,12 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
                 comboActive,
                 comboDestroyNum,
                 comboCnt,
-                animActive,
                 alienRemoveNum,
                 createProblem,
                 setInCorrectAnimActive,
                 setComboActive,
                 setComboDestroyNum,
                 setComboCnt,
-                setAnimActive,
                 setAlienRemoveNum,
                 init,
             }}>
