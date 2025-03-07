@@ -34,11 +34,11 @@ export const postGameData = async ({
 
             apiUrl = `${process.env.REACT_APP_LITTLEFOX_API_ULR}/starwords_h5_v3_api/record/${stage}/${score}/${correctCnt}/${comboScore}/${incorrectCnt}/${wordMasterSeq}/${stage}/${fuId}`;
         } else if (gameType === "class") {
-            const [fuId, fcId, classId] = getRequiredCookies(["fx7 ", "fc_id", "class_id"]);
+            const [fuId, fcId, classId] = getRequiredCookies(["fx7", "Starwords_fc_id", "class_id"]);
 
             apiUrl = `${process.env.REACT_APP_LITTLEFOX_API_ULR}/starwords_api/record/${fuId}/${fcId}/${score}/${correctCnt}/${comboScore}/${incorrectCnt}/0/${classId}`;
         } else {
-            const [fuId, fcId, hwCode] = getRequiredCookies(["fx7 ", "Starwords_fc_id", "hw_code"]);
+            const [fuId, fcId, hwCode] = getRequiredCookies(["fx7", "Starwords_fc_id", "hw_code"]);
 
             apiUrl = `${process.env.REACT_APP_LITTLEFOX_API_ULR}/starwords_api/record/${fuId}/${fcId}/${score}/${correctCnt}/${comboScore}/${incorrectCnt}/${hwCode}`;
         }
