@@ -21,13 +21,13 @@ export const GameLayout = ({ children, title }: Props) => {
 
             app.renderer.view.width = window.innerWidth;
             app.renderer.view.height = CONTENT_HEIGHT * scale;
-            gsap.set(app.renderer.view, { top: (window.innerHeight - CONTENT_HEIGHT * scale) / 2 });
+            gsap.set(app.renderer.view, { top: (window.innerHeight - CONTENT_HEIGHT * Math.min(scale, 1)) / 2 });
 
             // 렌더러 크기 조정
             app.renderer.resize(window.innerWidth, CONTENT_HEIGHT * scale);
 
             // 컨테이너 위치 및 크기 조정
-            container.current.position.x = (window.innerWidth - CONTENT_WIDTH * scale) / 2;
+            // container.current.position.x = (window.innerWidth - CONTENT_WIDTH * scale) / 2;
             container.current.scale.set(scale);
         }
     };
