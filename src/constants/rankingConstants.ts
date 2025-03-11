@@ -1,5 +1,5 @@
 import { TextStyle } from "pixi.js";
-import { langCodeType, RankingRefeshDataType, RankingWeekDataType } from "../types/resourcesType";
+import { LangCodeType, RankingRefeshDataType, RankingWeekDataType } from "../types/resourcesType";
 
 export const RANKING_TITLE_TEXT_STYLE = new TextStyle({
     fontSize: 30,
@@ -39,7 +39,7 @@ export const RANKING_USER_SCORE_TEXT_STYLE = new TextStyle({
     fontWeight: "bold",
 });
 
-export const langTemplates: Record<langCodeType, {
+export const langTemplates: Record<LangCodeType, {
     refresh: (d: RankingRefeshDataType) => string,
     week: (w: RankingWeekDataType) => string,
     scoreUnit: string;

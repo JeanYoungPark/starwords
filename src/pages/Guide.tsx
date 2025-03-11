@@ -21,6 +21,8 @@ export const Guide = () => {
             if(langCode === 'cn') return resources.guideWordMasterCn;
             if(langCode === 'tw' || langCode === 'hk') return resources.guideWordMasterTw;
             return resources.guideWordMaster;
+        }else if(gameType === 'class') {
+            return resources.guideClass;
         }else{
             if(langCode === 'jp') return resources.guideJp;
             if(langCode === 'cn') return resources.guideCn;

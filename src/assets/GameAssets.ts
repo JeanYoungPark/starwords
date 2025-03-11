@@ -44,6 +44,7 @@ const assets = [
     { alias: "guideJp", src: `${guideImgPath}guide_jp.png` },
     { alias: "guideCn", src: `${guideImgPath}guide_cn.png` },
     { alias: "guideTw", src: `${guideImgPath}guide_tw.png` },
+    { alias: "guideClass", src: `${guideImgPath}guide_class.png` },
     { alias: "guideWordMaster", src: `${guideImgPath}guide_word_master.png` },
     { alias: "guideWordMasterJp", src: `${guideImgPath}guide_word_master_jp.png` },
     { alias: "guideWordMasterCn", src: `${guideImgPath}guide_word_master_cn.png` },
@@ -93,6 +94,7 @@ const assets = [
     { alias: "gameBar", src: `${scoreBarImgPath}bar.png` },
     { alias: "gameBarBg", src: `${scoreBarImgPath}bar_bg.png` },
     { alias: "gameScoreBg", src: `${scoreBarImgPath}score_board.png` },
+    { alias: "gameCorrectBg", src: `${scoreBarImgPath}correct_board.png` },
     { alias: "gameComboScoreBg", src: `${scoreBarImgPath}combo_score_board.png` },
 
     { alias: "comboBall", src: `${scoreBarImgPath}combo_ball.png` },

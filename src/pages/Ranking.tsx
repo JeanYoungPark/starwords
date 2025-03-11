@@ -9,7 +9,7 @@ import { Actions } from "../types/actionsType";
 import { PixiButton } from "../components/common/PixiButton";
 import { CONTENT_HEIGHT, CONTENT_WIDTH } from "../constants/commonConstants";
 import { getRankingData } from "../apis/getData";
-import { langCodeType, RankingType } from "../types/resourcesType";
+import { LANG_CODES, LangCodeType, RankingType } from "../types/resourcesType";
 import _ from "lodash";
 import { getTimeRemaining } from "../util";
 import { sound } from "@pixi/sound";
@@ -61,8 +61,10 @@ export const Ranking = () => {
 
     const refreshText = () => {
         const dateInfo = getTimeRemaining(rankingUpdateTime);
-        console.log(dateInfo)
-        return langTemplates[langCode ?? 'default'].refresh(dateInfo);
+        
+        const validLangCode = LANG_CODES.includes(langCode as LangCodeType) ? langCode as LangCodeType : 'default';
+        return langTemplates[validLangCode].refresh(dateInfo);
+        
     }
     
     return (

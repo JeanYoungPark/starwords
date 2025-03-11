@@ -1,6 +1,7 @@
 import { Texture } from "pixi.js";
 
-export type langCodeType = "jp" | "cn" | "tw" | "hk" | "default";
+export const LANG_CODES = ["jp", "cn", "tw", "hk", "default"] as const;
+export type LangCodeType = typeof LANG_CODES[number];
 
 export interface Resource {
     [key: string]: any;

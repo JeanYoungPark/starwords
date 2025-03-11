@@ -5,6 +5,7 @@ import { getWeekInfo } from "../../util";
 import { langTemplates, RANKING_DATE_TEXT_STYLE } from "../../constants/rankingConstants";
 import { langCodeState } from "../../store/assetsStore";
 import { useRecoilValue } from "recoil";
+import { LANG_CODES, LangCodeType } from "../../types/resourcesType";
 
 export const DateTitle = () => {
     const { resources } = useContext(ResourceContext);
@@ -12,7 +13,8 @@ export const DateTitle = () => {
 
     const weekText = () => {
         const weekInfo = getWeekInfo();
-        return langTemplates[langCode ?? 'default'].week(weekInfo);
+        const validLangCode = LANG_CODES.includes(langCode as LangCodeType) ? langCode as LangCodeType : 'default';
+        return langTemplates[validLangCode].week(weekInfo);
     }
 
     const titleImg = () => {

@@ -4,7 +4,7 @@ import { ResourceContext } from "../../context/ResourceContext";
 import { numberComma } from "../../util";
 import { langTemplates, RANKING_SCORE_KR_TEXT_STYLE, RANKING_SCORE_TEXT_STYLE } from "../../constants/rankingConstants";
 import { getUserData } from "../../apis/getData";
-import { UserDataType } from "../../types/resourcesType";
+import { LANG_CODES, LangCodeType, UserDataType } from "../../types/resourcesType";
 import { useRecoilValue } from "recoil";
 import { gameTypeState, langCodeState } from "../../store/assetsStore";
 
@@ -18,6 +18,11 @@ export const Score = () => {
         const userData = await getUserData();
         setUserData(userData);
     };
+
+    const unitText = () => {
+        const validLangCode = LANG_CODES.includes(langCode as LangCodeType) ? langCode as LangCodeType : 'default';
+        return langTemplates[validLangCode].scoreUnit;
+    }
 
     useEffect(() => {
         if (gameType !== "word_master") getUserInfoData();
@@ -34,7 +39,7 @@ export const Score = () => {
                 style={RANKING_SCORE_TEXT_STYLE}
             />
 
-            <Text text={langTemplates[langCode ?? 'default'].scoreUnit} anchor={0.5} position={[460, 65]} style={RANKING_SCORE_KR_TEXT_STYLE} />
+            <Text text={unitText()} anchor={0.5} position={[460, 65]} style={RANKING_SCORE_KR_TEXT_STYLE} />
         </Container>
     );
 };
