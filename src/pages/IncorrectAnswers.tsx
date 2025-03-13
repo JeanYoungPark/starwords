@@ -2,7 +2,7 @@ import { Container, Sprite, Text } from "@pixi/react";
 import { useContext, useEffect, useState } from "react";
 import { useRecoilValue, useSetRecoilState } from "recoil";
 import { ResourceContext } from "../context/ResourceContext";
-import { incorrectListState } from "../store/gameStore";
+import { incorrectListState, soundMuteState } from "../store/gameStore";
 import { CONTENT_HEIGHT, CONTENT_WIDTH } from "../constants/commonConstants";
 import { IncorrectType } from "../types/resourcesType";
 import _ from "lodash";
@@ -11,12 +11,14 @@ import { PixiButton } from "../components/common/PixiButton";
 import { actionState, langCodeState } from "../store/assetsStore";
 import { Actions } from "../types/actionsType";
 import { sound } from "@pixi/sound";
+import { AutosizeText } from "../components/common/AutosizeText";
 
 export const IncorrectAnswers = () => {
     const { resources } = useContext(ResourceContext);
     const incorrectList = useRecoilValue(incorrectListState);
     const langCode = useRecoilValue(langCodeState);
     const setAction = useSetRecoilState(actionState);
+    const soundState = useRecoilValue(soundMuteState);
     const [incorrectArr, setIncorrectArr] = useState<IncorrectType[][]>([]);
     const [page, setPage] = useState<number>(0);
 
@@ -36,9 +38,18 @@ export const IncorrectAnswers = () => {
         
         const soundPath = `https://cdn.littlefox.co.kr/contents/vocab/${soundUrl.substring(0,1)}/${soundUrl}.mp3`;
         
+        if(!soundState) {
+            sound.unmuteAll();
+            sound.stopAll()
+        }
+
         // 사운드가 이미 로드되어 있는지 확인
         if (sound.exists(soundUrl)) {
-            sound.play(soundUrl);
+            sound.play(soundUrl, {
+                complete: () => {
+                    if(!soundState) sound.muteAll();
+                }
+            });
         } else {
             // 사운드 로드 후 재생
             sound.add(soundUrl, {
@@ -46,7 +57,11 @@ export const IncorrectAnswers = () => {
                 preload: true,
                 loaded: (err) => {
                     if (!err) {
-                        sound.play(soundUrl);
+                        sound.play(soundUrl, {
+                            complete: () => {
+                                if(!soundState) sound.muteAll();
+                            }
+                        });
                     } else {
                         console.error("Failed to load sound:", err);
                     }
@@ -90,12 +105,14 @@ export const IncorrectAnswers = () => {
             <Sprite texture={incorrectBgImg()} anchor={0.5} position={[CONTENT_WIDTH / 2, 570]} scale={0.8}>
                 {incorrectArr[page]?.map((data, i) => {
                     const key = Object.keys(data)[0];
-                    console.log(data);
+                    
                     return (
                         <Container key={key} position={[-700, -310 + 125 * i]}>
                             <Sprite texture={resources.incorrectSound} position={[0, -10]} interactive={true} onclick={() => playWordSound(data[key].sound_url)} ontouchend={() => playWordSound(data[key].sound_url)}/>
                             <Text text={data[key].word_en} position={[300, 0]} style={INCORRECT_EN_TEXT_STYLE} anchor={0.5} />
-                            <Text text={data[key].word_ko} position={[500, 0]} anchor={[0, 0.5]} style={INCORRECT_KO_TEXT_STYLE}/>
+                            <AutosizeText
+                                text={data[key].word_ko} maxWidth={700} position={[500, 0]} anchor={[0, 0.5]} style={INCORRECT_KO_TEXT_STYLE}
+                            />
                             <Text text={`${data[key].cnt}`} position={[resources.incorrectBg.width - 160, 0]} anchor={0.5} />
                         </Container>
                     );

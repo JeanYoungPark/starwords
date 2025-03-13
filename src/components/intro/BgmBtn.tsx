@@ -13,7 +13,6 @@ export const BgmBtn = () => {
     const { resources } = useContext(ResourceContext);
     const [soundState, setSoundState] = useRecoilState(soundMuteState);
     const langCode = useRecoilValue(langCodeState);
-    const isInitialBgmSet = useRef(false);
 
     const getTexture = () => {
         if(langCode === 'jp') return resources.soundTextJp;
@@ -28,7 +27,7 @@ export const BgmBtn = () => {
 
             if (newState) {
                 sound.unmuteAll();
-                sound.stop("audioIntroBgm");
+                sound.stop('audioIntroBgm');
                 sound.play("audioIntroBgm", { loop: true, start: 0 });
             } else {
                 sound.muteAll();
@@ -39,11 +38,11 @@ export const BgmBtn = () => {
     };
 
     useEffect(() => {
-        sound.volume("audioIntroBgm", BGM_BUTTON.INITIAL_VOLUME);
-        sound.play("audioIntroBgm", { loop: true, start: 0 });
-        isInitialBgmSet.current = true;
-
-        if (!soundState) {
+        if(soundState){
+            sound.stop('audioIntroBgm');
+            sound.volume("audioIntroBgm", BGM_BUTTON.INITIAL_VOLUME);
+            sound.play("audioIntroBgm", { loop: true, start: 0 });
+        }else{
             sound.muteAll();
         }
     }, []);

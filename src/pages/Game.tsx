@@ -12,6 +12,8 @@ import { useRecoilState } from "recoil";
 import { AlienActionState } from "../store/assetsStore";
 import { AlienActions } from "../types/actionsType";
 import { sound } from "@pixi/sound";
+import { AutosizeText } from "../components/common/AutosizeText";
+
 
 export const Game = () => {
     const { resources, gameData, contentsData } = useContext(ResourceContext);
@@ -44,7 +46,13 @@ export const Game = () => {
 
             <ReloadBtn />
 
-            <Text text={problems.item.word_ko} position={[CONTENT_WIDTH / 2, 180]} style={PROBLEM_TEXT_STYLE} anchor={0.5} />
+            <AutosizeText
+                text={problems.item.word_ko}
+                maxWidth={CONTENT_WIDTH - 400}
+                position={[CONTENT_WIDTH / 2, 160]}
+                style={PROBLEM_TEXT_STYLE}
+                anchor={0.5}
+            />
 
             <Container position={[CONTENT_WIDTH / 2, 400]} scale={0.9} anchor={0.5}>
                 <Aliens problems={problems} />
